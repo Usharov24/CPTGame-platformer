@@ -4,6 +4,7 @@ public class Main {
         System.out.println("pain");
         System.out.println("pain2");
         System.out.println("watig for albert");
+        System.out.println("success");
     }
     
 }
