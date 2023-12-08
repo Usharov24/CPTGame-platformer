@@ -5,6 +5,7 @@ public class Main {
         System.out.println("pain2");
         System.out.println("watig for albert");
         System.out.println("success");
+        System.out.println("it should work now");
     }
     
 }
