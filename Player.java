@@ -13,31 +13,31 @@ public class Player extends GameObject implements KeyListener {
 
     private EnumSet<InputKeys> keySet = EnumSet.noneOf(InputKeys.class);
 
-    private float acceleration = 1f, deceleration = 0.5f;
+    private float fltAcc = 1f, fltDec = 0.5f;
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight) {
         super(fltX, fltY, fltWidth, fltHeight);
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(keySet.contains(InputKeys.W)) fltVelY -= acceleration;
-        else if(keySet.contains(InputKeys.S)) fltVelY += acceleration;
+        if(keySet.contains(InputKeys.W)) fltVelY -= fltAcc;
+        else if(keySet.contains(InputKeys.S)) fltVelY += fltAcc;
         else if(keySet.contains(InputKeys.W) && keySet.contains(InputKeys.S)) {
-            if(fltVelY > 0) fltVelY -= deceleration;
-            else if(fltVelY < 0) fltVelY += deceleration;
+            if(fltVelY > 0) fltVelY -= fltDec;
+            else if(fltVelY < 0) fltVelY += fltDec;
         } else {
-            if(fltVelY > 0) fltVelY -= deceleration;
-            else if(fltVelY < 0) fltVelY += deceleration;
+            if(fltVelY > 0) fltVelY -= fltDec;
+            else if(fltVelY < 0) fltVelY += fltDec;
         }
 
-        if(keySet.contains(InputKeys.A)) fltVelX -= acceleration;
-        else if(keySet.contains(InputKeys.D)) fltVelX += acceleration;
+        if(keySet.contains(InputKeys.A)) fltVelX -= fltAcc;
+        else if(keySet.contains(InputKeys.D)) fltVelX += fltAcc;
         else if(keySet.contains(InputKeys.A) && keySet.contains(InputKeys.D)) {
-            if(fltVelX > 0) fltVelX -= deceleration;
-            else if(fltVelX < 0) fltVelX += deceleration;
+            if(fltVelX > 0) fltVelX -= fltDec;
+            else if(fltVelX < 0) fltVelX += fltDec;
         } else {
-            if(fltVelX > 0) fltVelX -= deceleration;
-            else if(fltVelX < 0) fltVelX += deceleration;
+            if(fltVelX > 0) fltVelX -= fltDec;
+            else if(fltVelX < 0) fltVelX += fltDec;
         }
 
         if(fltVelX > 10) fltVelX = 10;
