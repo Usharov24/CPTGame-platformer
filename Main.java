@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class Main implements ActionListener {
@@ -13,9 +15,14 @@ public class Main implements ActionListener {
     //4 wide because of the 4 player maximum
     public DrawPanel mainPanel = new DrawPanel();
     //panel that contains the rest of the panels
+
+    //Panels
     public JPanel hudPanel = new JPanel();
     public JPanel panel2 = new JPanel();
     public JPanel startPanel = new JPanel(null);
+    public JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
+    public ChatPanel chatPanel = new ChatPanel();
+
     private JFrame theFrame = new JFrame("CPT Game Proto");
     private JButton hostbutton = new JButton("Host");
     private JButton joinbutton = new JButton("Join");
@@ -23,8 +30,14 @@ public class Main implements ActionListener {
     private JButton quitbutton = new JButton("quit");
     private JLabel startmenulabel = new JLabel("Game!");
 
+    //Host & Join
+    private JTextField port = new JTextField();
+    private JTextField ip = new JTextField();
+    private JButton host = new JButton("Host Network");
+    private JButton join = new JButton("Join Network");
+    private JLabel[] netLabels = {new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
 
-    public JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
+    private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
     Player player = new Player(0, 0, 32, 32);
@@ -74,6 +87,44 @@ public class Main implements ActionListener {
         startPanel.add(quitbutton);
         startPanel.setPreferredSize(new Dimension(1280,720));
 
+        //Host & Join Network
+        port.setSize(200, 50);
+        port.setLocation(30, 300);
+
+        ip.setSize(200, 50);
+        ip.setLocation(350, 300);
+
+        host.addActionListener(this);
+        host.setSize(1220, 70);
+        host.setLocation(30, 550);
+
+        join.addActionListener(this);
+        join.setSize(1220,70);
+        join.setLocation(30, 550);
+
+        netLabels[0].setLocation(30, 300);
+        netLabels[1].setLocation(600, 300);
+        netLabels[2].setLocation(30, 700);
+
+        // Network Panel
+        for(int intCount = 0; intCount < 2; intCount++){
+            netPanels[intCount].setFocusable(true);
+            netPanels[intCount].requestFocus();
+            netPanels[intCount].setPreferredSize(new Dimension(1280, 720));
+            netPanels[intCount].add(port);
+            netPanels[intCount].add(ip);
+            theFrame.add(netPanels[intCount]);
+        }
+
+        for(int intCount = 0; intCount < 3; intCount++){
+            netLabels[intCount].setSize(100, 50);
+            netPanels[0].add(netLabels[intCount]);
+            netPanels[1].add(netLabels[intCount]);
+        }
+
+        netPanels[0].add(host);
+        netPanels[1].add(join);
+
         /* Panel 2
         panel2.setSize(new Dimension(1280,620));
         panel2.setBackground(Color.RED);
@@ -112,7 +163,10 @@ public class Main implements ActionListener {
     public void actionPerformed(ActionEvent evt){
         if(evt.getSource() == timer) mainPanel.repaint();
         if(evt.getSource() == hostbutton){
-
+            theFrame.setContentPane(netPanels[0]);
+            netPanels[0].setFocusable(true);
+            theFrame.pack();   
+            netPanels[0].setVisible(true);
         }
         if(evt.getSource() == joinbutton){
             theFrame.setContentPane(mainPanel);
