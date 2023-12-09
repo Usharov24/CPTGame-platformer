@@ -1,6 +1,8 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +15,14 @@ public class Main implements ActionListener {
     //panel that contains the rest of the panels
     public JPanel hudPanel = new JPanel();
     public JPanel panel2 = new JPanel();
+    public JPanel startPanel = new JPanel(null);
     private JFrame theFrame = new JFrame("CPT Game Proto");
+    private JButton hostbutton = new JButton("Host");
+    private JButton joinbutton = new JButton("Join");
+    private JButton settingbutton = new JButton("Settings");
+    private JButton quitbutton = new JButton("quit");
+    private JLabel startmenulabel = new JLabel("Game!");
+
 
     public JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
@@ -37,6 +46,34 @@ public class Main implements ActionListener {
         mainPanel.setPreferredSize(new Dimension(1280,720));
         mainPanel.setLayout(null);
 
+        //Buttons for Main Menu
+        hostbutton.addActionListener(this);
+        joinbutton.addActionListener(this);
+        settingbutton.addActionListener(this);
+        quitbutton.addActionListener(this);
+        hostbutton.setLocation(600,200);
+        joinbutton.setLocation(600,300);
+        settingbutton.setLocation(600,400);
+        quitbutton.setLocation(600,500);
+        hostbutton.setSize(100,100);
+        joinbutton.setSize(100,100);
+        quitbutton.setSize(100,100);
+        settingbutton.setSize(100,100);
+
+
+        //title for main menu
+        startPanel.add(startmenulabel);
+        startmenulabel.setSize(100,100);
+        startmenulabel.setLocation(600,20);
+
+
+        //start panel settigns
+        startPanel.add(hostbutton);
+        startPanel.add(joinbutton);
+        startPanel.add(settingbutton);
+        startPanel.add(quitbutton);
+        startPanel.setPreferredSize(new Dimension(1280,720));
+
         /* Panel 2
         panel2.setSize(new Dimension(1280,620));
         panel2.setBackground(Color.RED);
@@ -58,21 +95,41 @@ public class Main implements ActionListener {
         //hudPanel.setVisible(true);
 
         // Add the panels
-        theFrame.add(mainPanel);
+        
+        theFrame.add(startPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theFrame.setResizable(false);
         theFrame.setVisible(true);
+        
         theFrame.pack();
-
         timer.start();
     }
 
     // Override ActionPerformed Method
     public void actionPerformed(ActionEvent evt){
         if(evt.getSource() == timer) mainPanel.repaint();
+        if(evt.getSource() == hostbutton){
+
+        }
+        if(evt.getSource() == joinbutton){
+            theFrame.setContentPane(mainPanel);
+            mainPanel.setFocusable(true);
+            theFrame.pack();
+            mainPanel.addKeyListener(player);
+            mainPanel.requestFocus();
+            
+        }
+        if(evt.getSource() == settingbutton){
+           
+        }
+        if(evt.getSource() == quitbutton){
+            System.exit(0);
+           
+        }
+
     }
 
     public void shoot(){
