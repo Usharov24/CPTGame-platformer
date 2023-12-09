@@ -1,6 +1,8 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class CPTMain {
@@ -11,23 +13,46 @@ public class CPTMain {
     public JPanel hudpanel = new JPanel();
     public JPanel panel2 = new JPanel();
     private JFrame theFrame = new JFrame("CPT Game Proto");
+
+    public JLabel[] playernames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
+
     
     public CPTMain() {
     
+        // Frame
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         theFrame.setResizable(false);
         theFrame.setLocationRelativeTo(null);
-        theFrame.setVisible(true);
+
+        // Main Panel
         mainpanel.setPreferredSize(new Dimension(1280,720));
+        mainpanel.setLayout(null);
+
+        // Panel 2
+        panel2.setBounds(0,100,1280,620);
+        panel2.setBackground(Color.RED);
+        panel2.setLayout(new BorderLayout());
+
+        // HUD Panel
+        hudpanel.setBounds(0,0,1280,100);
+        hudpanel.setBackground(new Color(0,0,100));
+        hudpanel.setLayout(new BorderLayout());
+
+        for(int intplayer = 0; intplayer < 4; intplayer++){
+            playernames[intplayer].setForeground(Color.BLACK);
+            playernames[intplayer].setSize(80,20);
+            playernames[intplayer].setLocation(8, 5+20*intplayer);
+            playernames[intplayer].setVisible(true);
+            mainpanel.add(playernames[intplayer]);
+        }
+
+        hudpanel.setVisible(true);
+
+        // Add the panels
         theFrame.add(mainpanel);
         mainpanel.add(panel2);
         mainpanel.add(hudpanel);
-        mainpanel.setLayout(null);
-        panel2.setBounds(0,100,1280,620);
-        panel2.setBackground(Color.RED);
-        hudpanel.setBounds(0,0,1280,100);
-        hudpanel.setBackground(new Color(0,0,100));
+        theFrame.setVisible(true);
         theFrame.pack();
         
 
