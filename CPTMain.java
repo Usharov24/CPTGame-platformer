@@ -1,11 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class CPTMain {
+public class CPTMain implements ActionListener {
     public int[][] intplayercords = new int[4][4];
     //4 wide because of the 4 player maximum
     public JPanel mainpanel = new JPanel();
@@ -16,6 +19,15 @@ public class CPTMain {
 
     public JLabel[] playernames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
+    // Create Timer
+    private Timer timer = new Timer(1000/60, this);
+
+    // Override ActionPerformed Method
+    public void actionPerformed(ActionEvent evt){
+        if(evt.getSource() == timer){
+            mainpanel.repaint();
+        }
+    }
     
     public CPTMain() {
     
