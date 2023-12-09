@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,11 +32,14 @@ public class Main implements ActionListener {
     private JLabel startmenulabel = new JLabel("Game!");
 
     //Host & Join
-    private JTextField port = new JTextField();
-    private JTextField ip = new JTextField();
+    private JTextField[] port = {new JTextField(), new JTextField()};
+    private JTextField[] ip = {new JTextField(), new JTextField()};
+    private JTextField[] name = {new JTextField(), new JTextField()};
+    private JTextArea[] players = {new JTextArea(), new JTextArea()};
     private JButton host = new JButton("Host Network");
     private JButton join = new JButton("Join Network");
-    private JLabel[] netLabels = {new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
+    private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
+    private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
 
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
@@ -88,38 +92,62 @@ public class Main implements ActionListener {
         startPanel.setPreferredSize(new Dimension(1280,720));
 
         //Host & Join Network
-        port.setSize(200, 50);
-        port.setLocation(30, 300);
-
-        ip.setSize(200, 50);
-        ip.setLocation(350, 300);
-
         host.addActionListener(this);
-        host.setSize(1220, 70);
-        host.setLocation(30, 550);
+        host.setSize(500, 70);
+        host.setLocation(390, 540);
 
         join.addActionListener(this);
-        join.setSize(1220,70);
-        join.setLocation(30, 550);
+        join.setSize(500,70);
+        join.setLocation(390, 540);
 
-        netLabels[0].setLocation(30, 300);
-        netLabels[1].setLocation(600, 300);
-        netLabels[2].setLocation(30, 700);
+        // These will most likely be moved into a for loop in the future after the layout design has been finalized
+        hostLabels[3].setFont(new Font("Dialog", Font.BOLD, 21));
+        hostLabels[0].setSize(100, 50);
+        hostLabels[1].setSize(100, 50);
+        hostLabels[2].setSize(100, 50);
+        hostLabels[3].setSize(600, 50);
+        hostLabels[0].setLocation(300, 330);
+        hostLabels[1].setLocation(300, 400);
+        hostLabels[2].setLocation(300, 470);
+        hostLabels[3].setLocation(390, 630);
+        
+        joinLabels[3].setFont(new Font("Dialog", Font.BOLD, 21));
+        joinLabels[0].setSize(100, 50);
+        joinLabels[1].setSize(100, 50);
+        joinLabels[2].setSize(100, 50);
+        joinLabels[3].setSize(600, 50);
+        joinLabels[0].setLocation(300, 330);
+        joinLabels[1].setLocation(300, 400);
+        joinLabels[2].setLocation(300, 470);
+        joinLabels[3].setLocation(390, 630);
 
         // Network Panel
         for(int intCount = 0; intCount < 2; intCount++){
+            name[intCount].setSize(500, 50);
+            name[intCount].setLocation(390, 330);
+
+            port[intCount].setSize(500, 50);
+            port[intCount].setLocation(390, 400);
+
+            ip[intCount].setSize(500, 50);
+            ip[intCount].setLocation(390, 470);
+
+            players[intCount].setSize(500, 300);
+            players[intCount].setLocation(390, 20);
+
             netPanels[intCount].setFocusable(true);
             netPanels[intCount].requestFocus();
             netPanels[intCount].setPreferredSize(new Dimension(1280, 720));
-            netPanels[intCount].add(port);
-            netPanels[intCount].add(ip);
+            netPanels[intCount].add(port[intCount]);
+            netPanels[intCount].add(ip[intCount]);
+            netPanels[intCount].add(name[intCount]);
+            netPanels[intCount].add(players[intCount]);
             theFrame.add(netPanels[intCount]);
         }
 
-        for(int intCount = 0; intCount < 3; intCount++){
-            netLabels[intCount].setSize(100, 50);
-            netPanels[0].add(netLabels[intCount]);
-            netPanels[1].add(netLabels[intCount]);
+        for(int intCount = 0; intCount < 4; intCount++){
+            netPanels[0].add(hostLabels[intCount]);
+            netPanels[1].add(joinLabels[intCount]);
         }
 
         netPanels[0].add(host);
@@ -164,17 +192,32 @@ public class Main implements ActionListener {
         if(evt.getSource() == timer) mainPanel.repaint();
         if(evt.getSource() == hostbutton){
             theFrame.setContentPane(netPanels[0]);
-            netPanels[0].setFocusable(true);
             theFrame.pack();   
             netPanels[0].setVisible(true);
         }
+        if(evt.getSource() == host){
+            hostLabels[3].setText("Now hosting network from "+ip[0].getText()+" at port "+port[0].getText());
+            players[0].setText(name[0].getText()+" 👑");
+            playerNames[0].setText(name[0].getText());
+            netPanels[0].repaint();
+        }
         if(evt.getSource() == joinbutton){
-            theFrame.setContentPane(mainPanel);
-            mainPanel.setFocusable(true);
-            theFrame.pack();
-            mainPanel.addKeyListener(player);
-            mainPanel.requestFocus();
+            theFrame.setContentPane(netPanels[1]);
+            theFrame.pack();   
+            netPanels[1].setVisible(true);
+
+            //theFrame.setContentPane(mainPanel);
+            //mainPanel.setFocusable(true);
+            //theFrame.pack();
+            //mainPanel.addKeyListener(player);
+            //mainPanel.requestFocus();
             
+        }
+        if(evt.getSource() == join){
+            joinLabels[3].setText("Joined network hosted from "+ip[1].getText()+" at port "+port[1].getText());
+            players[1].setText(name[1].getText());
+            playerNames[1].setText(name[1].getText());
+            netPanels[1].repaint();
         }
         if(evt.getSource() == settingbutton){
            
