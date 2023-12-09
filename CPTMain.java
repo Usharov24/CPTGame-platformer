@@ -24,9 +24,9 @@ public class CPTMain {
         mainpanel.add(panel2);
         mainpanel.add(hudpanel);
         mainpanel.setLayout(null);
-        panel2.setBounds(0,0,1080,720);
+        panel2.setBounds(0,100,1280,620);
         panel2.setBackground(Color.RED);
-        hudpanel.setBounds(1080,0,200,720);
+        hudpanel.setBounds(0,0,1280,100);
         hudpanel.setBackground(new Color(0,0,100));
         theFrame.pack();
         
