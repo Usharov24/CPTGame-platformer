@@ -57,8 +57,8 @@ public class Main implements ActionListener {
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
-    public Player player = new Player(0, 0, 32, 32);
     public static ObjectHandler handler = new ObjectHandler();
+    public Player player = new Player(0, 0, 32, 32, ObjectId.PLAYER, handler);
     /////////////////////////////////////////////////////////////////////////////
 
     // Create Timer
@@ -217,7 +217,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.add(startPanel);
+        theFrame.setContentPane(mainPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
@@ -309,11 +309,6 @@ public class Main implements ActionListener {
 
     }
 
-    
-    public void jump(){
-
-    }
-    //potential methods needed in the future which are both non-static
     public static void main(String[] args) {
         new Main();
     }

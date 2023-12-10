@@ -6,8 +6,9 @@ public abstract class GameObject {
     protected float fltX, fltY;
     protected float fltVelX, fltVelY;
     protected float fltWidth, fltHeight;
+    protected ObjectId id;
 
-    public GameObject(float fltX, float fltY, float fltWidth, float fltHeight) {
+    public GameObject(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id) {
         this.fltX = fltX;
         this.fltY = fltY;
         this.fltWidth = fltWidth;
@@ -39,5 +40,9 @@ public abstract class GameObject {
 
     public float getHeight() {
         return fltHeight;
+    }
+
+    public ObjectId getId() {
+        return id;
     }
 }

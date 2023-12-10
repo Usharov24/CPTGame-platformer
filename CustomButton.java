@@ -54,11 +54,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
     public void mousePressed(MouseEvent evt) {}
 
     public void mouseReleased(MouseEvent evt) {
-        try {
-            listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), evt.getWhen(), evt.getModifiersEx()));
-        } catch(NullPointerException e) {
-            e.printStackTrace();
-        }
+        if(listener != null) listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), evt.getWhen(), evt.getModifiersEx()));
     }
 
     public void mouseEntered(MouseEvent evt) {

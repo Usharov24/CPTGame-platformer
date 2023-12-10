@@ -15,13 +15,13 @@ public class Player extends GameObject implements KeyListener, MouseListener {
 
     private EnumSet<InputKeys> keySet = EnumSet.noneOf(InputKeys.class);
 
+    private ObjectHandler handler;
+
     private float fltAcc = 1f, fltDec = 0.5f;
-    public int intmousex;
-    public int intmousey;
 
-
-    public Player(float fltX, float fltY, float fltWidth, float fltHeight) {
-        super(fltX, fltY, fltWidth, fltHeight);
+    public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
+        super(fltX, fltY, fltWidth, fltHeight, id);
+        this.handler = handler;
     }
 
     public void update(LinkedList<GameObject> objectList) {
@@ -73,20 +73,25 @@ public class Player extends GameObject implements KeyListener, MouseListener {
         if(evt.getKeyCode() == KeyEvent.VK_D) keySet.remove(InputKeys.D);
     }
 
-    public void mouseExited(MouseEvent evt){
-    }
-    public void mouseClicked(MouseEvent evt){
-    
-    }
-    public void mouseReleased(MouseEvent evt){
-        
-    }
-    public void mousePressed(MouseEvent evt){
-         Main.handler.addObject(new Bullet(this.fltX, this.fltY,10,10, (float) evt.getX(), (float) evt.getY()));
-    }
-    public void mouseEntered(MouseEvent evt){
-        
+    public void mousePressed(MouseEvent evt) {
+        float fltDiffX = evt.getX() - (fltX + fltWidth/2);
+        float fltDiffY = evt.getY() - (fltY + fltHeight/2);
+
+        float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+
+        fltDiffX /= fltLength;
+        fltDiffY /= fltLength;
+
+        handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
     }
 
     public void keyTyped(KeyEvent evt) {}
+
+    public void mouseExited(MouseEvent evt) {}
+
+    public void mouseClicked(MouseEvent evt) {}
+
+    public void mouseReleased(MouseEvent evt) {}
+
+    public void mouseEntered(MouseEvent evt) {}
 }
