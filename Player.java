@@ -76,14 +76,13 @@ public class Player extends GameObject implements KeyListener, MouseListener {
     public void mouseExited(MouseEvent evt){
     }
     public void mouseClicked(MouseEvent evt){
-        
-        Main.handler.addObject(new Bullet(this.fltX, this.fltY,10,10, (float) evt.getX(), (float) evt.getY()));
+    
     }
     public void mouseReleased(MouseEvent evt){
         
     }
     public void mousePressed(MouseEvent evt){
-        
+         Main.handler.addObject(new Bullet(this.fltX, this.fltY,10,10, (float) evt.getX(), (float) evt.getY()));
     }
     public void mouseEntered(MouseEvent evt){
         
