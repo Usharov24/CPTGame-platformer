@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -7,8 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.awt.Font;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,25 +17,24 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class Main implements ActionListener {
-    public int[][] intplayercords = new int[4][4];
-    //4 wide because of the 4 player maximum
-    public DrawPanel mainPanel = new DrawPanel();
-    //panel that contains the rest of the panels
-
-    //Panels
-    public JPanel hudPanel = new JPanel();
-    public JPanel panel2 = new JPanel();
-    public JPanel startPanel = new JPanel(null);
-    public JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
-    public ChatPanel chatPanel = new ChatPanel();
-    public JPanel characterPanel = new JPanel(null);
 
     private JFrame theFrame = new JFrame("CPT Game Proto");
-    private CustomButton hostbutton = new CustomButton(100, 100, this);
-    private JButton joinbutton = new JButton("Join");
-    private JButton settingbutton = new JButton("Settings");
-    private JButton quitbutton = new JButton("quit");
-    private JLabel startmenulabel = new JLabel("Game!");
+
+    //Panels
+    private DrawPanel mainPanel = new DrawPanel(null);
+    private JPanel hudPanel = new JPanel();
+    private JPanel panel2 = new JPanel();
+    private JPanel startPanel = new JPanel(null);
+    private JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
+    private ChatPanel chatPanel = new ChatPanel();
+    private JPanel characterPanel = new JPanel(null);
+
+    // Order of buttons:
+    // {host, join, settings, quit}
+    private CustomButton[] mainMenuButtons = {new CustomButton(100, 100, this), new CustomButton(100, 100, this), 
+                                              new CustomButton(100, 100, this), new CustomButton(100, 100, this)};
+    
+    private JLabel mainMenuLabel = new JLabel("Game!");
 
     //Host & Join
     private JTextField[] port = {new JTextField(), new JTextField()};
@@ -48,10 +46,10 @@ public class Main implements ActionListener {
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private SuperSocketMaster ssm = null;
-    public JButton buttonchar1 = new JButton("Sniper");
-    public JButton buttonchar2 = new JButton("Brute");
-    public JButton buttonchar3 = new JButton("ShotGunner");
-    public JButton buttonchar4 = new JButton("Wizard");
+    private JButton buttonchar1 = new JButton("Sniper");
+    private JButton buttonchar2 = new JButton("Brute");
+    private JButton buttonchar3 = new JButton("ShotGunner");
+    private JButton buttonchar4 = new JButton("Wizard");
 
     //HUD
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
@@ -72,38 +70,23 @@ public class Main implements ActionListener {
         ///////////////
 
         // Main Panel
+        mainPanel.setPreferredSize(new Dimension(1280, 720));
         mainPanel.setFocusable(true);
         mainPanel.requestFocus();
-        mainPanel.setPreferredSize(new Dimension(1280,720));
-        mainPanel.setLayout(null);
-
-        //Buttons for Main Menu
-        //hostbutton.addActionListener(this);
-        joinbutton.addActionListener(this);
-        settingbutton.addActionListener(this);
-        quitbutton.addActionListener(this);
-        hostbutton.setLocation(600,200);
-        joinbutton.setLocation(600,300);
-        settingbutton.setLocation(600,400);
-        quitbutton.setLocation(600,500);
-        //hostbutton.setSize(100,100);
-        joinbutton.setSize(100,100);
-        quitbutton.setSize(100,100);
-        settingbutton.setSize(100,100);
-
-
-        //title for main menu
-        startPanel.add(startmenulabel);
-        startmenulabel.setSize(100,100);
-        startmenulabel.setLocation(600,20);
-
 
         //start panel settigns
-        startPanel.add(hostbutton);
-        startPanel.add(joinbutton);
-        startPanel.add(settingbutton);
-        startPanel.add(quitbutton);
-        startPanel.setPreferredSize(new Dimension(1280,720));
+        startPanel.setPreferredSize(new Dimension(1280, 720));
+
+        //Buttons for Main Menu
+        for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
+            mainMenuButtons[intCount].setLocation(600, 200 + 100 * intCount);
+            startPanel.add(mainMenuButtons[intCount]);
+        }
+
+        //title for main menu
+        mainMenuLabel.setSize(100, 100);
+        mainMenuLabel.setLocation(600, 20);
+        startPanel.add(mainMenuLabel);
 
         //Character selection panel
         characterPanel.add(buttonchar1);
@@ -217,7 +200,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.setContentPane(mainPanel);
+        theFrame.setContentPane(startPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
@@ -231,17 +214,25 @@ public class Main implements ActionListener {
     // Override ActionPerformed Method
     public void actionPerformed(ActionEvent evt){
         if(evt.getSource() == timer) mainPanel.repaint();
-        if(evt.getSource() == hostbutton){
+
+        if(evt.getSource() == mainMenuButtons[0]){
             theFrame.setContentPane(netPanels[0]);
-            theFrame.pack();   
+            theFrame.pack();
             netPanels[0].setVisible(true);
+        } else if(evt.getSource() == mainMenuButtons[1]){
+            theFrame.setContentPane(netPanels[1]);
+            theFrame.pack();   
+            netPanels[1].setVisible(true);
+        } else if(evt.getSource() == mainMenuButtons[2]){
+           
+        } else if(evt.getSource() == mainMenuButtons[3]){
+            System.exit(0);
         }
+        
         if(evt.getSource() == host){
             // Write Host to File
-            try{
-                PrintWriter writehost = new PrintWriter(new FileWriter("Players.txt", false));
+            try (PrintWriter writehost = new PrintWriter(new FileWriter("Players.txt", false))) {
                 writehost.println(name[0].getText());
-                writehost.close();
             }catch(FileNotFoundException e){
                 e.printStackTrace();
             }catch(IOException e){
@@ -257,18 +248,7 @@ public class Main implements ActionListener {
             ssm = new SuperSocketMaster(Integer.parseInt(port[0].getText()), this);
             ssm.connect();
         }
-        if(evt.getSource() == joinbutton){
-            theFrame.setContentPane(netPanels[1]);
-            theFrame.pack();   
-            netPanels[1].setVisible(true);
 
-            //theFrame.setContentPane(mainPanel);
-            //mainPanel.setFocusable(true);
-            //theFrame.pack();
-            //mainPanel.addKeyListener(player);
-            //mainPanel.requestFocus();
-            
-        }
         if(evt.getSource() == join){
             // Write Players to File
             try{
@@ -299,14 +279,6 @@ public class Main implements ActionListener {
             ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
             ssm.connect();
         }
-        if(evt.getSource() == settingbutton){
-           
-        }
-        if(evt.getSource() == quitbutton){
-            System.exit(0);
-           
-        }
-
     }
 
     public static void main(String[] args) {

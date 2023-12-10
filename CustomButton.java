@@ -1,5 +1,5 @@
-import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +13,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
     private ActionListener listener;
 
-    private boolean mouseEntered = false;
+    private boolean blnMouseEntered = false;
 
     public CustomButton() {
         this(0, 0, null);
@@ -40,7 +40,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if(mouseEntered) {
+        if(blnMouseEntered) {
             g.setColor(Color.green);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else {
@@ -58,12 +58,12 @@ public class CustomButton extends AbstractButton implements MouseListener {
     }
 
     public void mouseEntered(MouseEvent evt) {
-        mouseEntered = true;
+        blnMouseEntered = true;
         repaint();
     }
 
     public void mouseExited(MouseEvent evt) {
-        mouseEntered = false;
+        blnMouseEntered = false;
         repaint();
     }
 }

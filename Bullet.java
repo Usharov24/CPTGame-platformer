@@ -14,7 +14,7 @@ public class Bullet extends GameObject {
     }
     
     public void update(LinkedList<GameObject> objectList) {
-
+        
         fltX += fltVelX;
         fltY += fltVelY;
 

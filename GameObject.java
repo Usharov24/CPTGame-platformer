@@ -13,6 +13,7 @@ public abstract class GameObject {
         this.fltY = fltY;
         this.fltWidth = fltWidth;
         this.fltHeight = fltHeight;
+        this.id = id;
     }
 
     public abstract void update(LinkedList<GameObject> objectList);

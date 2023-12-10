@@ -4,8 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
 import java.util.EnumSet;
+import java.util.LinkedList;
 
 public class Player extends GameObject implements KeyListener, MouseListener {
 
@@ -82,6 +82,7 @@ public class Player extends GameObject implements KeyListener, MouseListener {
         fltDiffX /= fltLength;
         fltDiffY /= fltLength;
 
+        // - 5 is for the width and height of the bullet
         handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
     }
 
