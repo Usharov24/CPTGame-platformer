@@ -2,10 +2,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.EnumSet;
 
-public class Player extends GameObject implements KeyListener {
+public class Player extends GameObject implements KeyListener, MouseListener {
 
     private enum InputKeys {
         W, A, S, D;
@@ -14,6 +16,9 @@ public class Player extends GameObject implements KeyListener {
     private EnumSet<InputKeys> keySet = EnumSet.noneOf(InputKeys.class);
 
     private float fltAcc = 1f, fltDec = 0.5f;
+    public int intmousex;
+    public int intmousey;
+
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight) {
         super(fltX, fltY, fltWidth, fltHeight);
@@ -66,6 +71,22 @@ public class Player extends GameObject implements KeyListener {
         if(evt.getKeyCode() == KeyEvent.VK_A) keySet.remove(InputKeys.A);
         if(evt.getKeyCode() == KeyEvent.VK_S) keySet.remove(InputKeys.S);
         if(evt.getKeyCode() == KeyEvent.VK_D) keySet.remove(InputKeys.D);
+    }
+
+    public void mouseExited(MouseEvent evt){
+    }
+    public void mouseClicked(MouseEvent evt){
+        
+        Main.handler.addObject(new Bullet(this.fltX, this.fltY,10,10, (float) evt.getX(), (float) evt.getY()));
+    }
+    public void mouseReleased(MouseEvent evt){
+        
+    }
+    public void mousePressed(MouseEvent evt){
+        
+    }
+    public void mouseEntered(MouseEvent evt){
+        
     }
 
     public void keyTyped(KeyEvent evt) {}

@@ -29,6 +29,7 @@ public class Main implements ActionListener {
     public JPanel startPanel = new JPanel(null);
     public JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
     public ChatPanel chatPanel = new ChatPanel();
+    public JPanel characterPanel = new JPanel(null);
 
     private JFrame theFrame = new JFrame("CPT Game Proto");
     private CustomButton hostbutton = new CustomButton(100, 100, this);
@@ -47,12 +48,16 @@ public class Main implements ActionListener {
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private SuperSocketMaster ssm = null;
+    public JButton buttonchar1 = new JButton("Sniper");
+    public JButton buttonchar2 = new JButton("Brute");
+    public JButton buttonchar3 = new JButton("ShotGunner");
+    public JButton buttonchar4 = new JButton("Wizard");
 
     //HUD
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
-    Player player = new Player(0, 0, 32, 32);
+    public Player player = new Player(0, 0, 32, 32);
     public static ObjectHandler handler = new ObjectHandler();
     /////////////////////////////////////////////////////////////////////////////
 
@@ -63,6 +68,7 @@ public class Main implements ActionListener {
         // TEMP ///////
         handler.addObject(player);
         mainPanel.addKeyListener(player);
+        mainPanel.addMouseListener(player);
         ///////////////
 
         // Main Panel
@@ -98,6 +104,25 @@ public class Main implements ActionListener {
         startPanel.add(settingbutton);
         startPanel.add(quitbutton);
         startPanel.setPreferredSize(new Dimension(1280,720));
+
+        //Character selection panel
+        characterPanel.add(buttonchar1);
+        characterPanel.add(buttonchar2);
+        characterPanel.add(buttonchar3);
+        characterPanel.add(buttonchar4);
+        characterPanel.setPreferredSize(new Dimension(1280,720));
+        buttonchar1.setSize(100,100);
+        buttonchar1.setLocation(100,100);
+        buttonchar1.addActionListener(this);
+        buttonchar2.setSize(100,100);
+        buttonchar2.setLocation(200,100);
+        buttonchar2.addActionListener(this);
+        buttonchar3.setSize(100,100);
+        buttonchar3.setLocation(100,200);
+        buttonchar3.addActionListener(this);
+        buttonchar4.setSize(100,100);
+        buttonchar4.setLocation(200,200);
+        buttonchar4.addActionListener(this);
 
         //Host & Join Network
         host.addActionListener(this);
@@ -199,7 +224,6 @@ public class Main implements ActionListener {
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theFrame.setResizable(false);
         theFrame.setVisible(true);
-        
         theFrame.pack();
         timer.start();
     }
@@ -285,9 +309,7 @@ public class Main implements ActionListener {
 
     }
 
-    public void shoot(){
-
-    }
+    
     public void jump(){
 
     }
