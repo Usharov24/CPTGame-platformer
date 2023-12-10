@@ -31,7 +31,7 @@ public class Main implements ActionListener {
     public ChatPanel chatPanel = new ChatPanel();
 
     private JFrame theFrame = new JFrame("CPT Game Proto");
-    private JButton hostbutton = new JButton("Host");
+    private CustomButton hostbutton = new CustomButton(100, 100, this);
     private JButton joinbutton = new JButton("Join");
     private JButton settingbutton = new JButton("Settings");
     private JButton quitbutton = new JButton("quit");
@@ -72,7 +72,7 @@ public class Main implements ActionListener {
         mainPanel.setLayout(null);
 
         //Buttons for Main Menu
-        hostbutton.addActionListener(this);
+        //hostbutton.addActionListener(this);
         joinbutton.addActionListener(this);
         settingbutton.addActionListener(this);
         quitbutton.addActionListener(this);
@@ -80,7 +80,7 @@ public class Main implements ActionListener {
         joinbutton.setLocation(600,300);
         settingbutton.setLocation(600,400);
         quitbutton.setLocation(600,500);
-        hostbutton.setSize(100,100);
+        //hostbutton.setSize(100,100);
         joinbutton.setSize(100,100);
         quitbutton.setSize(100,100);
         settingbutton.setSize(100,100);
