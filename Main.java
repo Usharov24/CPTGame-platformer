@@ -1,6 +1,12 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.Font;
 
 import javax.swing.JButton;
@@ -40,7 +46,9 @@ public class Main implements ActionListener {
     private JButton join = new JButton("Join Network");
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
+    private SuperSocketMaster ssm = null;
 
+    //HUD
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
@@ -132,6 +140,12 @@ public class Main implements ActionListener {
             ip[intCount].setSize(500, 50);
             ip[intCount].setLocation(390, 470);
 
+            try{
+                ip[intCount].setText(ssm.getMyAddress());
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
             players[intCount].setSize(500, 300);
             players[intCount].setLocation(390, 20);
 
@@ -152,6 +166,9 @@ public class Main implements ActionListener {
 
         netPanels[0].add(host);
         netPanels[1].add(join);
+
+        
+
 
         /* Panel 2
         panel2.setSize(new Dimension(1280,620));
@@ -196,10 +213,25 @@ public class Main implements ActionListener {
             netPanels[0].setVisible(true);
         }
         if(evt.getSource() == host){
+            // Write Host to File
+            try{
+                PrintWriter writehost = new PrintWriter(new FileWriter("Players.txt", false));
+                writehost.println(name[0].getText());
+                writehost.close();
+            }catch(FileNotFoundException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            // Display
+            host.setEnabled(false);
             hostLabels[3].setText("Now hosting network from "+ip[0].getText()+" at port "+port[0].getText());
             players[0].setText(name[0].getText()+" 👑");
-            playerNames[0].setText(name[0].getText());
             netPanels[0].repaint();
+
+            ssm = new SuperSocketMaster(Integer.parseInt(port[0].getText()), this);
+            ssm.connect();
         }
         if(evt.getSource() == joinbutton){
             theFrame.setContentPane(netPanels[1]);
@@ -214,10 +246,34 @@ public class Main implements ActionListener {
             
         }
         if(evt.getSource() == join){
+            // Write Players to File
+            try{
+                BufferedReader readplayers = new BufferedReader(new FileReader("Players.txt"));
+                PrintWriter writeplayers = new PrintWriter(new FileWriter("Players.txt", true));
+                String strName = readplayers.readLine();
+                players[1].setText(strName+" 👑");
+                strName = readplayers.readLine();
+                while(strName != null){
+                    players[1].append("\n"+strName);
+                    strName = readplayers.readLine();
+                }
+                writeplayers.append("\n"+name[1].getText());
+                players[1].append("\n"+name[1].getText());
+                readplayers.close();
+                writeplayers.close();
+            }catch(FileNotFoundException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            // Display
+            join.setEnabled(false);
             joinLabels[3].setText("Joined network hosted from "+ip[1].getText()+" at port "+port[1].getText());
-            players[1].setText(name[1].getText());
-            playerNames[1].setText(name[1].getText());
             netPanels[1].repaint();
+
+            ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
+            ssm.connect();
         }
         if(evt.getSource() == settingbutton){
            
