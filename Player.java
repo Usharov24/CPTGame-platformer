@@ -74,16 +74,36 @@ public class Player extends GameObject implements KeyListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent evt) {
-        float fltDiffX = evt.getX() - (fltX + fltWidth/2);
-        float fltDiffY = evt.getY() - (fltY + fltHeight/2);
+        if(evt.getButton() == 1){
+            float fltDiffX = evt.getX() - (fltX + fltWidth/2);
+            float fltDiffY = evt.getY() - (fltY + fltHeight/2);
+            float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
-        float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+            fltDiffX /= fltLength;
+            fltDiffY /= fltLength;
 
-        fltDiffX /= fltLength;
-        fltDiffY /= fltLength;
+            // - 5 is for the width and height of the bullet
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
+        }
+        if(evt.getButton() == 3){
+            float fltDiffX = evt.getX() - (fltX + fltWidth/2);
+            float fltDiffY = evt.getY() - (fltY + fltHeight/2);
+            float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
-        // - 5 is for the width and height of the bullet
-        handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
+            fltDiffX /= fltLength;
+            fltDiffY /= fltLength;
+
+            // - 5 is for the width and height of the bullet
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+
+        }
     }
 
     public void keyTyped(KeyEvent evt) {}

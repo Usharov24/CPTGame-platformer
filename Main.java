@@ -200,7 +200,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.setContentPane(startPanel);
+        theFrame.setContentPane(mainPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
