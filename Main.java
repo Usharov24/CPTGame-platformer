@@ -48,8 +48,10 @@ public class Main implements ActionListener {
     private SuperSocketMaster ssm = null;
     private JButton buttonchar1 = new JButton("Sniper");
     private JButton buttonchar2 = new JButton("Brute");
-    private JButton buttonchar3 = new JButton("ShotGunner");
+    private JButton buttonchar3 = new JButton("Knight");
     private JButton buttonchar4 = new JButton("Wizard");
+    private JButton buttonstart = new JButton("Start game");
+    private JButton buttonready = new JButton("Ready");
 
     //HUD
     private JLabel[] playerNames = {new JLabel("Player 1"), new JLabel("Player 2"), new JLabel("Player 3"), new JLabel("Player 4")};
@@ -57,6 +59,10 @@ public class Main implements ActionListener {
     // TEMPORARY ////////////////////////////////////////////////////////////////
     public static ObjectHandler handler = new ObjectHandler();
     public Player player = new Player(0, 0, 32, 32, ObjectId.PLAYER, handler);
+    public Player player2 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
+    public Player player3 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
+    public Player player4 = new Player(-1000, 0, 32, 32, ObjectId.PLAYER, handler);
+
     /////////////////////////////////////////////////////////////////////////////
 
     // Create Timer
@@ -93,7 +99,15 @@ public class Main implements ActionListener {
         characterPanel.add(buttonchar2);
         characterPanel.add(buttonchar3);
         characterPanel.add(buttonchar4);
+        characterPanel.add(buttonready);
         characterPanel.setPreferredSize(new Dimension(1280,720));
+        buttonready.setSize(100,100);
+        buttonready.setLocation(800,200);
+        buttonready.addActionListener(this);
+        buttonstart.setSize(100,100);
+        buttonstart.setLocation(900,100);
+        buttonstart.addActionListener(this);
+        buttonstart.setEnabled(false);
         buttonchar1.setSize(100,100);
         buttonchar1.setLocation(100,100);
         buttonchar1.addActionListener(this);
@@ -166,6 +180,8 @@ public class Main implements ActionListener {
             netPanels[intCount].add(players[intCount]);
             theFrame.add(netPanels[intCount]);
         }
+        netPanels[0].add(buttonstart);
+
 
         for(int intCount = 0; intCount < 4; intCount++){
             netPanels[0].add(hostLabels[intCount]);
@@ -200,7 +216,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.setContentPane(mainPanel);
+        theFrame.setContentPane(startPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
@@ -238,15 +254,18 @@ public class Main implements ActionListener {
             }catch(IOException e){
                 e.printStackTrace();
             }
-
             // Display
+            buttonstart.setEnabled(true);
             host.setEnabled(false);
             hostLabels[3].setText("Now hosting network from "+ip[0].getText()+" at port "+port[0].getText());
             players[0].setText(name[0].getText()+" 👑");
             netPanels[0].repaint();
+            
 
             ssm = new SuperSocketMaster(Integer.parseInt(port[0].getText()), this);
             ssm.connect();
+            System.out.println("ip : "  + ssm.getMyAddress());
+            ip[0].setText(ssm.getMyAddress());
         }
 
         if(evt.getSource() == join){
@@ -278,6 +297,23 @@ public class Main implements ActionListener {
 
             ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
             ssm.connect();
+
+        }
+
+        if(evt.getSource() == buttonstart){
+            theFrame.setContentPane(characterPanel);
+            theFrame.pack();
+        }
+
+        if(evt.getSource() == buttonready){
+            mainPanel.setFocusable(true);
+            mainPanel.requestFocus();
+            theFrame.setContentPane(mainPanel);
+            theFrame.pack();
+        }
+        
+        if(evt.getSource() == ssm){
+        
         }
     }
 

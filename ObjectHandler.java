@@ -10,6 +10,7 @@ public class ObjectHandler {
             GameObject object = objectList.get(intCount);
 
             object.update(objectList);
+            
         }
     }
 

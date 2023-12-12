@@ -12,8 +12,8 @@ public class Player extends GameObject implements KeyListener, MouseListener {
     private enum InputKeys {
         W, A, S, D;
     }
-
-    private EnumSet<InputKeys> keySet = EnumSet.noneOf(InputKeys.class);
+    
+    public static EnumSet<InputKeys> keySet = EnumSet.noneOf(InputKeys.class);
 
     private ObjectHandler handler;
 
@@ -102,10 +102,10 @@ public class Player extends GameObject implements KeyListener, MouseListener {
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-
+            
         }
     }
-
+    
     public void keyTyped(KeyEvent evt) {}
 
     public void mouseExited(MouseEvent evt) {}
