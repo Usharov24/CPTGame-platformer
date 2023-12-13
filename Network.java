@@ -1,3 +1,5 @@
+import java.awt.datatransfer.StringSelection;
+
 public class Network {
 
 
@@ -30,13 +32,22 @@ public class Network {
                         Main.theFrame.pack();
                     }
                     if(strSelection[1].equals("join")){
-                        System.out.println("smth good happened");
+                
                         if(Main.intjoinid == 0){
-                            System.out.println("smth good happened");
+                         
                             Main.intjoinid = Integer.parseInt(strSelection[2]);
                             
                         }
 
+                    }
+                    if(strSelection[1].equals("charbutton")){
+                        Main.intcharbutton[Integer.parseInt(strSelection[2])] = Integer.parseInt(strSelection[3]);
+                        Main.buttonchar[Integer.parseInt(strSelection[3])].setEnabled(false);
+                        
+                    
+                    }
+                    if(strSelection[1].equals("oldbutton")){
+                        Main.buttonchar[Integer.parseInt(strSelection[2])].setEnabled(true);
                     }
                     
                     /*if(strSelection[1].equals("char1")){

@@ -63,6 +63,7 @@ public class Main implements ActionListener {
     public Player player3 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
     public Player player4 = new Player(-1000, 0, 32, 32, ObjectId.PLAYER, handler);
     public static int[] intcharbutton = new int[]{0,0,0,0};
+    public static int[] intpastcharbutton = new int[]{0,0,0,0};
     public Network network = new Network();
 
     /////////////////////////////////////////////////////////////////////////////
@@ -232,6 +233,7 @@ public class Main implements ActionListener {
                 network.senddata(ssm);
                 intjoinid = 0;
             }
+            
         };
 
         if(evt.getSource() == mainMenuButtons[0]){
@@ -313,12 +315,18 @@ public class Main implements ActionListener {
            
             for(int i = 0; i < 4; i++){
                 if(evt.getSource() == buttonchar[i]){
+                    intpastcharbutton[intjoinid] = intcharbutton[intjoinid];
+                    buttonchar[intpastcharbutton[intjoinid]].setEnabled(true);
+                    ssm.sendText("m,oldbutton," + intpastcharbutton[intjoinid]);
                     intcharbutton[intjoinid] = i;
                     buttonchar[i].setEnabled(false);
+                    
                     System.out.println(intjoinid);
+                    ssm.sendText("m,charbutton," + intjoinid + "," + i + "," + intpastcharbutton[intjoinid]);
                 }
                 
             }
+            
             
             
         }
