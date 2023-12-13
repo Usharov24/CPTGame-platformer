@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,7 @@ public class Main implements ActionListener {
     private JPanel panel2 = new JPanel();
     private JPanel startPanel = new JPanel(null);
     private JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
+    private JPanel settingsPanel = new JPanel(null);
     private ChatPanel chatPanel = new ChatPanel();
     public static JPanel characterPanel = new JPanel(null);
     public static int intjoinid;
@@ -83,7 +85,12 @@ public class Main implements ActionListener {
         mainPanel.setFocusable(true);
         mainPanel.requestFocus();
 
-        //start panel settigns
+        // Settings Panel
+        settingsPanel.setPreferredSize(new Dimension(1280, 720));
+        settingsPanel.setFocusable(true);
+        settingsPanel.requestFocus();
+
+        //start panel settings
         startPanel.setPreferredSize(new Dimension(1280, 720));
 
         //Buttons for Main Menu
@@ -124,7 +131,7 @@ public class Main implements ActionListener {
         buttonchar[3].setLocation(200,200);
         buttonchar[3].addActionListener(this);
 
-        //Host & Join Network
+        // Host & Join Network
         host.addActionListener(this);
         host.setSize(500, 70);
         host.setLocation(390, 540);
@@ -133,25 +140,20 @@ public class Main implements ActionListener {
         join.setSize(500,70);
         join.setLocation(390, 540);
 
-        // These will most likely be moved into a for loop in the future after the layout design has been finalized
+        // Labels
+        for(int intCount = 0; intCount < 3; intCount++){
+            hostLabels[intCount].setSize(100, 50);
+            joinLabels[intCount].setSize(100, 50);
+            hostLabels[intCount].setLocation(300, 330 + 70*intCount);
+            joinLabels[intCount].setLocation(300, 330 + 70*intCount);
+        }
+
         hostLabels[3].setFont(new Font("Dialog", Font.BOLD, 21));
-        hostLabels[0].setSize(100, 50);
-        hostLabels[1].setSize(100, 50);
-        hostLabels[2].setSize(100, 50);
         hostLabels[3].setSize(600, 50);
-        hostLabels[0].setLocation(300, 330);
-        hostLabels[1].setLocation(300, 400);
-        hostLabels[2].setLocation(300, 470);
         hostLabels[3].setLocation(390, 630);
         
         joinLabels[3].setFont(new Font("Dialog", Font.BOLD, 21));
-        joinLabels[0].setSize(100, 50);
-        joinLabels[1].setSize(100, 50);
-        joinLabels[2].setSize(100, 50);
         joinLabels[3].setSize(600, 50);
-        joinLabels[0].setLocation(300, 330);
-        joinLabels[1].setLocation(300, 400);
-        joinLabels[2].setLocation(300, 470);
         joinLabels[3].setLocation(390, 630);
 
         // Network Panel
@@ -164,8 +166,6 @@ public class Main implements ActionListener {
 
             ip[intCount].setSize(500, 50);
             ip[intCount].setLocation(390, 470);
-
-            
 
             players[intCount].setSize(500, 300);
             players[intCount].setLocation(390, 20);
@@ -233,8 +233,7 @@ public class Main implements ActionListener {
                 network.senddata(ssm);
                 intjoinid = 0;
             }
-            
-        };
+        }
 
         if(evt.getSource() == mainMenuButtons[0]){
             theFrame.setContentPane(netPanels[0]);
@@ -245,7 +244,9 @@ public class Main implements ActionListener {
             theFrame.pack();   
             netPanels[1].setVisible(true);
         } else if(evt.getSource() == mainMenuButtons[2]){
-           
+           theFrame.setContentPane(settingsPanel);
+           theFrame.pack();
+           settingsPanel.setVisible(true);
         } else if(evt.getSource() == mainMenuButtons[3]){
             System.exit(0);
         }
@@ -320,13 +321,12 @@ public class Main implements ActionListener {
                     ssm.sendText("m,oldbutton," + intpastcharbutton[intjoinid]);
                     intcharbutton[intjoinid] = i;
                     buttonchar[i].setEnabled(false);
-                    
+
                     System.out.println(intjoinid);
                     ssm.sendText("m,charbutton," + intjoinid + "," + i + "," + intpastcharbutton[intjoinid]);
                 }
                 
             }
-            
             
             
         }

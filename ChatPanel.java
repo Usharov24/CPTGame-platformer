@@ -8,7 +8,7 @@ public class ChatPanel extends JPanel {
     //Chat 
     private JTextArea chatarea = new JTextArea();
     private JTextField sendmessage = new JTextField();
-    //private SuperSocketMaster ssm = null;
+    private SuperSocketMaster ssm = null;
 
     public void paintComponent(Graphics g){
 
