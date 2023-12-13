@@ -28,7 +28,12 @@ public class Network {
                         Main.mainPanel.requestFocus();
                         Main.theFrame.pack();
                     }
-
+                    if(strSelection[1].equals("join")){
+                        if(Main.intjoinid == 0){
+                            Main.intjoinid = Integer.parseInt(strSelection[2]);
+                        }
+                        
+                    }
                     
                     /*if(strSelection[1].equals("char1")){
                         Main.intcharbutton2 = 1;
@@ -69,8 +74,8 @@ public class Network {
            
         
 
-        public void senddata(){
-
+        public void senddata(SuperSocketMaster ssm){
+            ssm.sendText("m,join," + Main.intjoinid);
         }
     
 }

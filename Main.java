@@ -28,6 +28,8 @@ public class Main implements ActionListener {
     private JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
     private ChatPanel chatPanel = new ChatPanel();
     public static JPanel characterPanel = new JPanel(null);
+    public static int intjoinid;
+    public static int inthostid;
 
     // Order of buttons:
     // {host, join, settings, quit}
@@ -45,7 +47,7 @@ public class Main implements ActionListener {
     private JButton join = new JButton("Join Network");
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
-    private SuperSocketMaster ssm = null;
+    public static SuperSocketMaster ssm = null;
     public static JButton[] buttonchar = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
     private JButton buttonstart = new JButton("Start game");
     private JButton buttonready = new JButton("Ready");
@@ -211,7 +213,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.setContentPane(characterPanel);
+        theFrame.setContentPane(startPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
@@ -250,6 +252,9 @@ public class Main implements ActionListener {
                 e.printStackTrace();
             }
             // Display
+            inthostid = 0;
+            intjoinid = 4;
+        
             buttonstart.setEnabled(true);
             host.setEnabled(false);
             hostLabels[3].setText("Now hosting network from "+ip[0].getText()+" at port "+port[0].getText());
@@ -265,6 +270,7 @@ public class Main implements ActionListener {
 
         if(evt.getSource() == join){
             // Write Players to File
+            inthostid = 1;
             try{
                 BufferedReader readplayers = new BufferedReader(new FileReader("Players.txt"));
                 PrintWriter writeplayers = new PrintWriter(new FileWriter("Players.txt", true));
@@ -292,28 +298,22 @@ public class Main implements ActionListener {
 
             ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
             ssm.connect();
+            
 
         }
 
         if(evt.getSource() == buttonchar[1] || evt.getSource() == buttonchar[2] || evt.getSource() == buttonchar[3] || evt.getSource() == buttonchar[0]){
-            int intcount = 4;
+           
             for(int i = 0; i < 4; i++){
                 if(evt.getSource() == buttonchar[i]){
-                    intcharbutton[i] = 1;
+                    intcharbutton[intjoinid] = i;
                     buttonchar[i].setEnabled(false);
+                    System.out.println(intjoinid);
                 }
                 
             }
-            for(int i2 = 0; i2 < 4; i2++){
-                for(int i = 0; i < 4; i++){
-                        if(intcharbutton[i] != i2){
-                            intcount++;
-                        }
-
-                }
-                if(intcount == 4)buttonchar[i2].setEnabled(true);
-                intcount = 0;
-            }
+            
+            
         }
         
 
@@ -321,6 +321,9 @@ public class Main implements ActionListener {
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
             ssm.sendText("m,start");
+            if(inthostid == 1){
+                intjoinid = 0;
+            }
         }
 
         if(evt.getSource() == buttonready){
