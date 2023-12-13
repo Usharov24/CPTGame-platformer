@@ -46,10 +46,7 @@ public class Main implements ActionListener {
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private SuperSocketMaster ssm = null;
-    public static JButton buttonchar1 = new JButton("Sniper");
-    public static JButton buttonchar2 = new JButton("Brute");
-    public static JButton buttonchar3 = new JButton("Knight");
-    public static JButton buttonchar4 = new JButton("Wizard");
+    public static JButton[] buttonchar = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
     private JButton buttonstart = new JButton("Start game");
     private JButton buttonready = new JButton("Ready");
 
@@ -62,10 +59,7 @@ public class Main implements ActionListener {
     public Player player2 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
     public Player player3 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
     public Player player4 = new Player(-1000, 0, 32, 32, ObjectId.PLAYER, handler);
-    public static int intcharbutton = 0;
-    public static int intcharbutton1 = 0;
-    public static int intcharbutton2 = 0;
-    public static int intcharbutton3 = 0;
+    public static int[] intcharbutton = new int[]{0,0,0,0};
     public Network network = new Network();
 
     /////////////////////////////////////////////////////////////////////////////
@@ -100,10 +94,10 @@ public class Main implements ActionListener {
         startPanel.add(mainMenuLabel);
 
         //Character selection panel
-        characterPanel.add(buttonchar1);
-        characterPanel.add(buttonchar2);
-        characterPanel.add(buttonchar3);
-        characterPanel.add(buttonchar4);
+        for(int i = 0; i < 4; i++){
+            characterPanel.add(buttonchar[i]);
+        }
+        
         characterPanel.add(buttonready);
         characterPanel.setPreferredSize(new Dimension(1280,720));
         buttonready.setSize(100,100);
@@ -113,18 +107,18 @@ public class Main implements ActionListener {
         buttonstart.setLocation(900,100);
         buttonstart.addActionListener(this);
         buttonstart.setEnabled(false);
-        buttonchar1.setSize(100,100);
-        buttonchar1.setLocation(100,100);
-        buttonchar1.addActionListener(this);
-        buttonchar2.setSize(100,100);
-        buttonchar2.setLocation(200,100);
-        buttonchar2.addActionListener(this);
-        buttonchar3.setSize(100,100);
-        buttonchar3.setLocation(100,200);
-        buttonchar3.addActionListener(this);
-        buttonchar4.setSize(100,100);
-        buttonchar4.setLocation(200,200);
-        buttonchar4.addActionListener(this);
+        buttonchar[0].setSize(100,100);
+        buttonchar[0].setLocation(100,100);
+        buttonchar[0].addActionListener(this);
+        buttonchar[1].setSize(100,100);
+        buttonchar[1].setLocation(200,100);
+        buttonchar[1].addActionListener(this);
+        buttonchar[2].setSize(100,100);
+        buttonchar[2].setLocation(100,200);
+        buttonchar[2].addActionListener(this);
+        buttonchar[3].setSize(100,100);
+        buttonchar[3].setLocation(200,200);
+        buttonchar[3].addActionListener(this);
 
         //Host & Join Network
         host.addActionListener(this);
@@ -301,63 +295,27 @@ public class Main implements ActionListener {
 
         }
 
-        if(evt.getSource() == buttonchar1){
-            buttonchar1.setEnabled(false);
-            if(intcharbutton == 2){
-                buttonchar2.setEnabled(true);
+        if(evt.getSource() == buttonchar[1] || evt.getSource() == buttonchar[2] || evt.getSource() == buttonchar[3] || evt.getSource() == buttonchar[0]){
+            int intcount = 4;
+            for(int i = 0; i < 4; i++){
+                if(evt.getSource() == buttonchar[i]){
+                    intcharbutton[i] = 1;
+                    buttonchar[i].setEnabled(false);
+                }
+                
             }
-            if(intcharbutton == 3){
-                buttonchar3.setEnabled(true);
+            for(int i2 = 0; i2 < 4; i2++){
+                for(int i = 0; i < 4; i++){
+                        if(intcharbutton[i] != i2){
+                            intcount++;
+                        }
+
+                }
+                if(intcount == 4)buttonchar[i2].setEnabled(true);
+                intcount = 0;
             }
-            if(intcharbutton == 4){
-                buttonchar4.setEnabled(true);
-            }
-            intcharbutton = 1;
-            ssm.sendText("m,char,1");
         }
-        if(evt.getSource() == buttonchar2){
-            buttonchar2.setEnabled(false);
-            if(intcharbutton == 1){
-                buttonchar1.setEnabled(true);
-            }
-            if(intcharbutton == 3){
-                buttonchar3.setEnabled(true);
-            }
-            if(intcharbutton == 4){
-                buttonchar4.setEnabled(true);
-            }
-            intcharbutton = 2;
-            ssm.sendText("m,char2");
-        }
-        if(evt.getSource() == buttonchar3){
-            buttonchar3.setEnabled(false);
-            
-            if(intcharbutton == 1){
-                buttonchar1.setEnabled(true);
-            }
-            if(intcharbutton == 2){
-                buttonchar2.setEnabled(true);
-            }
-            if(intcharbutton == 4){
-                buttonchar4.setEnabled(true);
-            }
-            intcharbutton = 3;
-            ssm.sendText("m,char,3");
-        }
-        if(evt.getSource() == buttonchar4){
-            buttonchar4.setEnabled(false);
-            if(intcharbutton == 2){
-                buttonchar2.setEnabled(true);
-            }
-            if(intcharbutton == 3){
-                buttonchar3.setEnabled(true);
-            }
-            if(intcharbutton == 1){
-                buttonchar1.setEnabled(true);
-            }
-            intcharbutton = 4;
-            ssm.sendText("m,char,4");
-        }
+        
 
         if(evt.getSource() == buttonstart){
             theFrame.setContentPane(characterPanel);
