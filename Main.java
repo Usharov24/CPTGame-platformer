@@ -18,16 +18,16 @@ import javax.swing.Timer;
 
 public class Main implements ActionListener {
 
-    private JFrame theFrame = new JFrame("CPT Game Proto");
+    public static JFrame theFrame = new JFrame("CPT Game Proto");
 
     //Panels
-    private DrawPanel mainPanel = new DrawPanel(null);
+    public static DrawPanel mainPanel = new DrawPanel(null);
     private JPanel hudPanel = new JPanel();
     private JPanel panel2 = new JPanel();
     private JPanel startPanel = new JPanel(null);
     private JPanel[] netPanels = {new JPanel(null), new JPanel(null)};
     private ChatPanel chatPanel = new ChatPanel();
-    private JPanel characterPanel = new JPanel(null);
+    public static JPanel characterPanel = new JPanel(null);
 
     // Order of buttons:
     // {host, join, settings, quit}
@@ -46,10 +46,7 @@ public class Main implements ActionListener {
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private SuperSocketMaster ssm = null;
-    private JButton buttonchar1 = new JButton("Sniper");
-    private JButton buttonchar2 = new JButton("Brute");
-    private JButton buttonchar3 = new JButton("Knight");
-    private JButton buttonchar4 = new JButton("Wizard");
+    public static JButton[] buttonchar = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
     private JButton buttonstart = new JButton("Start game");
     private JButton buttonready = new JButton("Ready");
 
@@ -62,6 +59,8 @@ public class Main implements ActionListener {
     public Player player2 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
     public Player player3 = new Player(-100, 0, 32, 32, ObjectId.PLAYER, handler);
     public Player player4 = new Player(-1000, 0, 32, 32, ObjectId.PLAYER, handler);
+    public static int[] intcharbutton = new int[]{0,0,0,0};
+    public Network network = new Network();
 
     /////////////////////////////////////////////////////////////////////////////
 
@@ -95,10 +94,10 @@ public class Main implements ActionListener {
         startPanel.add(mainMenuLabel);
 
         //Character selection panel
-        characterPanel.add(buttonchar1);
-        characterPanel.add(buttonchar2);
-        characterPanel.add(buttonchar3);
-        characterPanel.add(buttonchar4);
+        for(int i = 0; i < 4; i++){
+            characterPanel.add(buttonchar[i]);
+        }
+        
         characterPanel.add(buttonready);
         characterPanel.setPreferredSize(new Dimension(1280,720));
         buttonready.setSize(100,100);
@@ -108,18 +107,18 @@ public class Main implements ActionListener {
         buttonstart.setLocation(900,100);
         buttonstart.addActionListener(this);
         buttonstart.setEnabled(false);
-        buttonchar1.setSize(100,100);
-        buttonchar1.setLocation(100,100);
-        buttonchar1.addActionListener(this);
-        buttonchar2.setSize(100,100);
-        buttonchar2.setLocation(200,100);
-        buttonchar2.addActionListener(this);
-        buttonchar3.setSize(100,100);
-        buttonchar3.setLocation(100,200);
-        buttonchar3.addActionListener(this);
-        buttonchar4.setSize(100,100);
-        buttonchar4.setLocation(200,200);
-        buttonchar4.addActionListener(this);
+        buttonchar[0].setSize(100,100);
+        buttonchar[0].setLocation(100,100);
+        buttonchar[0].addActionListener(this);
+        buttonchar[1].setSize(100,100);
+        buttonchar[1].setLocation(200,100);
+        buttonchar[1].addActionListener(this);
+        buttonchar[2].setSize(100,100);
+        buttonchar[2].setLocation(100,200);
+        buttonchar[2].addActionListener(this);
+        buttonchar[3].setSize(100,100);
+        buttonchar[3].setLocation(200,200);
+        buttonchar[3].addActionListener(this);
 
         //Host & Join Network
         host.addActionListener(this);
@@ -162,11 +161,7 @@ public class Main implements ActionListener {
             ip[intCount].setSize(500, 50);
             ip[intCount].setLocation(390, 470);
 
-            try{
-                ip[intCount].setText(ssm.getMyAddress());
-            }catch(NullPointerException e){
-                e.printStackTrace();
-            }
+            
 
             players[intCount].setSize(500, 300);
             players[intCount].setLocation(390, 20);
@@ -216,7 +211,7 @@ public class Main implements ActionListener {
 
         // Add the panels
         
-        theFrame.setContentPane(startPanel);
+        theFrame.setContentPane(characterPanel);
         //mainPanel.add(panel2);
         //mainPanel.add(hudPanel);
         // Frame
@@ -300,9 +295,32 @@ public class Main implements ActionListener {
 
         }
 
+        if(evt.getSource() == buttonchar[1] || evt.getSource() == buttonchar[2] || evt.getSource() == buttonchar[3] || evt.getSource() == buttonchar[0]){
+            int intcount = 4;
+            for(int i = 0; i < 4; i++){
+                if(evt.getSource() == buttonchar[i]){
+                    intcharbutton[i] = 1;
+                    buttonchar[i].setEnabled(false);
+                }
+                
+            }
+            for(int i2 = 0; i2 < 4; i2++){
+                for(int i = 0; i < 4; i++){
+                        if(intcharbutton[i] != i2){
+                            intcount++;
+                        }
+
+                }
+                if(intcount == 4)buttonchar[i2].setEnabled(true);
+                intcount = 0;
+            }
+        }
+        
+
         if(evt.getSource() == buttonstart){
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
+            ssm.sendText("m,start");
         }
 
         if(evt.getSource() == buttonready){
@@ -310,10 +328,12 @@ public class Main implements ActionListener {
             mainPanel.requestFocus();
             theFrame.setContentPane(mainPanel);
             theFrame.pack();
+            ssm.sendText("m,ready");
         }
         
         if(evt.getSource() == ssm){
-        
+            network.readdata(ssm);
+            
         }
     }
 

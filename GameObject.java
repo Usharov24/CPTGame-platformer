@@ -21,17 +21,11 @@ public abstract class GameObject {
     public abstract void update(LinkedList<GameObject> objectList);
     public abstract void draw(Graphics g);
     
-    public void networksend(){
-        ssm.sendText(this.fltX + "," + this.fltY + "," + this.fltVelX + "," + this.fltVelY + "," + this.getId() + "," + this.fltWidth + "," + this.fltHeight);
-    }
     public void networkrecieve(){
         String strmsg[] = ssm.readText().split(",");
         if(strmsg[3] == "BULLET"){
             handler.addObject(new Bullet(Float.parseFloat(strmsg[0]), Float.parseFloat(strmsg[1]), Float.parseFloat(strmsg[2]),Float.parseFloat(strmsg[3]), Float.parseFloat(strmsg[5]), Float.parseFloat(strmsg[6]), ObjectId.BULLET, handler));
         } 
-        if(strmsg[3] == "PLAYER"){
-            //handler.addObject(new Player(Float.parseFloat(strmsg[0]), Float.parseFloat(strmsg[1]), Float.parseFloat(strmsg[2]),Float.parseFloat(strmsg[3]), Float.parseFloat(strmsg[5]), Float.parseFloat(strmsg[6]), ObjectId.BULLET, handler));
-        }
         
     }
 

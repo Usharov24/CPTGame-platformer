@@ -11,7 +11,7 @@ public class Bullet extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        this.networksend();
+        
         
     }
         
