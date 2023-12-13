@@ -30,6 +30,7 @@ public class Main implements ActionListener {
     public static JPanel characterPanel = new JPanel(null);
     public static int intjoinid;
     public static int inthostid;
+    public static int intjoinhostid;
 
     // Order of buttons:
     // {host, join, settings, quit}
@@ -226,7 +227,12 @@ public class Main implements ActionListener {
 
     // Override ActionPerformed Method
     public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == timer) mainPanel.repaint();
+        if(evt.getSource() == timer){mainPanel.repaint();
+            if( theFrame.getContentPane() == netPanels[0] && ssm!= null && inthostid == 1 ){
+                network.senddata(ssm);
+                intjoinid = 0;
+            }
+        };
 
         if(evt.getSource() == mainMenuButtons[0]){
             theFrame.setContentPane(netPanels[0]);
@@ -252,8 +258,8 @@ public class Main implements ActionListener {
                 e.printStackTrace();
             }
             // Display
-            inthostid = 0;
-            intjoinid = 4;
+            inthostid = 1;
+            
         
             buttonstart.setEnabled(true);
             host.setEnabled(false);
@@ -297,6 +303,7 @@ public class Main implements ActionListener {
             netPanels[1].repaint();
 
             ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
+            
             ssm.connect();
             
 
@@ -324,6 +331,7 @@ public class Main implements ActionListener {
             if(inthostid == 1){
                 intjoinid = 0;
             }
+            
         }
 
         if(evt.getSource() == buttonready){

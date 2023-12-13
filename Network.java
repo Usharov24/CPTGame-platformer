@@ -9,7 +9,7 @@ public class Network {
 
             
                 String strInput = ssm.readText();
-                strInput = ssm.readText();
+                System.out.println(strInput);
                 
                 if(strInput.substring(0,1).equals("c")){
                     String[] strMessage = strInput.split(",");
@@ -17,6 +17,7 @@ public class Network {
                     //chatbox.append(strmessage[1] + "\n");
                 }
                 else if(strInput.substring(0,1).equals("m")){
+                    System.out.println("msg recieved");
                     String[] strSelection = strInput.split(",");
                     if(strSelection[1].equals("start")){
                         Main.theFrame.setContentPane(Main.characterPanel);
@@ -29,10 +30,13 @@ public class Network {
                         Main.theFrame.pack();
                     }
                     if(strSelection[1].equals("join")){
+                        System.out.println("smth good happened");
                         if(Main.intjoinid == 0){
+                            System.out.println("smth good happened");
                             Main.intjoinid = Integer.parseInt(strSelection[2]);
+                            
                         }
-                        
+
                     }
                     
                     /*if(strSelection[1].equals("char1")){
@@ -75,7 +79,8 @@ public class Network {
         
 
         public void senddata(SuperSocketMaster ssm){
-            ssm.sendText("m,join," + Main.intjoinid);
+            ssm.sendText("m,join," + Main.intjoinhostid);
+            System.out.println("sent msg");
         }
     
 }

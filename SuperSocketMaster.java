@@ -280,12 +280,15 @@ public class SuperSocketMaster{
             Thread t1 = new Thread(singleconnection);
             t1.start();
             System.out.println("Server accepted a client connection:  Current Size: "+clientconnections.size());
-            Main.intjoinid = clientconnections.size();
-            network.senddata(Main.ssm);
+            Main.intjoinhostid = clientconnections.size();
+            
+            
           } catch (IOException e) {
             blnListenForClients = false;
           }
         }   
+        
+        
       }else{
         // Client 
         // Already connected to a server and have a socket object
@@ -436,13 +439,16 @@ public class SuperSocketMaster{
       socketConnection.removeClient(this);
     }
     public boolean sendText(String strText) {
-      if(outBuffer.checkError()){    
-        socketConnection.removeClient(this);  
-        return false;
-      }else{
-        outBuffer.println(strText);
-        return true;
-      }
+      
+        if(outBuffer.checkError()){    
+          socketConnection.removeClient(this);  
+          return false;
+        }else{
+          outBuffer.println(strText);
+          return false;
+        }
+      
+      
     }
     public ClientConnection(SuperSocketMaster parentssm, Socket socketObject, SocketConnection socketConnection){
       this.socketConnection = socketConnection;
