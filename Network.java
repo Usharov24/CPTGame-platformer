@@ -74,8 +74,8 @@ public class Network {
                 }
                 else if(strInput.substring(0,1).equals("o")){
                     String[] strSelection = strInput.split(",");
-                    if (strSelection[5].equals("BULLET")){
-
+                    if (strSelection[1].equals("b")){
+                        Main.handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Main.handler));
                     }
                     if (strSelection[5].equals("PLAYER")){
                         

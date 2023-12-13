@@ -24,6 +24,8 @@ public class Player extends GameObject implements KeyListener, MouseListener {
         this.handler = handler;
     }
 
+    Network network = new Network();
+
     public void update(LinkedList<GameObject> objectList) {
         if(keySet.contains(InputKeys.W)) fltVelY -= fltAcc;
         else if(keySet.contains(InputKeys.S)) fltVelY += fltAcc;
@@ -84,6 +86,7 @@ public class Player extends GameObject implements KeyListener, MouseListener {
 
             // - 5 is for the width and height of the bullet
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
+            Main.ssm.sendText("o,b,"+ (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + fltDiffX * 20 + "," + fltDiffY * 20 + "," + 10 + "," + 10);
         }
         if(evt.getButton() == 3){
             float fltDiffX = evt.getX() - (fltX + fltWidth/2);
