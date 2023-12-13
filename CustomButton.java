@@ -41,9 +41,19 @@ public class CustomButton extends AbstractButton implements MouseListener {
         super.paintComponent(g);
 
         if(blnMouseEntered) {
+            if(getWidth() < size.getWidth() + 10 && getHeight() < size.getHeight() + 10) {
+                setSize(new Dimension(getWidth() + 2, getHeight() + 2));
+                setLocation(getX() - 1, getY() - 1);
+            }
+
             g.setColor(Color.green);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else {
+            if(getWidth() > size.getWidth() && getHeight() > size.getHeight()) {
+                setSize(new Dimension(getWidth() - 2, getHeight() - 2));
+                setLocation(getX() + 1, getY() + 1);
+            }
+
             g.setColor(Color.red);
             g.fillRect(0, 0, getWidth(), getHeight());
         }
