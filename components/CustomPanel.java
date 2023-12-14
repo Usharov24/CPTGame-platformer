@@ -6,13 +6,13 @@ import javax.swing.JPanel;
 
 import framework.Main;
 
-public class DrawPanel extends JPanel {
+public class CustomPanel extends JPanel {
 
-    public DrawPanel() {
+    public CustomPanel() {
         super();
     }
 
-    public DrawPanel(LayoutManager layout) {
+    public CustomPanel(LayoutManager layout) {
         super(layout);
     }
 

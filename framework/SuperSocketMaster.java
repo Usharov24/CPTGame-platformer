@@ -409,7 +409,7 @@ public class SuperSocketMaster{
     String strIncomingText = "";
     Socket socketObject = null;
     PrintWriter outBuffer = null;
-    BufferedReader inBuffer = null; 
+    BufferedReader inBuffer = null;
     public void run(){
       try {
         inBuffer = new BufferedReader(new InputStreamReader(socketObject.getInputStream()));

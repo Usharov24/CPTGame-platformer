@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 import java.util.EnumSet;
 import java.util.LinkedList;
 
-import framework.Main;
 import framework.Network;
 import framework.ObjectHandler;
 import framework.ObjectId;
@@ -23,14 +22,14 @@ public class Player extends GameObject implements KeyListener, MouseListener {
 
     private ObjectHandler handler;
 
+    private Network network = new Network(ssm);
+
     private float fltAcc = 1f, fltDec = 0.5f;
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
         super(fltX, fltY, fltWidth, fltHeight, id);
         this.handler = handler;
     }
-
-    Network network = new Network(ssm);
 
     public void update(LinkedList<GameObject> objectList) {
         if(keySet.contains(InputKeys.W)) fltVelY -= fltAcc;
@@ -82,7 +81,7 @@ public class Player extends GameObject implements KeyListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent evt) {
-        if(evt.getButton() == 1){
+        if(evt.getButton() == MouseEvent.BUTTON1){
             float fltDiffX = evt.getX() - (fltX + fltWidth/2);
             float fltDiffY = evt.getY() - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
@@ -92,9 +91,9 @@ public class Player extends GameObject implements KeyListener, MouseListener {
 
             // - 5 is for the width and height of the bullet
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
-            Main.ssm.sendText("o,b,"+ (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + fltDiffX * 20 + "," + fltDiffY * 20 + "," + 10 + "," + 10);
+            network.sendMessage("o,b,"+ (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + fltDiffX * 20 + "," + fltDiffY * 20 + "," + 10 + "," + 10);
         }
-        if(evt.getButton() == 3){
+        if(evt.getButton() == MouseEvent.BUTTON3){
             float fltDiffX = evt.getX() - (fltX + fltWidth/2);
             float fltDiffY = evt.getY() - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
