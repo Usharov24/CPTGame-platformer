@@ -1,4 +1,7 @@
+package framework;
 import java.awt.datatransfer.StringSelection;
+
+import objects.Bullet;
 
 public class Network {
 

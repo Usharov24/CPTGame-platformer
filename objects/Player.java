@@ -1,3 +1,4 @@
+package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -6,6 +7,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EnumSet;
 import java.util.LinkedList;
+
+import framework.Main;
+import framework.Network;
+import framework.ObjectHandler;
+import framework.ObjectId;
 
 public class Player extends GameObject implements KeyListener, MouseListener {
 

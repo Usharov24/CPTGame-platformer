@@ -1,5 +1,8 @@
+package framework;
 import java.awt.Graphics;
 import java.util.LinkedList;
+
+import objects.GameObject;
 
 public class ObjectHandler {
 

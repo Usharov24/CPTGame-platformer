@@ -1,3 +1,4 @@
+package framework;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,6 +17,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
+import components.ChatPanel;
+import components.CustomButton;
+import components.DrawPanel;
+import objects.Player;
 
 public class Main implements ActionListener {
 
@@ -36,8 +42,8 @@ public class Main implements ActionListener {
 
     // Order of buttons:
     // {host, join, settings, quit}
-    private CustomButton[] mainMenuButtons = {new CustomButton(100, 100, this), new CustomButton(100, 100, this), 
-                                              new CustomButton(100, 100, this), new CustomButton(100, 100, this)};
+    private CustomButton[] mainMenuButtons = {new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this), 
+                                              new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this)};
     
     private JLabel mainMenuLabel = new JLabel("Game!");
 

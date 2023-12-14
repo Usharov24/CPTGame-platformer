@@ -1,8 +1,11 @@
+package components;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import framework.SuperSocketMaster;
 
 public class ChatPanel extends JPanel {
     //Chat 

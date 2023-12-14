@@ -1,6 +1,10 @@
+package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
+
+import framework.ObjectHandler;
+import framework.ObjectId;
 
 public class Bullet extends GameObject {
 
@@ -12,8 +16,6 @@ public class Bullet extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        
-        
     }
         
     public void update(LinkedList<GameObject> objectList) {
