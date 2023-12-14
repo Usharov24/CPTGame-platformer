@@ -189,7 +189,6 @@ public class SuperSocketMaster{
     String strMyHostname;
     Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
     boolean blnListenForClients = true;
-    Network network = new Network();
     
     Timer theTimer;
     public void actionPerformed(ActionEvent evt){

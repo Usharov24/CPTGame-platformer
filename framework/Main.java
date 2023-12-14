@@ -1,5 +1,4 @@
 package framework;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -48,15 +47,12 @@ public class Main implements ActionListener {
     private JLabel mainMenuLabel = new JLabel("Game!");
 
     //Host & Join
-    private JTextField[] port = {new JTextField(), new JTextField()};
-    private JTextField[] ip = {new JTextField(), new JTextField()};
     private JTextField[] name = {new JTextField(), new JTextField()};
     private JTextArea[] players = {new JTextArea(), new JTextArea()};
     private JButton host = new JButton("Host Network");
     private JButton join = new JButton("Join Network");
     private JLabel[] hostLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
     private JLabel[] joinLabels = {new JLabel("Enter Name"), new JLabel("Port Number"), new JLabel("IP Address"), new JLabel("")};
-    public static SuperSocketMaster ssm = null;
     public static JButton[] buttonchar = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
     private JButton buttonstart = new JButton("Start game");
     private JButton buttonready = new JButton("Ready");
@@ -72,7 +68,9 @@ public class Main implements ActionListener {
     public Player player4 = new Player(-1000, 0, 32, 32, ObjectId.PLAYER, handler);
     public static int[] intcharbutton = new int[]{0,0,0,0};
     public static int[] intpastcharbutton = new int[]{0,0,0,0};
-    public Network network = new Network();
+
+    public static SuperSocketMaster ssm = null;
+    public Network network = new Network(ssm);
 
     /////////////////////////////////////////////////////////////////////////////
 
@@ -167,20 +165,12 @@ public class Main implements ActionListener {
             name[intCount].setSize(500, 50);
             name[intCount].setLocation(390, 330);
 
-            port[intCount].setSize(500, 50);
-            port[intCount].setLocation(390, 400);
-
-            ip[intCount].setSize(500, 50);
-            ip[intCount].setLocation(390, 470);
-
             players[intCount].setSize(500, 300);
             players[intCount].setLocation(390, 20);
 
             netPanels[intCount].setFocusable(true);
             netPanels[intCount].requestFocus();
             netPanels[intCount].setPreferredSize(new Dimension(1280, 720));
-            netPanels[intCount].add(port[intCount]);
-            netPanels[intCount].add(ip[intCount]);
             netPanels[intCount].add(name[intCount]);
             netPanels[intCount].add(players[intCount]);
             theFrame.add(netPanels[intCount]);
@@ -272,15 +262,11 @@ public class Main implements ActionListener {
         
             buttonstart.setEnabled(true);
             host.setEnabled(false);
-            hostLabels[3].setText("Now hosting network from "+ip[0].getText()+" at port "+port[0].getText());
             players[0].setText(name[0].getText()+" 👑");
             netPanels[0].repaint();
             
-
-            ssm = new SuperSocketMaster(Integer.parseInt(port[0].getText()), this);
             ssm.connect();
             System.out.println("ip : "  + ssm.getMyAddress());
-            ip[0].setText(ssm.getMyAddress());
         }
 
         if(evt.getSource() == join){
@@ -308,14 +294,9 @@ public class Main implements ActionListener {
 
             // Display
             join.setEnabled(false);
-            joinLabels[3].setText("Joined network hosted from "+ip[1].getText()+" at port "+port[1].getText());
             netPanels[1].repaint();
-
-            ssm = new SuperSocketMaster(ip[1].getText(), Integer.parseInt(port[1].getText()), this);
             
             ssm.connect();
-            
-
         }
 
         if(evt.getSource() == buttonchar[1] || evt.getSource() == buttonchar[2] || evt.getSource() == buttonchar[3] || evt.getSource() == buttonchar[0]){

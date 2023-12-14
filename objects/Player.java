@@ -30,7 +30,7 @@ public class Player extends GameObject implements KeyListener, MouseListener {
         this.handler = handler;
     }
 
-    Network network = new Network();
+    Network network = new Network(ssm);
 
     public void update(LinkedList<GameObject> objectList) {
         if(keySet.contains(InputKeys.W)) fltVelY -= fltAcc;

@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.AbstractButton;
-import javax.swing.JLabel;
 
 import framework.ResourceLoader;
 
@@ -68,10 +67,6 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
             g.setColor(Color.green);
             g.fillRect(0, 0, getWidth(), getHeight());
-
-            g.setColor(Color.black);
-            g.setFont(font.deriveFont(10f));
-            g.drawString("hello", getX(), getY());
         } else {
             if(getWidth() > getMinimumSize().width && getHeight() > getMinimumSize().height) {
                 setSize(new Dimension(getWidth() - 2, getHeight() - 2));
