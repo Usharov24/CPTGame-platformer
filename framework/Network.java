@@ -4,7 +4,7 @@ import objects.Bullet;
 
 public class Network {
 
-    private SuperSocketMaster ssm;
+    private SuperSocketMaster ssm = null;
 
     public Network(SuperSocketMaster ssm) {
         this.ssm = ssm;
