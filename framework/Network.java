@@ -11,7 +11,7 @@ public class Network {
     }
 
     public void readMessage() { 
-        String strInput = ssm.readText();
+        String strInput = Main.ssm.readText();
                 
         if(strInput.substring(0,1).equals("c")) {
             String[] strMessage = strInput.split(",");
@@ -49,6 +49,6 @@ public class Network {
     }
            
     public void sendMessage(String strMessage) {
-        ssm.sendText(strMessage);
+        Main.ssm.sendText(strMessage);
     }
 }

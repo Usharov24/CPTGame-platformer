@@ -176,7 +176,7 @@ public class SuperSocketMaster{
     * Client opens a socket and starts listening for data
     * *****************************************************************/
   
-  private class SocketConnection implements Runnable, ActionListener{
+  public class SocketConnection implements Runnable, ActionListener{
     SuperSocketMaster parentssm = null;
     int intPort = 1337;
     String strServerIP = null;
@@ -187,7 +187,7 @@ public class SuperSocketMaster{
     BufferedReader inBuffer = null;
     String strMyIP;
     String strMyHostname;
-    Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
+    public static Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
     boolean blnListenForClients = true;
     
     Timer theTimer;
@@ -280,7 +280,7 @@ public class SuperSocketMaster{
             Thread t1 = new Thread(singleconnection);
             t1.start();
             System.out.println("Server accepted a client connection:  Current Size: "+clientconnections.size());
-            Main.intjoinhostid = clientconnections.size();
+            
             
             
           } catch (IOException e) {
@@ -310,6 +310,7 @@ public class SuperSocketMaster{
         closeConnection();
       }
     }
+    
     public void closeConnection(){
       // If server, kill all client sockets then close the serversocket
       if(strServerIP == null || strServerIP.equals("")){

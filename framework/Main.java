@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import components.*;
+import framework.SuperSocketMaster.SocketConnection;
 import objects.Player;
 
 public class Main implements ActionListener {
@@ -47,7 +48,7 @@ public class Main implements ActionListener {
     public static int[] intcharbutton = new int[4];
     private static int[] intpastcharbutton = new int[4];
 
-    private SuperSocketMaster ssm;
+    public static SuperSocketMaster ssm;
     private Network network;
 
     /////////////////////////////////////////////////////////////////////////////
@@ -147,6 +148,7 @@ public class Main implements ActionListener {
             menuPanels[0].repaint();
 
             if(theFrame.getContentPane() == menuPanels[1] && ssm != null && inthostid == 1) {
+                intjoinhostid = SocketConnection.clientconnections.size();
                 network.sendMessage("m,join," + intjoinhostid);
                 intjoinid = 0;
             }
@@ -197,7 +199,7 @@ public class Main implements ActionListener {
             }
 
             ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
-            network = new Network(ssm);
+            network = new Network(new SuperSocketMaster(new String(chrJoinCode), 8080, this));
             
             inthostid = 1;
 
@@ -218,6 +220,7 @@ public class Main implements ActionListener {
 
                 System.out.println(intjoinid);
                 ssm.sendText("m,charbutton," + intjoinid + "," + intCount + "," + intpastcharbutton[intjoinid]);
+                
             }
         }
 
