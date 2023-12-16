@@ -13,6 +13,7 @@ import javax.swing.Timer;
 
 import components.*;
 import objects.Player;
+import objects.Mango;
 
 public class Main implements ActionListener {
 
@@ -82,6 +83,7 @@ public class Main implements ActionListener {
         
         // TEMP ///////
         handler.addObject(new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input));
+        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
@@ -268,7 +270,10 @@ public class Main implements ActionListener {
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
             thePanels[4].requestFocus();
+
             //ssm.sendText("m,ready");
+
+            
         }
     }
 
