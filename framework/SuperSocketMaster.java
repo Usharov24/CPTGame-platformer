@@ -176,7 +176,7 @@ public class SuperSocketMaster{
     * Client opens a socket and starts listening for data
     * *****************************************************************/
   
-  public class SocketConnection implements Runnable, ActionListener{
+  private class SocketConnection implements Runnable, ActionListener{
     SuperSocketMaster parentssm = null;
     int intPort = 1337;
     String strServerIP = null;
@@ -187,7 +187,7 @@ public class SuperSocketMaster{
     BufferedReader inBuffer = null;
     String strMyIP;
     String strMyHostname;
-    public static Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
+    Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
     boolean blnListenForClients = true;
     
     Timer theTimer;
@@ -256,8 +256,6 @@ public class SuperSocketMaster{
             clientconnections.remove(clientConnection);
             clientConnection = null;
             System.out.println("Server removed a client connection.  Current Size: "+clientconnections.size());
-            
-
           }catch(NullPointerException e){
           }
         }catch(IOException e){ 
@@ -280,15 +278,10 @@ public class SuperSocketMaster{
             Thread t1 = new Thread(singleconnection);
             t1.start();
             System.out.println("Server accepted a client connection:  Current Size: "+clientconnections.size());
-            
-            
-            
           } catch (IOException e) {
             blnListenForClients = false;
           }
         }   
-        
-        
       }else{
         // Client 
         // Already connected to a server and have a socket object
@@ -310,7 +303,6 @@ public class SuperSocketMaster{
         closeConnection();
       }
     }
-    
     public void closeConnection(){
       // If server, kill all client sockets then close the serversocket
       if(strServerIP == null || strServerIP.equals("")){
@@ -410,7 +402,7 @@ public class SuperSocketMaster{
     String strIncomingText = "";
     Socket socketObject = null;
     PrintWriter outBuffer = null;
-    BufferedReader inBuffer = null;
+    BufferedReader inBuffer = null; 
     public void run(){
       try {
         inBuffer = new BufferedReader(new InputStreamReader(socketObject.getInputStream()));
@@ -440,16 +432,13 @@ public class SuperSocketMaster{
       socketConnection.removeClient(this);
     }
     public boolean sendText(String strText) {
-      
-        if(outBuffer.checkError()){    
-          socketConnection.removeClient(this);  
-          return false;
-        }else{
-          outBuffer.println(strText);
-          return false;
-        }
-      
-      
+      if(outBuffer.checkError()){    
+        socketConnection.removeClient(this);  
+        return false;
+      }else{
+        outBuffer.println(strText);
+        return true;
+      }
     }
     public ClientConnection(SuperSocketMaster parentssm, Socket socketObject, SocketConnection socketConnection){
       this.socketConnection = socketConnection;

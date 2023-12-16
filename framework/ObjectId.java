@@ -1,6 +1,7 @@
 package framework;
 
 public enum ObjectId {
-    PLAYER,
+    PLAYER_LOCAL,
+    PLAYER_REMOTE,
     BULLET;
 }

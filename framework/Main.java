@@ -12,20 +12,18 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import components.*;
-import framework.SuperSocketMaster.SocketConnection;
 import objects.Player;
 
 public class Main implements ActionListener {
 
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
-    private CustomPanel[] menuPanels = {new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null)};
+    private CustomPanel[] thePanels = {new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null)};
     // TEMP public static
-    public static CustomPanel gamePanel = new CustomPanel(null);
-    public static JPanel characterPanel = new JPanel(null);
-    public static int intjoinid;
-    public static int inthostid;
-    public static int intjoinhostid;
+    private JPanel characterPanel = new JPanel(null);
+    //public static int intjoinid;
+    //public static int inthostid;
+    //public static int intjoinhostid;
 
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
@@ -44,39 +42,54 @@ public class Main implements ActionListener {
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
     public static ObjectHandler handler = new ObjectHandler();
-    private Player player = new Player(0, 0, 32, 32, ObjectId.PLAYER, handler);
-    public static int[] intcharbutton = new int[4];
-    private static int[] intpastcharbutton = new int[4];
-
-    public static SuperSocketMaster ssm;
-    private Network network;
-
+    private InputHandler input = new InputHandler();
+    //public static int[] intcharbutton = new int[4];
+    //private static int[] intpastcharbutton = new int[4];
     /////////////////////////////////////////////////////////////////////////////
 
-    // Timer
     private Timer timer = new Timer(1000/60, this);
-    
-    public Main() {
-        for(int intCount = 0; intCount < menuPanels.length; intCount++) {
-            menuPanels[intCount].setPreferredSize(new Dimension(1280, 720));
-            menuPanels[intCount].setFocusable(true);
+
+    private SuperSocketMaster ssm;
+
+    public State state = State.MAIN_MENU;
+
+    public enum State {
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4);
+
+        private final int intPanelNumber;
+
+        State(int intPanelNumber) {
+            this.intPanelNumber = intPanelNumber;
         }
 
-        // TEMP ///////
-        handler.addObject(player);
-        gamePanel.addKeyListener(player);
-        gamePanel.addMouseListener(player);
-        ///////////////
+        public int getValue() {
+            return intPanelNumber;
+        }
+    }
 
-        gamePanel.setPreferredSize(new Dimension(1280, 720));
-        gamePanel.setFocusable(true);
+    private int intSessionId;
+    private int intServerSize = 0;
+    private boolean[] availableIds = {true, true, true};
+    
+    public Main() {
+        for(int intCount = 0; intCount < thePanels.length; intCount++) {
+            thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
+            thePanels[intCount].setFocusable((intCount == 4) ? true : false);
+        }
+
+        thePanels[4].addKeyListener(input);
+        thePanels[4].addMouseListener(input);
+        
+        // TEMP ///////
+        handler.addObject(new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input));
+        ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
             mainMenuButtons[intCount].setLocation(540, 200 + 110 * intCount);
-            menuPanels[0].add(mainMenuButtons[intCount]);
+            thePanels[0].add(mainMenuButtons[intCount]);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,35 +100,35 @@ public class Main implements ActionListener {
             netTextAreas[intCount].setSize(600, 250);
             netTextAreas[intCount].setLocation(340, 50);
             netTextAreas[intCount].setEditable(false);
-            menuPanels[intCount + 1].add(netTextAreas[intCount]);
+            thePanels[intCount + 1].add(netTextAreas[intCount]);
         }
 
         for(int intCount = 0; intCount < netTextFields.length; intCount++) {
             netTextFields[intCount].setSize(465, 50);
             netTextFields[intCount].setLocation(475, (intCount < 2) ? 330 + 75 * intCount : 330 + 75 * (intCount - 2));
             netTextFields[intCount].setEditable((intCount == 1) ? false : true);
-            menuPanels[(intCount < 2) ? 1 : 2].add(netTextFields[intCount]);
+            thePanels[(intCount < 2) ? 1 : 2].add(netTextFields[intCount]);
         }
 
         for(int intCount = 0; intCount < netButtons.length; intCount++) {
             netButtons[intCount].setSize(500, 70);
             netButtons[intCount].setLocation(390, 540);
             netButtons[intCount].addActionListener(this);
-            menuPanels[intCount + 1].add(netButtons[intCount]);
+            thePanels[intCount + 1].add(netButtons[intCount]);
         }
 
         for(int intCount = 0; intCount < netLabels.length; intCount++){
             netLabels[intCount].setFont(new Font("Dialog", Font.BOLD, 18));
             netLabels[intCount].setSize(150, 50);
             netLabels[intCount].setLocation(300, (intCount < 2) ? 330 + 70 * intCount : 330 + 70 * (intCount - 2));
-            menuPanels[(intCount < 2) ? 1 : 2].add(netLabels[intCount]);
+            thePanels[(intCount < 2) ? 1 : 2].add(netLabels[intCount]);
         }
 
         // Will redo this
         buttonStart.setSize(100, 100);
         buttonStart.setLocation(950, 175);
         buttonStart.addActionListener(this);
-        menuPanels[1].add(buttonStart);
+        thePanels[1].add(buttonStart);
 
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,7 +147,7 @@ public class Main implements ActionListener {
         characterPanel.add(buttonReady);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
-        theFrame.setContentPane(menuPanels[0]);
+        theFrame.setContentPane(thePanels[0]);
         theFrame.pack();
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theFrame.setResizable(false);
@@ -145,27 +158,53 @@ public class Main implements ActionListener {
     // Override actionPerformed Method
     public void actionPerformed(ActionEvent evt) {
         if(evt.getSource() == timer) {
-            menuPanels[0].repaint();
+            thePanels[state.getValue()].repaint();
+            // Line not done
+            // Need to get player information from handler
+            if(state == State.GAME && intSessionId != 1) ssm.sendText("c" + intSessionId + ">oPLAYER~");
+        }
+        
+        if(evt.getSource() == ssm) {
+            String strMessage = ssm.readText();
 
-            if(theFrame.getContentPane() == menuPanels[1] && ssm != null && inthostid == 1) {
-                intjoinhostid = SocketConnection.clientconnections.size();
-                network.sendMessage("m,join," + intjoinhostid);
-                intjoinid = 0;
+            if(intSessionId == 1) {
+                if(strMessage.equals("c0>mJOIN")) {
+                    intServerSize++;
+                    System.out.println("Server Size: " + intServerSize);
+
+                    if(availableIds[intServerSize - 2]) {
+                        availableIds[intServerSize - 2] = false;
+                        ssm.sendText("h>mSESSION_ID~" + intServerSize);
+                    } else if(availableIds[intServerSize - 3]) {
+                        availableIds[intServerSize - 3] = false;
+                        ssm.sendText("h>mSESSION_ID~" + (intServerSize - 1));
+                    } else if(availableIds[intServerSize - 4]) {
+                        availableIds[intServerSize - 4] = false;
+                        ssm.sendText("h>mSESSION_ID~" + (intServerSize - 2));
+                    }
+                } else if(strMessage.contains("mPLAYER_DISCONNECT")) {
+                    intServerSize--;
+                    availableIds[Integer.parseInt(strMessage.substring(1, 2))] = true;
+                }
+            } else if(!strMessage.substring(0, 1).equals("c")) {
+                if(strMessage.contains("mSESSION_ID")) {
+                    intSessionId = Integer.parseInt(strMessage.split("~")[1]);
+                    System.out.println("Session Id: " + intSessionId);
+                }
             }
         }
 
-        if(evt.getSource() == ssm) {
-            network.readMessage();
-        }
-
         if(evt.getSource() == mainMenuButtons[0]) {
-            theFrame.setContentPane(menuPanels[1]);
+            state = State.HOST_MENU;
+            theFrame.setContentPane(thePanels[1]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[1]) {
-            theFrame.setContentPane(menuPanels[2]);
+            state = State.JOIN_MENU;
+            theFrame.setContentPane(thePanels[2]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[2]) {
-           theFrame.setContentPane(menuPanels[3]);
+            state = State.SETTINGS;
+           theFrame.setContentPane(thePanels[3]);
            theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
@@ -173,7 +212,9 @@ public class Main implements ActionListener {
         
         if(evt.getSource() == netButtons[0]) {
             ssm = new SuperSocketMaster(8080, this);
-            network = new Network(ssm);
+            ssm.connect();
+            intSessionId = 1;
+            intServerSize++;
 
             char[] chrCharacters = ssm.getMyAddress().toCharArray();
 
@@ -182,15 +223,10 @@ public class Main implements ActionListener {
             }
 
             netTextFields[1].setText(new String(chrCharacters));
-
-            inthostid = 1;
         
             buttonStart.setEnabled(true);
             netButtons[0].setEnabled(false);
             //playerArea[0].setText(name[0].getText()+" 👑");
-            menuPanels[1].repaint();
-            
-            ssm.connect();
         } else if(evt.getSource() == netButtons[1]) {
             char[] chrJoinCode = netTextFields[3].getText().toCharArray();
 
@@ -199,18 +235,15 @@ public class Main implements ActionListener {
             }
 
             ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
-            network = new Network(new SuperSocketMaster(new String(chrJoinCode), 8080, this));
-            
-            inthostid = 1;
+            ssm.connect();
+
+            ssm.sendText("c0>mJOIN");
 
             // Display
             netButtons[1].setEnabled(false);
-            menuPanels[2].repaint();
-            
-            ssm.connect();
         }
 
-        for(int intCount = 0; intCount < 4; intCount++) {
+        /*for(int intCount = 0; intCount < 4; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
                 intpastcharbutton[intjoinid] = intcharbutton[intjoinid];
                 characterButtons[intpastcharbutton[intjoinid]].setEnabled(true);
@@ -222,22 +255,20 @@ public class Main implements ActionListener {
                 ssm.sendText("m,charbutton," + intjoinid + "," + intCount + "," + intpastcharbutton[intjoinid]);
                 
             }
-        }
+        }*/
 
         if(evt.getSource() == buttonStart) {
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
-            ssm.sendText("m,start");
-            if(inthostid == 1){
-                intjoinid = 0;
-            }
+            //ssm.sendText("m,start");
         }
 
         if(evt.getSource() == buttonReady) {
-            gamePanel.requestFocus();
-            theFrame.setContentPane(gamePanel);
+            state = State.GAME;
+            theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
-            ssm.sendText("m,ready");
+            thePanels[4].requestFocus();
+            //ssm.sendText("m,ready");
         }
     }
 
