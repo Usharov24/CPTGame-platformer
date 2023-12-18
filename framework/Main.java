@@ -14,6 +14,7 @@ import javax.swing.Timer;
 import components.*;
 import objects.Player;
 import objects.Mango;
+import objects.Bullet;
 
 public class Main implements ActionListener {
 
@@ -194,6 +195,11 @@ public class Main implements ActionListener {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
                 }
+            }
+            if(strMessage.contains("BULLET")){
+                String[] strMsg = strMessage.split(",");
+                new Bullet(Float.parseFloat(strMsg[1]),Float.parseFloat(strMsg[2]),Float.parseFloat(strMsg[3]),Float.parseFloat(strMsg[5]),Float.parseFloat(strMsg[6]),Float.parseFloat(strMsg[7]),ObjectId.BULLET,handler);
+
             }
         }
 

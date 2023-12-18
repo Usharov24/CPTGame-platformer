@@ -5,21 +5,24 @@ import java.util.LinkedList;
 
 import framework.ObjectHandler;
 import framework.ObjectId;
-import framework.InputHandler;
+
 
 public class Bullet extends GameObject {
 
     private ObjectHandler handler;
-    private InputHandler input;
-
+    
     
     public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
         super(fltX, fltY, fltWidth, fltHeight, id);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-    }
+        if(ssm!=null){
+            ssm.sendText("BULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler);
+        }
         
+    }
+    
     public void update(LinkedList<GameObject> objectList) {
     
         fltX += fltVelX;

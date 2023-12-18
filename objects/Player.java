@@ -41,8 +41,8 @@ public class Player extends GameObject {
             else if(fltVelX < 0) fltVelX += fltDec;
         }
         if(input.mouseSet.contains(InputHandler.InputMouse.BUTTON1)){
-            float fltDiffX = InputHandler.fltclickx - (fltX + fltWidth/2);
-            float fltDiffY = InputHandler.fltclicky - (fltY + fltHeight/2);
+            float fltDiffX = InputHandler.fltClickX - (fltX + fltWidth/2);
+            float fltDiffY = InputHandler.fltClickY - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
@@ -50,8 +50,8 @@ public class Player extends GameObject {
         }
         
         if(input.mouseSet.contains(InputHandler.InputMouse.BUTTON3)){
-            float fltDiffX = InputHandler.fltclickx - (fltX + fltWidth/2);
-            float fltDiffY = InputHandler.fltclicky - (fltY + fltHeight/2);
+            float fltDiffX = InputHandler.fltClickX - (fltX + fltWidth/2);
+            float fltDiffY = InputHandler.fltClickY - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
             fltDiffX /= fltLength;
