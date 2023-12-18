@@ -11,7 +11,7 @@ public class HomingBullet extends GameObject {
     private ObjectHandler handler;
 
     
-    public HomingBullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
+    public HomingBullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, float flttargetx, float flttargety, ObjectHandler handler) {
         super(fltX, fltY, fltWidth, fltHeight, id);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;

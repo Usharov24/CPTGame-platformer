@@ -5,10 +5,12 @@ import java.util.LinkedList;
 
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.InputHandler;
 
 public class Bullet extends GameObject {
 
     private ObjectHandler handler;
+    private InputHandler input;
 
     
     public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
@@ -19,7 +21,7 @@ public class Bullet extends GameObject {
     }
         
     public void update(LinkedList<GameObject> objectList) {
-        
+    
         fltX += fltVelX;
         fltY += fltVelY;
 

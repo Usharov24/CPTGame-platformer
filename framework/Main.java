@@ -80,6 +80,7 @@ public class Main implements ActionListener {
 
         thePanels[4].addKeyListener(input);
         thePanels[4].addMouseListener(input);
+        thePanels[4].addMouseMotionListener(input);
         
         // TEMP ///////
         handler.addObject(new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input));
