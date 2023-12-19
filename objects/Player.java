@@ -21,9 +21,9 @@ public class Player extends GameObject {
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(input.keySet.contains(InputHandler.InputKeys.W)) fltVelY -= fltAcc;
-        else if(input.keySet.contains(InputHandler.InputKeys.S)) fltVelY += fltAcc;
-        else if(input.keySet.contains(InputHandler.InputKeys.W) && input.keySet.contains(InputHandler.InputKeys.S)) {
+        if(input.buttonSet.contains(InputHandler.InputButtons.W)) fltVelY -= fltAcc;
+        else if(input.buttonSet.contains(InputHandler.InputButtons.S)) fltVelY += fltAcc;
+        else if(input.buttonSet.contains(InputHandler.InputButtons.W) && input.buttonSet.contains(InputHandler.InputButtons.S)) {
             if(fltVelY > 0) fltVelY -= fltDec;
             else if(fltVelY < 0) fltVelY += fltDec;
         } else {
@@ -31,44 +31,39 @@ public class Player extends GameObject {
             else if(fltVelY < 0) fltVelY += fltDec;
         }
 
-        if(input.keySet.contains(InputHandler.InputKeys.A)) fltVelX -= fltAcc;
-        else if(input.keySet.contains(InputHandler.InputKeys.D)) fltVelX += fltAcc;
-        else if(input.keySet.contains(InputHandler.InputKeys.A) && input.keySet.contains(InputHandler.InputKeys.D)) {
+        if(input.buttonSet.contains(InputHandler.InputButtons.A)) fltVelX -= fltAcc;
+        else if(input.buttonSet.contains(InputHandler.InputButtons.D)) fltVelX += fltAcc;
+        else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
             if(fltVelX > 0) fltVelX -= fltDec;
             else if(fltVelX < 0) fltVelX += fltDec;
         } else {
             if(fltVelX > 0) fltVelX -= fltDec;
             else if(fltVelX < 0) fltVelX += fltDec;
         }
-        if(input.mouseSet.contains(InputHandler.InputMouse.BUTTON1)){
-            float fltDiffX = InputHandler.fltClickX - (fltX + fltWidth/2);
-            float fltDiffY = InputHandler.fltClickY - (fltY + fltHeight/2);
+        
+        if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)) {
+            float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
+            float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
             handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
         }
         
-        if(input.mouseSet.contains(InputHandler.InputMouse.BUTTON3)){
-            float fltDiffX = InputHandler.fltClickX - (fltX + fltWidth/2);
-            float fltDiffY = InputHandler.fltClickY - (fltY + fltHeight/2);
+        if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
+            float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
+            float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
 
-            // - 5 is for the width and height of the bullet
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20 + (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 10, 10, ObjectId.BULLET, handler));
+            for(int intCount = 0; intCount < 2; intCount++) {
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
+            }
         }
         
-
         if(fltVelX > 10) fltVelX = 10;
         else if(fltVelX < -10) fltVelX = -10;
         if(fltVelY > 10) fltVelY = 10;
