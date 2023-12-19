@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import components.*;
+import objects.Apple;
 import objects.Player;
 import objects.Mango;
 import objects.Bullet;
@@ -50,6 +51,7 @@ public class Main implements ActionListener {
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
+    public static float startTime = (float)(System.currentTimeMillis()/1000.0);
 
     private SuperSocketMaster ssm;
 
@@ -86,6 +88,7 @@ public class Main implements ActionListener {
         // TEMP ///////
         handler.addObject(new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input));
         handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, handler));
+        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
@@ -165,7 +168,7 @@ public class Main implements ActionListener {
             thePanels[state.getValue()].repaint();
             // Line not done
             // Need to get player information from handler
-            if(state == State.GAME && intSessionId != 1) ssm.sendText("c" + intSessionId + ">oPLAYER~");
+            if(state == State.GAME && intSessionId != 1 && ssm!=null) ssm.sendText("c" + intSessionId + ">oPLAYER~");
         }
         
         if(evt.getSource() == ssm) {

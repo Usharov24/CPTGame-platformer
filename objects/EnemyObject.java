@@ -10,19 +10,20 @@ public abstract class EnemyObject extends GameObject {
 
     protected float fltRangeX;
     protected float fltRangeY;
+    protected float fltVelX;
+    protected float fltVelY;
     protected float fltHealth;
     protected float fltDamage;
     //protected boolean blnMovement;
     //protected int intMovementType;
     //protected int intAttackType;
 
-    //protected float fltVelX; ??
-    //protected float fltVelY; ??
-
-    public EnemyObject(float fltX, float fltY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id){
+    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id){
         super(fltX, fltY, fltHeight, fltWidth, id);
         this.fltRangeX = fltRangeX;
         this.fltRangeY = fltRangeY;
+        this.fltVelX = fltVelX;
+        this.fltVelY = fltVelY;
         this.fltHealth = fltHealth;
         this.fltDamage = fltDamage;
     }
@@ -49,6 +50,22 @@ public abstract class EnemyObject extends GameObject {
 
     public void setRangeY() {
         this.fltRangeY = fltRangeY;
+    }
+
+    public float getVelX(){
+        return fltVelX;
+    }
+
+    public float getVelY(){
+        return fltVelY;
+    } 
+
+    public void setVelX(){
+        this.fltVelX = fltVelX;
+    }
+
+    public void setVelY(){
+        this.fltVelY = fltVelY;
     }
 
     public float getHealth() {
