@@ -13,7 +13,8 @@ public class Player extends GameObject {
     private InputHandler input;
     private String strdirection;
     private float fltAcc = 1f, fltDec = 0.5f;
-    private float fltnormalforce;
+    private float fltgravity;
+    private float fltjumpvel;
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, InputHandler input) {
         super(fltX, fltY, fltWidth, fltHeight, id);
@@ -22,8 +23,8 @@ public class Player extends GameObject {
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE)) fltVelY -= fltAcc;
-        else if(input.buttonSet.contains(InputHandler.InputButtons.S)) fltVelY += fltAcc;
+        if(input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE)) fltjumpvel = -30;
+        else if(input.buttonSet.contains(InputHandler.InputButtons.S) && fltY < 660) fltVelY += fltAcc;
         else if(input.buttonSet.contains(InputHandler.InputButtons.W) && input.buttonSet.contains(InputHandler.InputButtons.S)) {
             if(fltVelY > 0) fltVelY -= fltDec;
             else if(fltVelY < 0) fltVelY += fltDec;
@@ -85,14 +86,28 @@ public class Player extends GameObject {
                 fltVelX = -30;
                 
             }
-            if(input.buttonSet.contains(InputHandler.InputButtons.SPACE)){
-                fltnormalforce = -50;
-            }
+           
             
         }
+        //makes it so the object feels gravity when above ground
+        if(fltY < 685){
+                fltgravity += 2;
+            }
 
-        fltX += fltVelX + fltnormalforce;
-        fltY += fltVelY + 5;
+        if(fltY > 685){
+            fltgravity = 0;
+            fltjumpvel = 0;
+            fltY = 685;
+        }
+        //when hitting ground it takes away all momentum
+        
+                
+
+                
+            
+
+        fltX += fltVelX;
+        fltY += fltVelY + fltgravity + fltjumpvel;
         
     }
 
