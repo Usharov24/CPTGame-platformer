@@ -13,10 +13,12 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public float fltMouseX, fltMouseY;
 
     public enum InputButtons {
-        W, A, S, D, BUTTON1, BUTTON2, BUTTON3;
+        W, A, S, D, BUTTON1, BUTTON2, BUTTON3, SHIFT, SPACE;
     }
 
     public void keyPressed(KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_SHIFT) buttonSet.add(InputButtons.SHIFT);
+        if(evt.getKeyCode() == KeyEvent.VK_SPACE) buttonSet.add(InputButtons.SPACE);
         if(evt.getKeyCode() == KeyEvent.VK_W) buttonSet.add(InputButtons.W);
         if(evt.getKeyCode() == KeyEvent.VK_A) buttonSet.add(InputButtons.A);
         if(evt.getKeyCode() == KeyEvent.VK_S) buttonSet.add(InputButtons.S);
@@ -24,6 +26,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     public void keyReleased(KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_SHIFT) buttonSet.remove(InputButtons.SHIFT);
+        if(evt.getKeyCode() == KeyEvent.VK_SPACE) buttonSet.remove(InputButtons.SPACE);
         if(evt.getKeyCode() == KeyEvent.VK_W) buttonSet.remove(InputButtons.W);
         if(evt.getKeyCode() == KeyEvent.VK_A) buttonSet.remove(InputButtons.A);
         if(evt.getKeyCode() == KeyEvent.VK_S) buttonSet.remove(InputButtons.S);

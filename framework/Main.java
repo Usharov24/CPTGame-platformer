@@ -199,9 +199,38 @@ public class Main implements ActionListener {
             if(strMessage.contains("BULLET")){
                 String[] strMsg = strMessage.split(",");
                 new Bullet(Float.parseFloat(strMsg[1]),Float.parseFloat(strMsg[2]),Float.parseFloat(strMsg[3]),Float.parseFloat(strMsg[5]),Float.parseFloat(strMsg[6]),Float.parseFloat(strMsg[7]),ObjectId.BULLET,handler);
-
+                
             }
+            /*if(strMessage.substring(0,1).equals("c")) {
+                String[] strInput = strMessage.split(",");
+                
+                //chatbox.append(strmessage[1] + "\n");
+            } else if(strMessage.substring(0, 1).equals("m")) {
+                String[] strSelection = strMessage.split(",");
+                if(strSelection[1].equals("start")) {
+                    Main.theFrame.setContentPane(characterPanel);
+                    Main.theFrame.pack();
+                } else if(strSelection[1].equals("ready")) {
+                    Main.theFrame.setContentPane(mainPanel );
+                    Main.gamePanel.setFocusable(true);
+                    Main.gamePanel.requestFocus();
+                    Main.theFrame.pack();
+                } else if(strSelection[1].equals("join")) {
+                    if(Main.intjoinid == 0){    
+                        intjoinid = Integer.parseInt(strSelection[2]);      
+                    }
+                } else if(strSelection[1].equals("charbutton")) {
+                    Main.intcharbutton[Integer.parseInt(strSelection[2])] = Integer.parseInt(strSelection[3]);
+                    Main.characterButtons[Integer.parseInt(strSelection[3])].setEnabled(false);
+                } else if(strSelection[1].equals("oldbutton")) {
+                    Main.characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
+                }
         }
+        */ 
+
+
+        }
+
 
         if(evt.getSource() == mainMenuButtons[0]) {
             state = State.HOST_MENU;

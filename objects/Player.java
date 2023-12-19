@@ -11,8 +11,9 @@ public class Player extends GameObject {
 
     private ObjectHandler handler;
     private InputHandler input;
-
+    private String strdirection;
     private float fltAcc = 1f, fltDec = 0.5f;
+    private float fltnormalforce;
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, InputHandler input) {
         super(fltX, fltY, fltWidth, fltHeight, id);
@@ -21,7 +22,7 @@ public class Player extends GameObject {
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(input.buttonSet.contains(InputHandler.InputButtons.W)) fltVelY -= fltAcc;
+        if(input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE)) fltVelY -= fltAcc;
         else if(input.buttonSet.contains(InputHandler.InputButtons.S)) fltVelY += fltAcc;
         else if(input.buttonSet.contains(InputHandler.InputButtons.W) && input.buttonSet.contains(InputHandler.InputButtons.S)) {
             if(fltVelY > 0) fltVelY -= fltDec;
@@ -30,9 +31,16 @@ public class Player extends GameObject {
             if(fltVelY > 0) fltVelY -= fltDec;
             else if(fltVelY < 0) fltVelY += fltDec;
         }
+        
 
-        if(input.buttonSet.contains(InputHandler.InputButtons.A)) fltVelX -= fltAcc;
-        else if(input.buttonSet.contains(InputHandler.InputButtons.D)) fltVelX += fltAcc;
+        if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
+            fltVelX -= fltAcc;
+            strdirection = "left";
+        }
+        else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
+            fltVelX += fltAcc;
+            strdirection = "right";
+        }
         else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
             if(fltVelX > 0) fltVelX -= fltDec;
             else if(fltVelX < 0) fltVelX += fltDec;
@@ -68,9 +76,24 @@ public class Player extends GameObject {
         else if(fltVelX < -10) fltVelX = -10;
         if(fltVelY > 10) fltVelY = 10;
         else if(fltVelY < -10) fltVelY = -10;
+        if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT)){
+            if(strdirection.equals("right")){
+                fltVelX = 30;
 
-        fltX += fltVelX;
-        fltY += fltVelY;
+            }
+            if(strdirection.equals("left")){
+                fltVelX = -30;
+                
+            }
+            if(input.buttonSet.contains(InputHandler.InputButtons.SPACE)){
+                fltnormalforce = -50;
+            }
+            
+        }
+
+        fltX += fltVelX + fltnormalforce;
+        fltY += fltVelY + 5;
+        
     }
 
     public void draw(Graphics g) {
