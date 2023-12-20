@@ -121,8 +121,8 @@ public class Player extends GameObject {
         }
         //when hitting ground it takes away all momentum
                 
-        if(fltdashvelx > 0) fltdashvelx-=3;
-        if(fltdashvelx < 0) fltdashvelx+=3;
+        if(fltdashvelx > 0) fltdashvelx-=5;
+        if(fltdashvelx < 0) fltdashvelx+=5;     
         //creates the deceleration for dashes
 
         fltX += fltVelX + fltdashvelx;
