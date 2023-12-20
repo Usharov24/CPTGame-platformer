@@ -39,7 +39,7 @@ public class Apple extends EnemyObject {
 
         fltVelX = (float)(5*Math.sin(System.currentTimeMillis()/1000.0-framework.Main.startTime));
         fltVelY = (float)(5*Math.cos(System.currentTimeMillis()/1000.0-framework.Main.startTime));
-        System.out.println(fltVelX+", "+fltVelY);
+        
 
         fltX += fltVelX;
         fltY += fltVelY;

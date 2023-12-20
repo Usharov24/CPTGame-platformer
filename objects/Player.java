@@ -123,7 +123,6 @@ public class Player extends GameObject {
                 
         if(fltdashvelx > 0) fltdashvelx-=3;
         if(fltdashvelx < 0) fltdashvelx+=3;
-        System.out.println(fltdashvelx);
         //creates the deceleration for dashes
 
         fltX += fltVelX + fltdashvelx;
