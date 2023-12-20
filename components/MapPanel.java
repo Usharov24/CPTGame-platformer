@@ -19,19 +19,18 @@ import javax.swing.JPanel;
 
 import framework.Main;
 
-public class MapPanel extends JPanel {
-
-    try{
+public class MapPanel extends JPanel{{
+	try{
 		List<List<String> > strMap = new ArrayList<>();
 		String strFile = "res/map1.csv";
-		FileReader fr = new FileReader(strFile);
-		BufferedReader br = new BufferedReader(fr);
+		FileReader fileread = new FileReader(strFile);
+		BufferedReader reader = new BufferedReader(fileread);
 			
-		String line = br.readLine();
-		while(line != null){
-			List<String> lineData = Arrays.asList(line.split(","));
+		String strLine = reader.readLine();
+		while(strLine != null){
+			List<String> lineData = Arrays.asList(strLine.split(","));
 			strMap.add(lineData);
-			line = br.readLine();
+			strLine = reader.readLine();
 		}
 
 		for(List<String> list : strMap){
@@ -39,13 +38,13 @@ public class MapPanel extends JPanel {
 			System.out.print(str + " ");
 			System.out.println();
 		}
-		br.close();
+		reader.close();
     }catch(FileNotFoundException e){
         e.printStackTrace();
     }catch(IOException f){
         f.printStackTrace();
     }
-
+}
     // protected void paintComponent(Graphics g){
         //g.setColor(new Color(0,0,0));
         //Main.handler.update();
