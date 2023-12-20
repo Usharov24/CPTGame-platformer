@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import framework.InputHandler;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.InputHandler.InputButtons;
 
 public class Player extends GameObject {
 
@@ -15,6 +16,9 @@ public class Player extends GameObject {
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltgravity;
     private float fltjumpvel;
+    public int intjumpcount;
+    private float fltdashvelx;
+
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, InputHandler input) {
         super(fltX, fltY, fltWidth, fltHeight, id);
@@ -23,7 +27,21 @@ public class Player extends GameObject {
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE)) fltjumpvel = -30;
+        if(input.buttonSet.contains(InputHandler.InputButtons.W) && intjumpcount < 2){
+            input.buttonSet.remove(InputButtons.W);
+            input.buttonSet.remove(InputButtons.SPACE);
+            fltjumpvel = -30;
+            fltgravity = 0;
+            intjumpcount++;
+        } 
+        if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intjumpcount <2){
+            input.buttonSet.remove(InputButtons.SPACE);
+            input.buttonSet.remove(InputButtons.W);
+            fltjumpvel = -30;
+            fltgravity = 0;
+            intjumpcount++;
+
+        } 
         else if(input.buttonSet.contains(InputHandler.InputButtons.S) && fltY < 660) fltVelY += fltAcc;
         else if(input.buttonSet.contains(InputHandler.InputButtons.W) && input.buttonSet.contains(InputHandler.InputButtons.S)) {
             if(fltVelY > 0) fltVelY -= fltDec;
@@ -78,12 +96,13 @@ public class Player extends GameObject {
         if(fltVelY > 10) fltVelY = 10;
         else if(fltVelY < -10) fltVelY = -10;
         if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT)){
+            input.buttonSet.remove(InputButtons.SHIFT);
             if(strdirection.equals("right")){
-                fltVelX = 30;
+                fltdashvelx = 50;
 
             }
             if(strdirection.equals("left")){
-                fltVelX = -30;
+                fltdashvelx = -50;
                 
             }
            
@@ -95,18 +114,19 @@ public class Player extends GameObject {
             }
 
         if(fltY > 685){
+            intjumpcount = 0;
             fltgravity = 0;
             fltjumpvel = 0;
             fltY = 685;
         }
         //when hitting ground it takes away all momentum
-        
                 
+        if(fltdashvelx > 0) fltdashvelx-=3;
+        if(fltdashvelx < 0) fltdashvelx+=3;
+        System.out.println(fltdashvelx);
+        //creates the deceleration for dashes
 
-                
-            
-
-        fltX += fltVelX;
+        fltX += fltVelX + fltdashvelx;
         fltY += fltVelY + fltgravity + fltjumpvel;
         
     }
