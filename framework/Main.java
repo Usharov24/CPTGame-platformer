@@ -31,6 +31,9 @@ public class Main implements ActionListener {
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
                                               new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this)};
+ 
+    // Back Buttons
+    private CustomButton[] backButtons = {new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
@@ -147,6 +150,13 @@ public class Main implements ActionListener {
             characterPanel.add(characterButtons[intCount]);
         }
 
+        // Back Buttons
+        for(int intCount = 0; intCount < 3; intCount++){
+            backButtons[intCount].setLocation(20, 20);
+            backButtons[intCount].addActionListener(this);
+            thePanels[intCount+1].add(backButtons[intCount]);
+        }
+
         // Will redo this
         buttonReady.setSize(100, 100);
         buttonReady.setLocation(950, 175);
@@ -245,13 +255,26 @@ public class Main implements ActionListener {
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[2]) {
             state = State.SETTINGS;
-           theFrame.setContentPane(thePanels[3]);
-           theFrame.pack();
+            theFrame.setContentPane(thePanels[3]);
+            theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
+        } else if(evt.getSource() == backButtons[0]){
+            state = State.MAIN_MENU;
+            theFrame.setContentPane(thePanels[0]);
+            theFrame.pack();
+        } else if(evt.getSource() == backButtons[1]){
+            state = State.MAIN_MENU;
+            theFrame.setContentPane(thePanels[0]);
+            theFrame.pack();
+        } else if(evt.getSource() == backButtons[2]){
+            state = State.MAIN_MENU;
+            theFrame.setContentPane(thePanels[0]);
+            theFrame.pack();
         }
         
         if(evt.getSource() == netButtons[0]) {
+            backButtons[0].setVisible(false);
             ssm = new SuperSocketMaster(8080, this);
             ssm.connect();
             intSessionId = 1;
@@ -269,6 +292,7 @@ public class Main implements ActionListener {
             netButtons[0].setEnabled(false);
             //playerArea[0].setText(name[0].getText()+" 👑");
         } else if(evt.getSource() == netButtons[1]) {
+            backButtons[1].setEnabled(false);
             char[] chrJoinCode = netTextFields[3].getText().toCharArray();
 
             for(int intCount = 0; intCount < chrJoinCode.length; intCount++) {
