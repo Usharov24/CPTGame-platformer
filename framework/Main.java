@@ -16,6 +16,7 @@ import objects.Apple;
 import objects.Player;
 import objects.Mango;
 import objects.Bullet;
+import objects.HomingBullet;
 
 public class Main implements ActionListener {
 
@@ -49,14 +50,15 @@ public class Main implements ActionListener {
     // TEMPORARY ////////////////////////////////////////////////////////////////
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
-    //public static int[] intcharbutton = new int[4];
-    //private static int[] intpastcharbutton = new int[4];
+    public static int[] intcharbutton = new int[4];
+    private static int[] intpastcharbutton = new int[4];
+    private Player[] players = { new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
     public static float startTime = (float)(System.currentTimeMillis()/1000.0);
 
-    private SuperSocketMaster ssm;
+    public static SuperSocketMaster ssm;
 
     public State state = State.MAIN_MENU;
 
@@ -74,7 +76,7 @@ public class Main implements ActionListener {
         }
     }
 
-    private int intSessionId;
+    public static int intSessionId;
     private int intServerSize = 0;
     private boolean[] availableIds = {true, true, true};
     
@@ -89,7 +91,7 @@ public class Main implements ActionListener {
         thePanels[4].addMouseMotionListener(input);
         
         // TEMP ///////
-        handler.addObject(new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input));
+        
         handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, handler));
         handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, handler));
         ///////////////
@@ -183,6 +185,7 @@ public class Main implements ActionListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
+            String[] strSelection = strMessage.split(",");
 
             if(intSessionId == 1) {
                 if(strMessage.equals("c0>mJOIN")) {
@@ -209,37 +212,48 @@ public class Main implements ActionListener {
                     System.out.println("Session Id: " + intSessionId);
                 }
             }
-            if(strMessage.contains("BULLET")){
-                String[] strMsg = strMessage.split(",");
-                new Bullet(Float.parseFloat(strMsg[1]),Float.parseFloat(strMsg[2]),Float.parseFloat(strMsg[3]),Float.parseFloat(strMsg[5]),Float.parseFloat(strMsg[6]),Float.parseFloat(strMsg[7]),ObjectId.BULLET,handler);
+            if(strMessage.substring(0, 1).equals("o")) {
                 
-            }
-            /*if(strMessage.substring(0,1).equals("c")) {
+            
+                if (strSelection[1].equals("BULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
+                    Player.handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                    
+                    
+            
+                }
+                if (strSelection[1].equals("HOMINGBULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
+                    Player.handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                }
+
+                if (strSelection[1].equals("PLAYER")){
+                    handler.addObject(players[Integer.parseInt(strSelection[4])]);
+                    players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[2]));
+                    players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[3]));
+                }
+            }   
+            if(strMessage.substring(0,1).equals("c")) {
                 String[] strInput = strMessage.split(",");
                 
                 //chatbox.append(strmessage[1] + "\n");
             } else if(strMessage.substring(0, 1).equals("m")) {
-                String[] strSelection = strMessage.split(",");
                 if(strSelection[1].equals("start")) {
-                    Main.theFrame.setContentPane(characterPanel);
-                    Main.theFrame.pack();
+                    theFrame.setContentPane(characterPanel);
+                    theFrame.pack();
                 } else if(strSelection[1].equals("ready")) {
-                    Main.theFrame.setContentPane(mainPanel );
-                    Main.gamePanel.setFocusable(true);
-                    Main.gamePanel.requestFocus();
-                    Main.theFrame.pack();
+                    state = State.GAME;
+                    theFrame.setContentPane(thePanels[4]);
+                    theFrame.pack();
+                    thePanels[4].requestFocus();
                 } else if(strSelection[1].equals("join")) {
-                    if(Main.intjoinid == 0){    
-                        intjoinid = Integer.parseInt(strSelection[2]);      
-                    }
+                
                 } else if(strSelection[1].equals("charbutton")) {
-                    Main.intcharbutton[Integer.parseInt(strSelection[2])] = Integer.parseInt(strSelection[3]);
-                    Main.characterButtons[Integer.parseInt(strSelection[3])].setEnabled(false);
+                    intcharbutton[Integer.parseInt(strSelection[2])] = Integer.parseInt(strSelection[3]);
+                    characterButtons[Integer.parseInt(strSelection[3])].setEnabled(false);
                 } else if(strSelection[1].equals("oldbutton")) {
-                    Main.characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
+                    characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
                 }
         }
-        */ 
+         
 
 
         }
@@ -292,7 +306,7 @@ public class Main implements ActionListener {
             netButtons[0].setEnabled(false);
             //playerArea[0].setText(name[0].getText()+" 👑");
         } else if(evt.getSource() == netButtons[1]) {
-            backButtons[1].setEnabled(false);
+            backButtons[1].setVisible(false);
             char[] chrJoinCode = netTextFields[3].getText().toCharArray();
 
             for(int intCount = 0; intCount < chrJoinCode.length; intCount++) {
@@ -308,28 +322,35 @@ public class Main implements ActionListener {
             netButtons[1].setEnabled(false);
         }
 
-        /*for(int intCount = 0; intCount < 4; intCount++) {
+        for(int intCount = 0; intCount < 4; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
-                intpastcharbutton[intjoinid] = intcharbutton[intjoinid];
-                characterButtons[intpastcharbutton[intjoinid]].setEnabled(true);
-                ssm.sendText("m,oldbutton," + intpastcharbutton[intjoinid]);
-                intcharbutton[intjoinid] = intCount;
+                intpastcharbutton[intSessionId-1] = intcharbutton[intSessionId-1];
+                characterButtons[intpastcharbutton[intSessionId-1]].setEnabled(true);
+                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId-1]);
+                intcharbutton[intSessionId-1] = intCount;
                 characterButtons[intCount].setEnabled(false);
 
-                System.out.println(intjoinid);
-                ssm.sendText("m,charbutton," + intjoinid + "," + intCount + "," + intpastcharbutton[intjoinid]);
+                System.out.println(intSessionId-1);
+                ssm.sendText("m,charbutton," + (intSessionId-1) + "," + intCount + "," + intpastcharbutton[intSessionId-1]);
                 
             }
-        }*/
+        }
 
         if(evt.getSource() == buttonStart) {
+            if(ssm != null){
+                ssm.sendText("m,start");
+            }
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
             //ssm.sendText("m,start");
         }
 
         if(evt.getSource() == buttonReady) {
+            if(ssm != null){
+                ssm.sendText("m,ready");
+            }
             state = State.GAME;
+            handler.addObject(players[intSessionId-1]);
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
             thePanels[4].requestFocus();

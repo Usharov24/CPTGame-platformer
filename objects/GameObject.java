@@ -26,13 +26,7 @@ public abstract class GameObject {
     public abstract void update(LinkedList<GameObject> objectList);
     public abstract void draw(Graphics g);
     
-    public void networkreceive(){
-        String strmsg[] = ssm.readText().split(",");
-        if(strmsg[3] == "BULLET"){
-            handler.addObject(new Bullet(Float.parseFloat(strmsg[0]), Float.parseFloat(strmsg[1]), Float.parseFloat(strmsg[2]),Float.parseFloat(strmsg[3]), Float.parseFloat(strmsg[5]), Float.parseFloat(strmsg[6]), ObjectId.BULLET, handler));
-        } 
-        
-    }
+    
 
     public float getX() {
         return fltX;

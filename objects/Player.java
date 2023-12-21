@@ -1,16 +1,18 @@
 package objects;
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
 import framework.InputHandler;
+import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.InputHandler.InputButtons;
 
 public class Player extends GameObject {
 
-    private ObjectHandler handler;
+    public static ObjectHandler handler;
     private InputHandler input;
     private String strdirection;
     private float fltAcc = 1f, fltDec = 0.5f;
@@ -74,9 +76,19 @@ public class Player extends GameObject {
             float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
+
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler, framework.Main.intSessionId));
         }
         
+        if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
+            float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
+            float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
+            float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+            fltDiffX /= fltLength;
+            fltDiffY /= fltLength;
+            handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler, framework.Main.intSessionId));
+        }
+
         if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
             float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
             float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
@@ -86,10 +98,12 @@ public class Player extends GameObject {
             fltDiffY /= fltLength;
 
             for(int intCount = 0; intCount < 2; intCount++) {
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler, framework.Main.intSessionId));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler, framework.Main.intSessionId));
             }
         }
+
+        
         
         if(fltVelX > 10) fltVelX = 10;
         else if(fltVelX < -10) fltVelX = -10;
@@ -127,6 +141,7 @@ public class Player extends GameObject {
 
         fltX += fltVelX + fltdashvelx;
         fltY += fltVelY + fltgravity + fltjumpvel;
+        if(ssm != null) ssm.sendText("o,PLAYER," + fltX + "," + fltY + "," + Main.intSessionId);
         
     }
 

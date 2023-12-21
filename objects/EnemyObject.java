@@ -83,7 +83,7 @@ public abstract class EnemyObject extends GameObject {
     public void setDamage() {
         this.fltDamage = fltDamage;
     }
-
+    
     // public void setMovement(){
     //  this.blnMovement = blnMovement;
     //}
