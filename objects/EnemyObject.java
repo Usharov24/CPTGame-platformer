@@ -1,5 +1,6 @@
 package objects;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import framework.ObjectHandler;
@@ -27,10 +28,6 @@ public abstract class EnemyObject extends GameObject {
         this.fltHealth = fltHealth;
         this.fltDamage = fltDamage;
     }
-
-    public abstract void update(LinkedList<GameObject> objectList);
-
-    public abstract void draw(Graphics g);
     
     public void networkreceive(){
 

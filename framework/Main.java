@@ -55,7 +55,7 @@ public class Main implements ActionListener {
     private InputHandler input = new InputHandler();
     public static int[] intcharbutton = new int[4];
     private static int[] intpastcharbutton = new int[4];
-    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0)};
+    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
@@ -221,18 +221,18 @@ public class Main implements ActionListener {
                 
             
                 if (strSelection[1].equals("BULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    Player.handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                    handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, handler));
                     
                     
             
                 }
                 if (strSelection[1].equals("HOMINGBULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    Player.handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                    handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, handler, Integer.parseInt(strSelection[10])));
                 }
 
                 if (strSelection[1].equals("PLAYER")){
                     if(!handler.containObject(players[Integer.parseInt(strSelection[4])])){
-                        players[Integer.parseInt(strSelection[4])] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, Integer.parseInt(strSelection[4]));
+                        players[Integer.parseInt(strSelection[4])] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input);
                         handler.addObject(players[Integer.parseInt(strSelection[4])]);
 
                     }
@@ -359,7 +359,7 @@ public class Main implements ActionListener {
                 ssm.sendText("m,ready");
             }
             state = State.GAME;
-            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
+            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input);
             handler.addObject(players[intSessionId]);
 
             theFrame.setContentPane(thePanels[4]);

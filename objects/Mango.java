@@ -1,5 +1,6 @@
 package objects;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,8 +68,6 @@ public class Mango extends EnemyObject {
            
         }
         return objectList.get(intreturn);
-
-        
     }
 
     public void draw(Graphics g){
@@ -78,6 +77,10 @@ public class Mango extends EnemyObject {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Rectangle getBounds() {
+        return null;
     }
 }
 

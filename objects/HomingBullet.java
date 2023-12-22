@@ -1,6 +1,7 @@
 package objects;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import framework.Main;
@@ -20,10 +21,10 @@ public class HomingBullet extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        if(Main.ssm!=null){
+        /*if(Main.ssm!=null){
             Main.ssm.sendText("o,HOMINGBULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
             
-        }
+        }*/
 
     }
         
@@ -52,5 +53,9 @@ public class HomingBullet extends GameObject {
     public void draw(Graphics g) {
         g.setColor(Color.white);
         g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+    }
+
+    public Rectangle getBounds() {
+        return null;
     }
 }
