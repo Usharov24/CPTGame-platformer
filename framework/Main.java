@@ -52,7 +52,7 @@ public class Main implements ActionListener {
     private InputHandler input = new InputHandler();
     public static int[] intcharbutton = new int[4];
     private static int[] intpastcharbutton = new int[4];
-    private Player[] players = { new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input)};
+    private Player[] players = { new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
@@ -226,9 +226,13 @@ public class Main implements ActionListener {
                 }
 
                 if (strSelection[1].equals("PLAYER")){
-                    handler.addObject(players[Integer.parseInt(strSelection[4])]);
+                    if(!handler.containObject(players[Integer.parseInt(strSelection[4])])){
+                        players[Integer.parseInt(strSelection[4])] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, Integer.parseInt(strSelection[4]));
+                        handler.addObject(players[Integer.parseInt(strSelection[4])]);
+
+                    }
                     players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[2]));
-                    players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[3]));
+                    players[Integer.parseInt(strSelection[4])].setY(Float.parseFloat(strSelection[3]));
                 }
             }   
             if(strMessage.substring(0,1).equals("c")) {
@@ -330,7 +334,7 @@ public class Main implements ActionListener {
                 intcharbutton[intSessionId-1] = intCount;
                 characterButtons[intCount].setEnabled(false);
 
-                System.out.println(intSessionId-1);
+                
                 ssm.sendText("m,charbutton," + (intSessionId-1) + "," + intCount + "," + intpastcharbutton[intSessionId-1]);
                 
             }
@@ -350,7 +354,9 @@ public class Main implements ActionListener {
                 ssm.sendText("m,ready");
             }
             state = State.GAME;
+            players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
             handler.addObject(players[intSessionId-1]);
+
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
             thePanels[4].requestFocus();
