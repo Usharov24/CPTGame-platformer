@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
+import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 
@@ -12,13 +13,15 @@ public class Bullet extends GameObject {
     private ObjectHandler handler;
     
     
-    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
+    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, int intsender) {
         super(fltX, fltY, fltWidth, fltHeight, id);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        if(ssm!=null){
-            ssm.sendText("BULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler);
+        
+        if(Main.ssm!=null){
+            Main.ssm.sendText("o,BULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
+            
         }
         
     }

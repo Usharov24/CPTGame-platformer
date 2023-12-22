@@ -13,7 +13,34 @@ public class ObjectHandler {
             GameObject object = objectList.get(intCount);
             
             object.update(objectList);
+            
         }
+    }
+    public GameObject findnear(float fltX, float fltY){
+        float fltDistX = 0;     
+        float fltDistY = 0;
+        float flttotaldist = 0;
+        float fltPastX = 0;
+        float fltPastY = 0;
+        float fltpastTotal = 0;
+        int intreturn = 0;
+        for(int i = 0; i < objectList.size(); i++){
+            
+            fltDistX = fltX - objectList.get(i).getX();
+            fltDistY = fltY - objectList.get(i).getY();
+            flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
+            if(flttotaldist > fltpastTotal){
+                fltpastTotal = flttotaldist;
+                fltPastX = fltDistX;
+                fltPastY = fltDistY;
+                intreturn = i;
+            }
+
+           
+        }
+        return objectList.get(intreturn);
+
+        
     }
 
     public void draw(Graphics g) {
@@ -27,6 +54,11 @@ public class ObjectHandler {
     public void addObject(GameObject object) {
         objectList.add(object);
     }
+
+    public boolean containObject(GameObject object) {
+        return objectList.contains(object);
+    }
+
 
     public void removeObject(GameObject object) {
         objectList.remove(object);
