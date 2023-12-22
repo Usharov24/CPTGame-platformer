@@ -29,6 +29,9 @@ public class Main implements ActionListener {
     //public static int inthostid;
     //public static int intjoinhostid;
 
+    // Map
+    private MapPanel mapPanel = new MapPanel();
+
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
                                               new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this)};
@@ -52,7 +55,7 @@ public class Main implements ActionListener {
     private InputHandler input = new InputHandler();
     public static int[] intcharbutton = new int[4];
     private static int[] intpastcharbutton = new int[4];
-    private Player[] players = { new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0)};
+    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
@@ -87,9 +90,9 @@ public class Main implements ActionListener {
             thePanels[intCount].setFocusable((intCount == 4) ? true : false);
         }
 
-        thePanels[4].addKeyListener(input);
-        thePanels[4].addMouseListener(input);
-        thePanels[4].addMouseMotionListener(input);
+        mapPanel.addKeyListener(input);
+        mapPanel.addMouseListener(input);
+        mapPanel.addMouseMotionListener(input);
         
         // TEMP ///////
         
@@ -98,6 +101,7 @@ public class Main implements ActionListener {
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
+        mapPanel.setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -246,9 +250,9 @@ public class Main implements ActionListener {
                     theFrame.pack();
                 } else if(strSelection[1].equals("ready")) {
                     state = State.GAME;
-                    theFrame.setContentPane(thePanels[4]);
+                    theFrame.setContentPane(mapPanel);
                     theFrame.pack();
-                    thePanels[4].requestFocus();
+                    mapPanel.requestFocus();
                 } else if(strSelection[1].equals("join")) {
                 
                 } else if(strSelection[1].equals("charbutton")) {
@@ -329,14 +333,14 @@ public class Main implements ActionListener {
 
         for(int intCount = 0; intCount < 4; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
-                intpastcharbutton[intSessionId-1] = intcharbutton[intSessionId-1];
-                characterButtons[intpastcharbutton[intSessionId-1]].setEnabled(true);
-                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId-1]);
-                intcharbutton[intSessionId-1] = intCount;
+                intpastcharbutton[intSessionId] = intcharbutton[intSessionId];
+                characterButtons[intpastcharbutton[intSessionId]].setEnabled(true);
+                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId]);
+                intcharbutton[intSessionId] = intCount;
                 characterButtons[intCount].setEnabled(false);
 
                 
-                ssm.sendText("m,charbutton," + (intSessionId-1) + "," + intCount + "," + intpastcharbutton[intSessionId-1]);
+                ssm.sendText("m,charbutton," + (intSessionId) + "," + intCount + "," + intpastcharbutton[intSessionId]);
                 
             }
         }
@@ -355,12 +359,12 @@ public class Main implements ActionListener {
                 ssm.sendText("m,ready");
             }
             state = State.GAME;
-            players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
-            handler.addObject(players[intSessionId-1]);
+            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
+            handler.addObject(players[intSessionId]);
 
-            theFrame.setContentPane(thePanels[4]);
+            theFrame.setContentPane(mapPanel);
             theFrame.pack();
-            thePanels[4].requestFocus();
+            mapPanel.requestFocus();
 
             //ssm.sendText("m,ready");
 

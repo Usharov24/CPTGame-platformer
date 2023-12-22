@@ -19,40 +19,62 @@ import javax.swing.JPanel;
 
 import framework.Main;
 
-public class MapPanel extends JPanel{{
-	try{
-		List<List<String> > strMap = new ArrayList<>();
-		String strFile = "res/map1.csv";
-		FileReader fileread = new FileReader(strFile);
-		BufferedReader reader = new BufferedReader(fileread);
-			
-		String strLine = reader.readLine();
-		while(strLine != null){
-			List<String> lineData = Arrays.asList(strLine.split(","));
-			strMap.add(lineData);
-			strLine = reader.readLine();
+public class MapPanel extends JPanel{
+	int intNumRows = 25;
+	int intNumColumns = 40;
+	String strMap[][] = new String[40][25];
+	{
+		try{
+			String strFile = "res/map1.csv";
+			FileReader fileread = new FileReader(strFile);
+			BufferedReader reader = new BufferedReader(fileread);
+			String strLine = reader.readLine();
+			String strSplit[];
+			while(strLine != null){
+				for(int intRow = 0; intRow < intNumRows; intRow++){
+					strLine = reader.readLine();
+					try{
+						strSplit = strLine.split(",");
+						for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
+							strMap[intColumn][intRow] = strSplit[intColumn];
+						}
+					}catch(NullPointerException e){
+						e.printStackTrace();
+					}catch(ArrayIndexOutOfBoundsException e){
+						e.printStackTrace();
+					}
+				}
+			}
+			reader.close();
+		}catch(FileNotFoundException e){
+			e.printStackTrace();
+		}catch(IOException e){
+			e.printStackTrace();
 		}
+	}
 
-		for(List<String> list : strMap){
-			for(String str : list)
-			System.out.print(str + " ");
-			System.out.println();
+	protected void paintComponent(Graphics g){
+        g.setColor(new Color(0,0,0));
+		int intWidth = (int)Math.round(1280.0/intNumColumns);
+		int intHeight = (int)Math.round(720.0/intNumRows);
+		try{
+			for(int intRow = 0; intRow < intNumRows; intRow++){
+				for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
+					if(strMap[intColumn][intRow].equals("a")){
+					}
+					if(strMap[intColumn][intRow].equals("g")){
+						g.setColor(new Color(0, 128, 0));
+						g.fillRect((intColumn*intWidth), (intRow*intHeight), intWidth, intHeight);
+					}
+				}
+			}
+			Main.handler.update();
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}catch(ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
 		}
-		reader.close();
-    }catch(FileNotFoundException e){
-        e.printStackTrace();
-    }catch(IOException f){
-        f.printStackTrace();
-    }
-}
-    //protected void paintComponent(Graphics g){
-        //g.setColor(new Color(0,0,0));
-        //Main.handler.update();
-        //int intTiles = 1000;
-		//for(int intCount = 0; intCount < intTiles; intCount++){
-			//if(strMap[intCount])
-		//}
-    //}
+	}
 
     public MapPanel() {
         super();
