@@ -1,5 +1,4 @@
 package objects;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -50,8 +49,12 @@ public class Apple extends EnemyObject {
     }
 
     public void draw(Graphics g){
-        g.setColor(new Color(128, 0, 0));
-        g.fillRect((int)fltX, (int)fltY, 20, 20);
+        try{
+            BufferedImage imgApple = ImageIO.read(new File("res/apple.png"));
+            g.drawImage(imgApple, Math.round(fltX), Math.round(fltY), null);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
 

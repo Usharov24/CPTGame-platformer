@@ -90,9 +90,9 @@ public class Main implements ActionListener {
             thePanels[intCount].setFocusable((intCount == 4) ? true : false);
         }
 
-        mapPanel.addKeyListener(input);
-        mapPanel.addMouseListener(input);
-        mapPanel.addMouseMotionListener(input);
+        thePanels[4].addKeyListener(input);
+        thePanels[4].addMouseListener(input);
+        thePanels[4].addMouseMotionListener(input);
         
         // TEMP ///////
         
@@ -250,9 +250,9 @@ public class Main implements ActionListener {
                     theFrame.pack();
                 } else if(strSelection[1].equals("ready")) {
                     state = State.GAME;
-                    theFrame.setContentPane(mapPanel);
+                    theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
-                    mapPanel.requestFocus();
+                    thePanels[4].requestFocus();
                 } else if(strSelection[1].equals("join")) {
                 
                 } else if(strSelection[1].equals("charbutton")) {
@@ -261,7 +261,7 @@ public class Main implements ActionListener {
                 } else if(strSelection[1].equals("oldbutton")) {
                     characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
                 }
-        }
+            }
          
 
 
@@ -362,9 +362,9 @@ public class Main implements ActionListener {
             players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
             handler.addObject(players[intSessionId]);
 
-            theFrame.setContentPane(mapPanel);
+            theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
-            mapPanel.requestFocus();
+            thePanels[4].requestFocus();
 
             //ssm.sendText("m,ready");
 
