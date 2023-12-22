@@ -54,7 +54,8 @@ public class Main implements ActionListener {
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
-    public static float startTime = (float)(System.currentTimeMillis()/1000.0);
+
+    public static final float startTime = (float)System.currentTimeMillis();
 
     private SuperSocketMaster ssm;
 

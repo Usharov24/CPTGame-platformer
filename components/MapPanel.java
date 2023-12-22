@@ -45,10 +45,13 @@ public class MapPanel extends JPanel{{
         f.printStackTrace();
     }
 }
-    // protected void paintComponent(Graphics g){
+    //protected void paintComponent(Graphics g){
         //g.setColor(new Color(0,0,0));
         //Main.handler.update();
-        //Main.handler.draw(g);
+        //int intTiles = 1000;
+		//for(int intCount = 0; intCount < intTiles; intCount++){
+			//if(strMap[intCount])
+		//}
     //}
 
     public MapPanel() {
