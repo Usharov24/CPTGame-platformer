@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-
+import java.awt.Rectangle;
 import javax.imageio.ImageIO;
 
 import framework.ObjectHandler;
@@ -55,6 +55,10 @@ public class Apple extends EnemyObject {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int)(fltX + fltVelX), (int)fltY + 2, (int)fltWidth, (int)fltHeight - 4);
     }
 }
 

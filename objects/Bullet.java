@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import java.awt.Rectangle;
 
 
 public class Bullet extends GameObject {
@@ -39,5 +40,9 @@ public class Bullet extends GameObject {
     public void draw(Graphics g) {
         g.setColor(Color.white);
         g.fillOval((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+    }
+
+    public Rectangle getBounds() {
+        return null;
     }
 }

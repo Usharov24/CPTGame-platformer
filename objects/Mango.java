@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-
+import java.awt.Rectangle;
 import javax.imageio.ImageIO;
 
 import framework.ObjectHandler;
@@ -71,6 +71,7 @@ public class Mango extends EnemyObject {
         
     }
 
+    
     public void draw(Graphics g){
         try{
             BufferedImage imgMango = ImageIO.read(new File("res/mango.png"));
@@ -78,6 +79,10 @@ public class Mango extends EnemyObject {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Rectangle getBounds() {
+        return null;
     }
 }
 

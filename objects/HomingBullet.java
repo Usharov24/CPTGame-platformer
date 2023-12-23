@@ -2,7 +2,7 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
-
+import java.awt.Rectangle;
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
@@ -52,5 +52,8 @@ public class HomingBullet extends GameObject {
     public void draw(Graphics g) {
         g.setColor(Color.white);
         g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+    }
+    public Rectangle getBounds() {
+        return null;
     }
 }

@@ -221,13 +221,13 @@ public class Main implements ActionListener {
                 
             
                 if (strSelection[1].equals("BULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    Player.handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                   handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
                     
                     
             
                 }
                 if (strSelection[1].equals("HOMINGBULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    Player.handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
+                    handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
                 }
 
                 if (strSelection[1].equals("PLAYER")){
@@ -249,6 +249,8 @@ public class Main implements ActionListener {
                     theFrame.setContentPane(characterPanel);
                     theFrame.pack();
                 } else if(strSelection[1].equals("ready")) {
+                    players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
+                    handler.addObject(players[intSessionId]);
                     state = State.GAME;
                     theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
@@ -333,10 +335,10 @@ public class Main implements ActionListener {
 
         for(int intCount = 0; intCount < 4; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
-                intpastcharbutton[intSessionId] = intcharbutton[intSessionId];
-                characterButtons[intpastcharbutton[intSessionId]].setEnabled(true);
-                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId]);
-                intcharbutton[intSessionId] = intCount;
+                intpastcharbutton[intSessionId-1] = intcharbutton[intSessionId-1];
+                characterButtons[intpastcharbutton[intSessionId-1]].setEnabled(true);
+                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId-1]);
+                intcharbutton[intSessionId-1] = intCount;
                 characterButtons[intCount].setEnabled(false);
 
                 
@@ -359,8 +361,8 @@ public class Main implements ActionListener {
                 ssm.sendText("m,ready");
             }
             state = State.GAME;
-            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
-            handler.addObject(players[intSessionId]);
+            players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
+            handler.addObject(players[intSessionId-1]);
 
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();

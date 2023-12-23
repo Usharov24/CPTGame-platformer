@@ -2,9 +2,7 @@ package objects;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import framework.ObjectHandler;
 import framework.ObjectId;
-import framework.SuperSocketMaster;
 
 public abstract class ItemObject extends GameObject {
 
@@ -16,7 +14,4 @@ public abstract class ItemObject extends GameObject {
     
     public abstract void draw(Graphics g);
     
-    public void networkreceive(){        
-    }
-
 }

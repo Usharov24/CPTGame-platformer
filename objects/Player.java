@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.util.LinkedList;
-
+import java.awt.Rectangle;
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -18,9 +18,10 @@ public class Player extends GameObject {
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltgravity;
     private float fltjumpvel;
-    public int intjumpcount;
+    public int intJumpCount;
     private float fltdashvelx;
     private int intSessionId;
+    private boolean blnFalling = true;
 
 
     public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, InputHandler input, int intSessionId) {
@@ -34,19 +35,19 @@ public class Player extends GameObject {
     public void update(LinkedList<GameObject> objectList) {
         if(intSessionId == Main.intSessionId){
             
-            if(input.buttonSet.contains(InputHandler.InputButtons.W) && intjumpcount < 2){
+            if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2){
                 input.buttonSet.remove(InputButtons.W);
                 input.buttonSet.remove(InputButtons.SPACE);
                 fltjumpvel = -30;
                 fltgravity = 0;
-                intjumpcount++;
+                intJumpCount++;
             } 
-            if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intjumpcount <2){
+            if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount <2){
                 input.buttonSet.remove(InputButtons.SPACE);
                 input.buttonSet.remove(InputButtons.W);
                 fltjumpvel = -30;
                 fltgravity = 0;
-                intjumpcount++;
+                intJumpCount++;
 
             } 
             else if(input.buttonSet.contains(InputHandler.InputButtons.S) && fltY < 660) fltVelY += fltAcc;
@@ -58,6 +59,7 @@ public class Player extends GameObject {
                 else if(fltVelY < 0) fltVelY += fltDec;
             }
             
+            collisions();
 
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                 fltVelX -= fltAcc;
@@ -133,7 +135,7 @@ public class Player extends GameObject {
                 }
 
             if(fltY > 685){
-                intjumpcount = 0;
+                intJumpCount = 0;
                 fltgravity = 0;
                 fltjumpvel = 0;
                 fltY = 685;
@@ -150,8 +152,24 @@ public class Player extends GameObject {
         }
     }
 
+    private void collisions() {
+        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10))) {
+            blnFalling = false;
+            fltVelY = 0;
+            intJumpCount = 0;
+
+            fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+        }
+    }
+
     public void draw(Graphics g) {
         g.setColor(Color.white);
         g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+    }
+    public Rectangle getBounds() {
+        return new Rectangle((int)(fltX + fltVelX), (int)fltY + 2, (int)fltWidth, (int)fltHeight - 4);
+    }
+    public Rectangle getBounds2() {
+        return new Rectangle((int)fltX + 2, (int)(fltY + fltVelY), (int)fltWidth - 4, (int)fltHeight);
     }
 }
