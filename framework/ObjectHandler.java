@@ -16,7 +16,6 @@ public class ObjectHandler {
             
         }
     }
-
     public GameObject findnear(float fltX, float fltY){
         float fltDistX = 0;     
         float fltDistY = 0;
@@ -56,11 +55,12 @@ public class ObjectHandler {
         objectList.add(object);
     }
 
-    public void removeObject(GameObject object) {
-        objectList.remove(object);
+    public boolean containObject(GameObject object) {
+        return objectList.contains(object);
     }
 
-    public boolean containsObject(GameObject object) {
-        return objectList.contains(object);
+
+    public void removeObject(GameObject object) {
+        objectList.remove(object);
     }
 }

@@ -1,6 +1,5 @@
 package objects;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import javax.imageio.ImageIO;
 
 import framework.ObjectHandler;
 import framework.ObjectId;
-import framework.SuperSocketMaster;
 
 public class Apple extends EnemyObject {
 
@@ -21,8 +19,8 @@ public class Apple extends EnemyObject {
     private float fltMinY = 0;
     private float fltMaxY = 0;
 
-    public Apple(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, ssm);
+    public Apple(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, ObjectHandler handler) {
+        super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltRangeX = fltRangeX;
@@ -57,10 +55,6 @@ public class Apple extends EnemyObject {
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    public Rectangle getBounds() {
-        return null;
     }
 }
 

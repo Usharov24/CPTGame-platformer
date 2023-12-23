@@ -1,6 +1,5 @@
 package objects;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import framework.ObjectHandler;
@@ -19,8 +18,8 @@ public abstract class EnemyObject extends GameObject {
     //protected int intMovementType;
     //protected int intAttackType;
 
-    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm){
-        super(fltX, fltY, fltHeight, fltWidth, id, ssm);
+    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id){
+        super(fltX, fltY, fltHeight, fltWidth, id);
         this.fltRangeX = fltRangeX;
         this.fltRangeY = fltRangeY;
         this.fltVelX = fltVelX;
@@ -28,6 +27,10 @@ public abstract class EnemyObject extends GameObject {
         this.fltHealth = fltHealth;
         this.fltDamage = fltDamage;
     }
+
+    public abstract void update(LinkedList<GameObject> objectList);
+
+    public abstract void draw(Graphics g);
     
     public void networkreceive(){
 

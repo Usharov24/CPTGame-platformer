@@ -1,8 +1,8 @@
 package objects;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.LinkedList;
 
+import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
 
@@ -12,20 +12,21 @@ public abstract class GameObject {
     protected float fltVelX, fltVelY;
     protected float fltWidth, fltHeight;
     protected ObjectId id;
-    protected SuperSocketMaster ssm;
+    SuperSocketMaster ssm = null;
+    private ObjectHandler handler;
 
-    public GameObject(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm) {
+    public GameObject(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id) {
         this.fltX = fltX;
         this.fltY = fltY;
         this.fltWidth = fltWidth;
         this.fltHeight = fltHeight;
         this.id = id;
-        this.ssm = ssm;
     }
 
     public abstract void update(LinkedList<GameObject> objectList);
     public abstract void draw(Graphics g);
-    public abstract Rectangle getBounds();
+    
+    
 
     public float getX() {
         return fltX;

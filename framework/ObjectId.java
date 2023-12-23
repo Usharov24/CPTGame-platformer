@@ -5,6 +5,5 @@ public enum ObjectId {
     PLAYER_REMOTE,
     ENEMY_APPLE,
     ENEMY_MANGO,
-    BULLET,
-    HOMING_BULLET;
+    BULLET;
 }
