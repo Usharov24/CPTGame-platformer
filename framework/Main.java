@@ -55,14 +55,12 @@ public class Main implements ActionListener {
     private InputHandler input = new InputHandler();
     public static int[] intcharbutton = new int[4];
     private static int[] intpastcharbutton = new int[4];
-    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input)};
+    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, new SuperSocketMaster(8080, null), handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, new SuperSocketMaster(8080, null), handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, new SuperSocketMaster(8080, null), handler, input), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, new SuperSocketMaster(8080, null), handler, input)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
 
-    public static final float startTime = (float)System.currentTimeMillis();
-
-    public static SuperSocketMaster ssm;
+    private SuperSocketMaster ssm;
 
     public State state = State.MAIN_MENU;
 
@@ -80,6 +78,8 @@ public class Main implements ActionListener {
         }
     }
 
+    public static final float startTime = (float)System.currentTimeMillis();
+
     public static int intSessionId;
     private int intServerSize = 0;
     private boolean[] availableIds = {true, true, true};
@@ -96,8 +96,8 @@ public class Main implements ActionListener {
         
         // TEMP ///////
         
-        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, handler));
-        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, handler));
+        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, ssm, handler));
+        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
@@ -190,7 +190,7 @@ public class Main implements ActionListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
-            String[] strSelection = strMessage.split(",");
+            String[] strSelection = strMessage.split(",");System.out.println(strMessage);
 
             if(intSessionId == 1) {
                 if(strMessage.equals("c0>mJOIN")) {
@@ -210,36 +210,45 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mPLAYER_DISCONNECT")) {
                     intServerSize--;
                     availableIds[Integer.parseInt(strMessage.substring(1, 2))] = true;
+                } else if(strMessage.substring(3, 4).equals("a")) {
+                    if(strMessage.contains("PLAYER")) {
+                        String[] strParameters = strMessage.split("~")[1].split(",");
+                        
+                        if(!handler.containsObject(players[Integer.parseInt(strMessage.substring(1, 2)) - 1])) {
+                            players[Integer.parseInt(strMessage.substring(1, 2)) - 1] = new Player(Float.parseFloat(strParameters[0]), Float.parseFloat(strParameters[1]), Float.parseFloat(strParameters[2]), Float.parseFloat(strParameters[3]), ObjectId.PLAYER_REMOTE, ssm, handler, input);
+                            handler.addObject(players[Integer.parseInt(strMessage.substring(1, 2)) - 1]);
+                        }
+                    } else if(strMessage.contains("BULLET")) {
+                        String[] strParameters = strMessage.split("~")[1].split(",");
+                        handler.addObject(new Bullet(Float.parseFloat(strParameters[0]), Float.parseFloat(strParameters[1]), Float.parseFloat(strParameters[2]), Float.parseFloat(strParameters[3]), Float.parseFloat(strParameters[4]), Float.parseFloat(strParameters[5]), ObjectId.BULLET, ssm, handler));
+                    }
+                } else if(strMessage.substring(3, 4).equals("r")) {
+
+                } else if(strMessage.substring(3, 4).equals("o")) {
+
                 }
             } else if(!strMessage.substring(0, 1).equals("c")) {
                 if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
+                } else if(strMessage.substring(2, 3).equals("a")) {
+                    if(strMessage.contains("PLAYER")) {
+                        String[] strParameters = strMessage.split("~")[1].split(",");
+                        
+                        if(!handler.containsObject(players[0])) {
+                            players[0] = new Player(Float.parseFloat(strParameters[0]), Float.parseFloat(strParameters[1]), Float.parseFloat(strParameters[2]), Float.parseFloat(strParameters[3]), ObjectId.PLAYER_REMOTE, ssm, handler, input);
+                            handler.addObject(players[0]);
+                        }
+                    } else if(strMessage.contains("BULLET")) {
+                        String[] strParameters = strMessage.split("~")[1].split(",");
+                        handler.addObject(new Bullet(Float.parseFloat(strParameters[0]), Float.parseFloat(strParameters[1]), Float.parseFloat(strParameters[2]), Float.parseFloat(strParameters[3]), Float.parseFloat(strParameters[4]), Float.parseFloat(strParameters[5]), ObjectId.BULLET, ssm, handler));
+                    } else if(strMessage.contains("HOMING_BULLET")) {
+                        String[] strParameters = strMessage.split("~")[1].split(",");
+                        handler.addObject(new HomingBullet(Float.parseFloat(strParameters[0]), Float.parseFloat(strParameters[1]), Float.parseFloat(strParameters[2]), Float.parseFloat(strParameters[3]), Float.parseFloat(strParameters[4]), Float.parseFloat(strParameters[5]), ObjectId.HOMING_BULLET, ssm, handler, Integer.parseInt(strParameters[6])));
+                    }
                 }
             }
-            if(strMessage.substring(0, 1).equals("o")) {
-                
             
-                if (strSelection[1].equals("BULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, handler));
-                    
-                    
-            
-                }
-                if (strSelection[1].equals("HOMINGBULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, handler, Integer.parseInt(strSelection[10])));
-                }
-
-                if (strSelection[1].equals("PLAYER")){
-                    if(!handler.containObject(players[Integer.parseInt(strSelection[4])])){
-                        players[Integer.parseInt(strSelection[4])] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input);
-                        handler.addObject(players[Integer.parseInt(strSelection[4])]);
-
-                    }
-                    players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[2]));
-                    players[Integer.parseInt(strSelection[4])].setY(Float.parseFloat(strSelection[3]));
-                }
-            }   
             if(strMessage.substring(0,1).equals("c")) {
                 String[] strInput = strMessage.split(",");
                 
@@ -262,11 +271,7 @@ public class Main implements ActionListener {
                     characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
                 }
             }
-         
-
-
         }
-
 
         if(evt.getSource() == mainMenuButtons[0]) {
             state = State.HOST_MENU;
@@ -341,14 +346,11 @@ public class Main implements ActionListener {
 
                 
                 ssm.sendText("m,charbutton," + (intSessionId) + "," + intCount + "," + intpastcharbutton[intSessionId]);
-                
             }
         }
 
         if(evt.getSource() == buttonStart) {
-            if(ssm != null){
-                ssm.sendText("m,start");
-            }
+            ssm.sendText("m,start");
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
             //ssm.sendText("m,start");
@@ -359,16 +361,14 @@ public class Main implements ActionListener {
                 ssm.sendText("m,ready");
             }
             state = State.GAME;
-            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input);
+            players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, ssm, handler, input);
             handler.addObject(players[intSessionId]);
 
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
             thePanels[4].requestFocus();
 
-            //ssm.sendText("m,ready");
-
-            
+            //ssm.sendText("m,ready");            
         }
     }
 

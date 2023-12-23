@@ -6,8 +6,10 @@ import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import framework.InputHandler;
+import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.SuperSocketMaster;
 import framework.InputHandler.InputButtons;
 
 public class Player extends GameObject {
@@ -23,10 +25,13 @@ public class Player extends GameObject {
 
     private boolean blnFalling = true;
 
-    public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, InputHandler input) {
-        super(fltX, fltY, fltWidth, fltHeight, id);
+    public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input) {
+        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
         this.input = input;
+        
+        if(Main.intSessionId == 1) ssm.sendText("h>aPLAYER~" + fltX + "," + fltY + "," + fltWidth + "," + fltHeight);
+        else ssm.sendText("c" + Main.intSessionId + ">aPLAYER~" + fltX + "," + fltY + "," + fltWidth + "," + fltHeight);
     }
 
     public void update(LinkedList<GameObject> objectList) {
@@ -90,7 +95,7 @@ public class Player extends GameObject {
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
 
-            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler));
+            handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
         } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
             float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
             float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
@@ -99,7 +104,7 @@ public class Player extends GameObject {
             fltDiffX /= fltLength;
             fltDiffY /= fltLength;
 
-            handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler, framework.Main.intSessionId));
+            handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler, Main.intSessionId));
         } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
             float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
             float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
@@ -109,8 +114,8 @@ public class Player extends GameObject {
             fltDiffY /= fltLength;
 
             for(int intCount = 0; intCount < 2; intCount++) {
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, ssm, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, ssm, handler));
             }
         }
     }

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
+import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
@@ -13,11 +14,13 @@ public class Bullet extends GameObject {
 
     private ObjectHandler handler;
     
-    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler) {
-        super(fltX, fltY, fltWidth, fltHeight, id);
+    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
+
+        ssm.sendText("c" + Main.intSessionId + ">aBULLET~" + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight);
     }
     
     public void update(LinkedList<GameObject> objectList) {
@@ -36,6 +39,6 @@ public class Bullet extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
     }
 }

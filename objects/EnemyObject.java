@@ -19,8 +19,8 @@ public abstract class EnemyObject extends GameObject {
     //protected int intMovementType;
     //protected int intAttackType;
 
-    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id){
-        super(fltX, fltY, fltHeight, fltWidth, id);
+    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm){
+        super(fltX, fltY, fltHeight, fltWidth, id, ssm);
         this.fltRangeX = fltRangeX;
         this.fltRangeY = fltRangeY;
         this.fltVelX = fltVelX;
