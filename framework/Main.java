@@ -212,7 +212,7 @@ public class Main implements ActionListener {
                     availableIds[Integer.parseInt(strMessage.substring(1, 2))] = true;
                 }
             } else if(!strMessage.substring(0, 1).equals("c")) {
-                if(strMessage.contains("mSESSION_ID")) {
+                if(strMessage.contains("mSESSION_ID") && intSessionId < 1) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
                 }
@@ -231,13 +231,13 @@ public class Main implements ActionListener {
                 }
 
                 if (strSelection[1].equals("PLAYER")){
-                    if(!handler.containObject(players[Integer.parseInt(strSelection[4])])){
-                        players[Integer.parseInt(strSelection[4])] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, Integer.parseInt(strSelection[4]));
-                        handler.addObject(players[Integer.parseInt(strSelection[4])]);
+                    if(!handler.containObject(players[Integer.parseInt(strSelection[4])-1])){
+                        players[Integer.parseInt(strSelection[4])-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, Integer.parseInt(strSelection[4]));
+                        handler.addObject(players[Integer.parseInt(strSelection[4])-1]);
 
                     }
-                    players[Integer.parseInt(strSelection[4])].setX(Float.parseFloat(strSelection[2]));
-                    players[Integer.parseInt(strSelection[4])].setY(Float.parseFloat(strSelection[3]));
+                    players[Integer.parseInt(strSelection[4])-1].setX(Float.parseFloat(strSelection[2]));
+                    players[Integer.parseInt(strSelection[4])-1].setY(Float.parseFloat(strSelection[3]));
                 }
             }   
             if(strMessage.substring(0,1).equals("c")) {
@@ -249,8 +249,8 @@ public class Main implements ActionListener {
                     theFrame.setContentPane(characterPanel);
                     theFrame.pack();
                 } else if(strSelection[1].equals("ready")) {
-                    players[intSessionId] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
-                    handler.addObject(players[intSessionId]);
+                    players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
+                    handler.addObject(players[intSessionId-1]);
                     state = State.GAME;
                     theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();

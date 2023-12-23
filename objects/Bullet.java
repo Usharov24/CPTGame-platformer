@@ -20,7 +20,7 @@ public class Bullet extends GameObject {
         this.fltVelY = fltVelY;
         this.handler = handler;
         
-        if(Main.ssm!=null){
+        if(Main.ssm!=null && Main.intSessionId == intsender){
             Main.ssm.sendText("o,BULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
             
         }

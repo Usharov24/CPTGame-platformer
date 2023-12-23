@@ -148,7 +148,7 @@ public class Player extends GameObject {
 
             fltX += fltVelX + fltdashvelx;
             fltY += fltVelY + fltgravity + fltjumpvel;
-            if(Main.ssm != null) Main.ssm.sendText("o,PLAYER," + fltX + "," + fltY + "," + Main.intSessionId);
+            if(Main.ssm!=null && Main.intSessionId == this.intSessionId) Main.ssm.sendText("o,PLAYER," + fltX + "," + fltY + "," + Main.intSessionId);
         }
     }
 

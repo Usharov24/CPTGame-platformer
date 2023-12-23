@@ -20,7 +20,7 @@ public class HomingBullet extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        if(Main.ssm!=null){
+        if(Main.ssm!=null && Main.intSessionId == intsender){
             Main.ssm.sendText("o,HOMINGBULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
             
         }
