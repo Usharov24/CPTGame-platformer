@@ -55,12 +55,11 @@ public class ObjectHandler {
         objectList.add(object);
     }
 
-    public boolean containObject(GameObject object) {
-        return objectList.contains(object);
-    }
-
-
     public void removeObject(GameObject object) {
         objectList.remove(object);
+    }
+
+    public boolean containsObject(GameObject object) {
+        return objectList.contains(object);
     }
 }

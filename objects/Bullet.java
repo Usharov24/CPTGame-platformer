@@ -1,30 +1,26 @@
 package objects;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
-import java.awt.Rectangle;
+import framework.SuperSocketMaster;
 
 
 public class Bullet extends GameObject {
 
     private ObjectHandler handler;
     
-    
-    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, int intsender) {
-        super(fltX, fltY, fltWidth, fltHeight, id);
+    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        
-        if(Main.ssm!=null && Main.intSessionId == intsender){
-            Main.ssm.sendText("o,BULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
-            
-        }
-        
+
+        ssm.sendText("c" + Main.intSessionId + ">aBULLET~" + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight);
     }
     
     public void update(LinkedList<GameObject> objectList) {
@@ -39,10 +35,10 @@ public class Bullet extends GameObject {
 
     public void draw(Graphics g) {
         g.setColor(Color.white);
-        g.fillOval((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
     }
 
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
     }
 }

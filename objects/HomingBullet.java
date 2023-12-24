@@ -1,30 +1,27 @@
 package objects;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.LinkedList;
 import java.awt.Rectangle;
+import java.util.LinkedList;
+
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.SuperSocketMaster;
 
 
 public class HomingBullet extends GameObject {
 
     private ObjectHandler handler;
     
-    
-
-    
-    public HomingBullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, int intsender) {
-        super(fltX, fltY, fltWidth, fltHeight, id);
+    public HomingBullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, int intSender) {
+        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-        if(Main.ssm!=null && Main.intSessionId == intsender){
-            Main.ssm.sendText("o,HOMINGBULLET," + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + id + "," + handler + "," + intsender);
-            
-        }
-
+        
+        if(Main.intSessionId == 1) ssm.sendText("h>aHOMING_BULLET~" + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + intSender);
+        else ssm.sendText("c" + Main.intSessionId + ">aHOMING_BULLET~" + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight + "," + intSender);
     }
         
     public void update(LinkedList<GameObject> objectList) {
@@ -53,6 +50,7 @@ public class HomingBullet extends GameObject {
         g.setColor(Color.white);
         g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
     }
+
     public Rectangle getBounds() {
         return null;
     }

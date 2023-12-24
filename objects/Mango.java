@@ -1,14 +1,16 @@
 package objects;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.awt.Rectangle;
+
 import javax.imageio.ImageIO;
 
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.SuperSocketMaster;
 
 public class Mango extends EnemyObject {
 
@@ -19,8 +21,8 @@ public class Mango extends EnemyObject {
     private float fltMinY = 0;
     private float fltMaxY = 0;
 
-    public Mango(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, ObjectHandler handler) {
-        super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id);
+    public Mango(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltRangeX = fltRangeX;
@@ -67,11 +69,8 @@ public class Mango extends EnemyObject {
            
         }
         return objectList.get(intreturn);
-
-        
     }
 
-    
     public void draw(Graphics g){
         try{
             BufferedImage imgMango = ImageIO.read(new File("res/mango.png"));

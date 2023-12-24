@@ -1,8 +1,7 @@
 package framework;
 
 public enum ObjectId {
-    PLAYER_LOCAL,
-    PLAYER_REMOTE,
+    PLAYER,
     ENEMY_APPLE,
     ENEMY_MANGO,
     BULLET;

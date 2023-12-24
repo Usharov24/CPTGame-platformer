@@ -23,11 +23,7 @@ public class Main implements ActionListener {
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
     private CustomPanel[] thePanels = {new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null)};
-    // TEMP public static
     private JPanel characterPanel = new JPanel(null);
-    //public static int intjoinid;
-    //public static int inthostid;
-    //public static int intjoinhostid;
 
     // Map
     private MapPanel mapPanel = new MapPanel();
@@ -44,25 +40,22 @@ public class Main implements ActionListener {
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
     private JButton[] netButtons = {new JButton("Host Game"), new JButton("Join Game")};
     private JLabel[] netLabels = {new JLabel("Enter Name"), new JLabel("Join Code"), new JLabel("Enter Name"), new JLabel("Enter Join Code")};
+    private JButton netStartButton = new JButton("Start game");
     
     // WIP
     public static JButton[] characterButtons = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
-    private JButton buttonStart = new JButton("Start game");
     private JButton buttonReady = new JButton("Ready");
 
     // TEMPORARY ////////////////////////////////////////////////////////////////
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
-    public static int[] intcharbutton = new int[4];
-    private static int[] intpastcharbutton = new int[4];
-    private Player[] players = {new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0), new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, 0)};
     /////////////////////////////////////////////////////////////////////////////
 
     private Timer timer = new Timer(1000/60, this);
 
     public static final float startTime = (float)System.currentTimeMillis();
 
-    public static SuperSocketMaster ssm;
+    private SuperSocketMaster ssm;
 
     public State state = State.MAIN_MENU;
 
@@ -82,6 +75,9 @@ public class Main implements ActionListener {
 
     public static int intSessionId;
     private int intServerSize = 0;
+    private int intCurrentButton = -1, intPreviousButton = -1;
+    private int[] intCharacterSelections = new int[4];
+
     private boolean[] availableIds = {true, true, true};
     
     public Main() {
@@ -96,8 +92,8 @@ public class Main implements ActionListener {
         
         // TEMP ///////
         
-        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, handler));
-        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, handler));
+        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, ssm, handler));
+        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
@@ -142,10 +138,11 @@ public class Main implements ActionListener {
         }
 
         // Will redo this
-        buttonStart.setSize(100, 100);
-        buttonStart.setLocation(950, 175);
-        buttonStart.addActionListener(this);
-        thePanels[1].add(buttonStart);
+        netStartButton.setSize(100, 100);
+        netStartButton.setLocation(950, 175);
+        netStartButton.setEnabled(false);
+        netStartButton.addActionListener(this);
+        thePanels[1].add(netStartButton);
 
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -181,94 +178,68 @@ public class Main implements ActionListener {
 
     // Override actionPerformed Method
     public void actionPerformed(ActionEvent evt) {
-        if(evt.getSource() == timer) {
-            thePanels[state.getValue()].repaint();
-            // Line not done
-            // Need to get player information from handler
-            if(state == State.GAME && intSessionId != 1 && ssm!=null) ssm.sendText("c" + intSessionId + ">oPLAYER~");
-        }
-        
+        if(evt.getSource() == timer) thePanels[state.getValue()].repaint();
+
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
-            String[] strSelection = strMessage.split(",");
+            System.out.println(strMessage);
 
             if(intSessionId == 1) {
-                if(strMessage.equals("c0>mJOIN")) {
+                if(strMessage.contains("mJOIN")) {
                     intServerSize++;
                     System.out.println("Server Size: " + intServerSize);
 
                     if(availableIds[intServerSize - 2]) {
                         availableIds[intServerSize - 2] = false;
-                        ssm.sendText("h>mSESSION_ID~" + intServerSize);
+                        ssm.sendText("h>c0>mSESSION_ID~" + intServerSize);
                     } else if(availableIds[intServerSize - 3]) {
                         availableIds[intServerSize - 3] = false;
-                        ssm.sendText("h>mSESSION_ID~" + (intServerSize - 1));
+                        ssm.sendText("h>c0>mSESSION_ID~" + (intServerSize - 1));
                     } else if(availableIds[intServerSize - 4]) {
                         availableIds[intServerSize - 4] = false;
-                        ssm.sendText("h>mSESSION_ID~" + (intServerSize - 2));
+                        ssm.sendText("h>c0>mSESSION_ID~" + (intServerSize - 2));
                     }
                 } else if(strMessage.contains("mPLAYER_DISCONNECT")) {
                     intServerSize--;
                     availableIds[Integer.parseInt(strMessage.substring(1, 2))] = true;
+                } else if(strMessage.contains("mCHARACTER_SELECTED")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
+                    if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
+
+                    intCharacterSelections[Integer.parseInt(strMessage.substring(1, 2)) - 1] = Integer.parseInt(strPayload[0]);
+
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
                 }
-            } else if(!strMessage.substring(0, 1).equals("c")) {
-                if(strMessage.contains("mSESSION_ID") && intSessionId < 1) {
+            } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
+                if(strMessage.contains("oPLAYER")) {
+
+                } else if(strMessage.contains("aPLAYER")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Player(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
+                } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
-                }
-            }
-            if(strMessage.substring(0, 1).equals("o")) {
-                
-            
-                if (strSelection[1].equals("BULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                   handler.addObject(new Bullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
-                    
-                    
-            
-                }
-                if (strSelection[1].equals("HOMINGBULLET") && Integer.parseInt(strSelection[10]) != intSessionId){
-                    handler.addObject(new HomingBullet(Float.parseFloat(strSelection[2]), Float.parseFloat(strSelection[3]), Float.parseFloat(strSelection[4]), Float.parseFloat(strSelection[5]), Float.parseFloat(strSelection[6]), Float.parseFloat(strSelection[7]), ObjectId.BULLET, Player.handler, Integer.parseInt(strSelection[10])));
-                }
+                } else if(strMessage.contains("mCHARACTER_SELECTED")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
 
-                if (strSelection[1].equals("PLAYER")){
-                    if(!handler.containObject(players[Integer.parseInt(strSelection[4])-1])){
-                        players[Integer.parseInt(strSelection[4])-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, Integer.parseInt(strSelection[4]));
-                        handler.addObject(players[Integer.parseInt(strSelection[4])-1]);
-
-                    }
-                    players[Integer.parseInt(strSelection[4])-1].setX(Float.parseFloat(strSelection[2]));
-                    players[Integer.parseInt(strSelection[4])-1].setY(Float.parseFloat(strSelection[3]));
-                }
-            }   
-            if(strMessage.substring(0,1).equals("c")) {
-                String[] strInput = strMessage.split(",");
-                
-                //chatbox.append(strmessage[1] + "\n");
-            } else if(strMessage.substring(0, 1).equals("m")) {
-                if(strSelection[1].equals("start")) {
+                    characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
+                    if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
+                } else if(strMessage.contains("mCHARACTER_PANEL")) {
                     theFrame.setContentPane(characterPanel);
                     theFrame.pack();
-                } else if(strSelection[1].equals("ready")) {
-                    players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
-                    handler.addObject(players[intSessionId-1]);
+                } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
+
                     theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
-                    thePanels[4].requestFocus();
-                } else if(strSelection[1].equals("join")) {
-                
-                } else if(strSelection[1].equals("charbutton")) {
-                    intcharbutton[Integer.parseInt(strSelection[2])] = Integer.parseInt(strSelection[3]);
-                    characterButtons[Integer.parseInt(strSelection[3])].setEnabled(false);
-                } else if(strSelection[1].equals("oldbutton")) {
-                    characterButtons[Integer.parseInt(strSelection[2])].setEnabled(true);
                 }
             }
-         
-
-
         }
-
 
         if(evt.getSource() == mainMenuButtons[0]) {
             state = State.HOST_MENU;
@@ -284,15 +255,15 @@ public class Main implements ActionListener {
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
-        } else if(evt.getSource() == backButtons[0]){
+        } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
             theFrame.pack();
-        } else if(evt.getSource() == backButtons[1]){
+        } else if(evt.getSource() == backButtons[1]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
             theFrame.pack();
-        } else if(evt.getSource() == backButtons[2]){
+        } else if(evt.getSource() == backButtons[2]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
             theFrame.pack();
@@ -313,9 +284,8 @@ public class Main implements ActionListener {
 
             netTextFields[1].setText(new String(chrCharacters));
         
-            buttonStart.setEnabled(true);
+            netStartButton.setEnabled(true);
             netButtons[0].setEnabled(false);
-            //playerArea[0].setText(name[0].getText()+" 👑");
         } else if(evt.getSource() == netButtons[1]) {
             backButtons[1].setVisible(false);
             char[] chrJoinCode = netTextFields[3].getText().toCharArray();
@@ -333,44 +303,41 @@ public class Main implements ActionListener {
             netButtons[1].setEnabled(false);
         }
 
-        for(int intCount = 0; intCount < 4; intCount++) {
+        for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
-                intpastcharbutton[intSessionId-1] = intcharbutton[intSessionId-1];
-                characterButtons[intpastcharbutton[intSessionId-1]].setEnabled(true);
-                ssm.sendText("m,oldbutton," + intpastcharbutton[intSessionId-1]);
-                intcharbutton[intSessionId-1] = intCount;
-                characterButtons[intCount].setEnabled(false);
+                intPreviousButton = intCurrentButton;
+                intCurrentButton = intCount;
 
+                if(intSessionId == 1) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
+                else ssm.sendText("c" + intSessionId + ">mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
+
+                if(intSessionId == 1) intCharacterSelections[0] = intCurrentButton;
                 
-                ssm.sendText("m,charbutton," + (intSessionId) + "," + intCount + "," + intpastcharbutton[intSessionId]);
-                
+                if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
+                characterButtons[intCount].setEnabled(false);
             }
         }
 
-        if(evt.getSource() == buttonStart) {
-            if(ssm != null){
-                ssm.sendText("m,start");
-            }
+        if(evt.getSource() == netStartButton) {
+            ssm.sendText("h>a>mCHARACTER_PANEL");
+
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
-            //ssm.sendText("m,start");
         }
 
         if(evt.getSource() == buttonReady) {
-            if(ssm != null){
-                ssm.sendText("m,ready");
+            ssm.sendText("h>a>mGAME_PANEL");
+
+            for(int intCount = 0; intCount < intServerSize; intCount++) {
+                handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                // Need to find a way to specify character/class as well
+                ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
             }
+
             state = State.GAME;
-            players[intSessionId-1] = new Player(0, 0, 32, 32, ObjectId.PLAYER_LOCAL, handler, input, intSessionId);
-            handler.addObject(players[intSessionId-1]);
 
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
-            thePanels[4].requestFocus();
-
-            //ssm.sendText("m,ready");
-
-            
         }
     }
 
