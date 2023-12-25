@@ -9,7 +9,7 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 
 
-public class HomingBullet extends GameObject {
+public class HomingBullet extends GameObject{
 
     private ObjectHandler handler;
     
@@ -21,27 +21,27 @@ public class HomingBullet extends GameObject {
     }
         
     public void update(LinkedList<GameObject> objectList) {
-        if(fltX > 540){
-            fltVelX -= 2; 
+        float fltTargetX = findNearestObject(fltX, fltY).getX();
+        float fltTargetY = findNearestObject(fltX, fltY).getY();
+        if(fltX > fltTargetX){
+            fltVelX -= 5; 
         }
-         if(fltX < 540){
-            fltVelX += 2; 
+         if(fltX < fltTargetX){
+            fltVelX += 5; 
         }
-         if(fltY > 360){
-            fltVelY -= 2; 
+         if(fltY > fltTargetY){
+            fltVelY -= 5; 
         }
-         if(fltY < 360){
-            fltVelY += 2; 
+         if(fltY < fltTargetY){
+            fltVelY += 5; 
         }
         fltX += fltVelX;
         fltY += fltVelY;
 
-        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
-            handler.removeObject(this);
-        }
+        
     }
    
-
+    
     public void draw(Graphics g) {
         g.setColor(Color.white);
         g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
@@ -49,5 +49,29 @@ public class HomingBullet extends GameObject {
 
     public Rectangle getBounds() {
         return null;
+    }
+
+    public GameObject findNearestObject(float fltX, float fltY){
+        float fltDistX = 0;     
+        float fltDistY = 0;
+        float flttotaldist = 0;
+        float fltPastX = 0;
+        float fltPastY = 0;
+        float fltpastTotal = 0;
+        int intreturn = 0;
+        for(int i = 0; i < handler.sizeHandler(); i++){
+            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
+                fltDistX = fltX - handler.getObject(i).getX();
+                fltDistY = fltY - handler.getObject(i).getY();
+                flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
+                if(flttotaldist > fltpastTotal){
+                    fltpastTotal = flttotaldist;
+                    fltPastX = fltDistX;
+                    fltPastY = fltDistY;
+                    intreturn = i;
+                }
+            }
+        }
+        return handler.getObject(intreturn);
     }
 }
