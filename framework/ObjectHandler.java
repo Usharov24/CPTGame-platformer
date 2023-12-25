@@ -2,6 +2,7 @@ package framework;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
+import objects.EnemyObject;
 import objects.GameObject;
 
 public class ObjectHandler {
@@ -16,7 +17,16 @@ public class ObjectHandler {
             
         }
     }
-    public GameObject findnear(float fltX, float fltY){
+
+    public void draw(Graphics g) {
+        for(int intCount = 0; intCount < objectList.size(); intCount++) {
+            GameObject object = objectList.get(intCount);
+
+            object.draw(g);
+        }
+    }
+
+    public GameObject findNearestObject(float fltX, float fltY){
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
@@ -25,30 +35,27 @@ public class ObjectHandler {
         float fltpastTotal = 0;
         int intreturn = 0;
         for(int i = 0; i < objectList.size(); i++){
-            
-            fltDistX = fltX - objectList.get(i).getX();
-            fltDistY = fltY - objectList.get(i).getY();
-            flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-            if(flttotaldist > fltpastTotal){
-                fltpastTotal = flttotaldist;
-                fltPastX = fltDistX;
-                fltPastY = fltDistY;
-                intreturn = i;
+            if(objectList.get(i).getId() == ObjectId.ENEMY_APPLE || objectList.get(i).getId() == ObjectId.ENEMY_MANGO){
+                fltDistX = fltX - objectList.get(i).getX();
+                fltDistY = fltY - objectList.get(i).getY();
+                flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
+                if(flttotaldist > fltpastTotal){
+                    fltpastTotal = flttotaldist;
+                    fltPastX = fltDistX;
+                    fltPastY = fltDistY;
+                    intreturn = i;
+                }
             }
-
-           
         }
         return objectList.get(intreturn);
-
-        
     }
 
-    public void draw(Graphics g) {
-        for(int intCount = 0; intCount < objectList.size(); intCount++) {
-            GameObject object = objectList.get(intCount);
+    public int sizeHandler() {
+        return objectList.size();
+    }
 
-            object.draw(g);
-        }
+    public GameObject getObject(int i){
+        return objectList.get(i);
     }
 
     public void addObject(GameObject object) {
