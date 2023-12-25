@@ -96,6 +96,9 @@ public class Player extends GameObject {
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
 
+                if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+                else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+
                 handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
             } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
@@ -105,7 +108,10 @@ public class Player extends GameObject {
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
 
-                handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler, Main.intSessionId));
+                if(intSessionId == 1) ssm.sendText("h>a>aHOMING_BULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+                else ssm.sendText("c" + intSessionId + ">h>aHOMING_BULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+
+                handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
             } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
@@ -115,8 +121,20 @@ public class Player extends GameObject {
                 fltDiffY /= fltLength;
 
                 for(int intCount = 0; intCount < 2; intCount++) {
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 + (float) Math.random() * 3, 6, 6, ObjectId.BULLET, ssm, handler));
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - (float) Math.random() * 3, fltDiffY * 20 - (float) Math.random() * 3, 6, 6, ObjectId.BULLET, ssm, handler));
+                    // Might slightly change how this works in the future
+                    float intRand1 = (float)Math.random() * 3, intRand2 = (float)Math.random() * 3;
+                    float intRand3 = (float)Math.random() * 3, intRand4 = (float)Math.random() * 3;
+
+                    if(intSessionId == 1) {
+                        ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
+                        ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 - intRand3) + "," + 6 + "," + 6);
+                    } else {
+                        ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
+                        ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6);
+                    }
+
+                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler));
+                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler));
                 }
             }
         }
@@ -148,5 +166,10 @@ public class Player extends GameObject {
 
     public Rectangle getBounds2() {
         return new Rectangle((int)fltX + 2, (int)(fltY + fltVelY), (int)fltWidth - 4, (int)fltHeight);
+    }
+
+    // Will likely remove later
+    public int getSessionId() {
+        return intSessionId;
     }
 }

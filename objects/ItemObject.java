@@ -1,6 +1,4 @@
 package objects;
-import java.awt.Graphics;
-import java.util.LinkedList;
 
 import framework.ObjectId;
 import framework.SuperSocketMaster;

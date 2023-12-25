@@ -19,8 +19,6 @@ public class Bullet extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
-
-        ssm.sendText("c" + Main.intSessionId + ">aBULLET~" + fltX + "," + fltY + "," + fltVelX + "," + fltVelY + "," + fltWidth + "," + fltHeight);
     }
     
     public void update(LinkedList<GameObject> objectList) {

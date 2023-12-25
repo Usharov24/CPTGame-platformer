@@ -13,10 +13,10 @@ import javax.swing.Timer;
 
 import components.*;
 import objects.Apple;
-import objects.Player;
-import objects.Mango;
 import objects.Bullet;
 import objects.HomingBullet;
+import objects.Mango;
+import objects.Player;
 
 public class Main implements ActionListener {
 
@@ -185,7 +185,45 @@ public class Main implements ActionListener {
             System.out.println(strMessage);
 
             if(intSessionId == 1) {
-                if(strMessage.contains("mJOIN")) {
+                if(strMessage.contains("oPLAYER")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    // Temporary setup until a better system for object identification is made
+                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
+                        Player object = null;
+                        try {
+                            object = (Player)handler.objectList.get(intCount);
+
+                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
+                                object.setX(Float.parseFloat(strPayload[0]));
+                                object.setY(Float.parseFloat(strPayload[1]));
+                                break;
+                            }
+                        } catch(ClassCastException e) {
+                            //System.out.println("Cannot cast class to Player...");
+                        }
+                    }
+
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oPLAYER~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oPLAYER~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oPLAYER~" + strMessage.split("~")[1]);
+                } else if(strMessage.contains("aBULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
+                
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
+                } else if(strMessage.contains("aHOMING_BULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new HomingBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler));
+                
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);
+                } else if(strMessage.contains("mJOIN")) {
                     intServerSize++;
                     System.out.println("Server Size: " + intServerSize);
 
@@ -210,17 +248,41 @@ public class Main implements ActionListener {
 
                     intCharacterSelections[Integer.parseInt(strMessage.substring(1, 2)) - 1] = Integer.parseInt(strPayload[0]);
 
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + Integer.parseInt(strPayload[0]) + "," + Integer.parseInt(strPayload[1]));
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
                 if(strMessage.contains("oPLAYER")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
 
+                    // Temporary setup until a better system for object identification is made
+                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
+                        Player object = null;
+                        try {
+                            object = (Player)handler.objectList.get(intCount);
+
+                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
+                                object.setX(Float.parseFloat(strPayload[0]));
+                                object.setY(Float.parseFloat(strPayload[1]));
+                                break;
+                            }
+                        } catch(ClassCastException e) {
+                            //System.out.println("Cannot cast class to Player...");
+                        }
+                    }
                 } else if(strMessage.contains("aPLAYER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Player(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
+                } else if(strMessage.contains("aBULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
+                } else if(strMessage.contains("aHOMING_BULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new HomingBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler));
                 } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
