@@ -38,8 +38,9 @@ public class Apple extends EnemyObject {
 
     public void update(LinkedList<GameObject> objectList) {
 
-        fltVelX = (float)(5*Math.sin(System.currentTimeMillis()/1000.0-framework.Main.startTime/1000.0));
-        fltVelY = (float)(5*Math.cos(System.currentTimeMillis()/1000.0-framework.Main.startTime/1000.0));
+        fltVelX = (float)(5*Math.sin(System.currentTimeMillis()/1000.0-(float)framework.Main.startTime/1000.0));
+        fltVelY = (float)(5*Math.cos(System.currentTimeMillis()/1000.0-(float)framework.Main.startTime/1000.0));
+        System.out.println(System.currentTimeMillis()/1000.0-(float)framework.Main.startTime/1000.0);
 
         fltX += fltVelX;
         fltY += fltVelY;

@@ -11,29 +11,34 @@ import javax.swing.JPanel;
 import framework.Main;
 
 public class MapPanel extends JPanel{
-	int intNumRows = 25;
-	int intNumColumns = 40;
-	String strMap[][] = new String[40][25];
+
+	// Tile Configuration Variables
+	private int intTilesX = 256;
+	private int intTilesY = 144;
+	private int intTileSize = 5;
+
+	private int intRoomNumber = 2;
+	String strMap[][] = new String[intTilesX][intTilesY];
 	{
 		try{
-			String strFile = "res/map1.csv";
-			FileReader fileread = new FileReader(strFile);
-			BufferedReader reader = new BufferedReader(fileread);
+			String strFile[] = new String[]{"res/map0.csv", "res/map1.csv", "res/map2.csv", "res/map3.csv", "res/map4.csv", "res/map5.csv", "res/map6.csv", "res/map7.csv", "res/map8.csv", "res/map9.csv", "res/map10.csv", "res/map11.csv", "res/map12.csv", "res/map13.csv", "res/map14.csv", "res/map15.csv", "res/map16.csv", "res/map17.csv", "res/map18.csv", "res/map19.csv", "res/map20.csv", "res/map21.csv", "res/map22.csv", "res/map23.csv"};
+			BufferedReader reader = new BufferedReader(new FileReader(strFile[intRoomNumber]));
 			String strLine = reader.readLine();
 			String strSplit[];
 			while(strLine != null){
-				for(int intRow = 0; intRow < intNumRows; intRow++){
-					strLine = reader.readLine();
-					try{
-						strSplit = strLine.split(",");
-						for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
-							strMap[intColumn][intRow] = strSplit[intColumn];
+				try{
+					for(int intY = 0; intY < intTilesY; intY++){
+						for(int intX = 0; intX < intTilesX; intX++){
+							strSplit = strLine.split(",");
+							strMap[intX][intY] = strSplit[intX];
+							System.out.println(strMap[intX][intY]+" -> ("+intX+", "+intY+")");
 						}
-					}catch(NullPointerException e){
-						e.printStackTrace();
-					}catch(ArrayIndexOutOfBoundsException e){
-						e.printStackTrace();
+						strLine = reader.readLine();
 					}
+				}catch(NullPointerException e){
+					e.printStackTrace();
+				}catch(ArrayIndexOutOfBoundsException e){
+					e.printStackTrace();
 				}
 			}
 			reader.close();
@@ -46,25 +51,51 @@ public class MapPanel extends JPanel{
 
 	protected void paintComponent(Graphics g){
         g.setColor(new Color(0,0,0));
-		int intWidth = (int)Math.round(1280.0/intNumColumns);
-		int intHeight = (int)Math.round(720.0/intNumRows);
 		try{
-			for(int intRow = 0; intRow < intNumRows; intRow++){
-				for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
-					if(strMap[intColumn][intRow].equals("a")){
-					}
-					if(strMap[intColumn][intRow].equals("g")){
-						g.setColor(new Color(0, 128, 0));
-						g.fillRect((intColumn*intWidth), (intRow*intHeight), intWidth, intHeight);
+			for(int intY = 0; intY < intTilesY; intY++){
+				for(int intX = 0; intX < intTilesX; intX++){
+					switch(strMap[intX][intY]){
+						// Air
+						case "a":
+							g.setColor(new Color(0, 0, 0));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
+
+						// Fire
+						case "f":
+							g.setColor(new Color(128, 0, 0));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
+
+						// Grass
+						case "g":
+							g.setColor(new Color(0, 128, 0));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
+
+						// Water
+						case "w":
+							g.setColor(new Color(0, 0, 128));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
 					}
 				}
 			}
 			Main.handler.update();
+			Main.handler.draw(g);
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}catch(ArrayIndexOutOfBoundsException e){
 			e.printStackTrace();
 		}
+	}
+
+	public void setRoomNumber(){
+		this.intRoomNumber = intRoomNumber;
+	}
+
+	public int getRoomNumber(){
+		return this.intRoomNumber;
 	}
 
     public MapPanel() {
