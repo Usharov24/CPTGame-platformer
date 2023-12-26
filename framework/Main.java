@@ -1,4 +1,5 @@
 package framework;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.OverlayLayout;
 import javax.swing.Timer;
 
 import components.*;
@@ -27,6 +29,7 @@ public class Main implements ActionListener {
 
     // Map
     private MapPanel mapPanel = new MapPanel();
+    private Container gameContentPane = theFrame.getContentPane();
 
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
@@ -53,7 +56,7 @@ public class Main implements ActionListener {
 
     private Timer timer = new Timer(1000/60, this);
 
-    public static final float startTime = (float)System.currentTimeMillis();
+    public static long startTime = System.currentTimeMillis();
 
     private SuperSocketMaster ssm;
 
@@ -86,9 +89,10 @@ public class Main implements ActionListener {
             thePanels[intCount].setFocusable((intCount == 4) ? true : false);
         }
 
-        thePanels[4].addKeyListener(input);
-        thePanels[4].addMouseListener(input);
-        thePanels[4].addMouseMotionListener(input);
+        mapPanel.addKeyListener(input);
+        mapPanel.addMouseListener(input);
+        mapPanel.addMouseMotionListener(input);
+        mapPanel.setFocusable(true);
         
         // TEMP ///////
         
@@ -178,8 +182,10 @@ public class Main implements ActionListener {
 
     // Override actionPerformed Method
     public void actionPerformed(ActionEvent evt) {
-        if(evt.getSource() == timer) thePanels[state.getValue()].repaint();
-
+        if(evt.getSource() == timer){
+            thePanels[state.getValue()].repaint();
+            mapPanel.repaint();
+        }
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
             System.out.println(strMessage);
@@ -297,7 +303,10 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
-                    theFrame.setContentPane(thePanels[4]);
+                    gameContentPane = theFrame.getContentPane();
+                    gameContentPane.setLayout(new OverlayLayout(gameContentPane));
+                    gameContentPane.add(mapPanel);
+
                     theFrame.pack();
                 }
             }
@@ -389,6 +398,7 @@ public class Main implements ActionListener {
 
         if(evt.getSource() == buttonReady) {
             ssm.sendText("h>a>mGAME_PANEL");
+            startTime = System.currentTimeMillis();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
@@ -398,7 +408,10 @@ public class Main implements ActionListener {
 
             state = State.GAME;
 
-            theFrame.setContentPane(thePanels[4]);
+            gameContentPane = theFrame.getContentPane();
+            gameContentPane.setLayout(new OverlayLayout(gameContentPane));
+            gameContentPane.add(mapPanel);
+
             theFrame.pack();
         }
     }

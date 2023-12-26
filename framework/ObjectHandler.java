@@ -54,10 +54,6 @@ public class ObjectHandler {
         return objectList.size();
     }
 
-    public GameObject getObject(int i){
-        return objectList.get(i);
-    }
-
     public void addObject(GameObject object) {
         objectList.add(object);
     }

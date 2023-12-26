@@ -11,29 +11,30 @@ import javax.swing.JPanel;
 import framework.Main;
 
 public class MapPanel extends JPanel{
-	int intNumRows = 25;
-	int intNumColumns = 40;
-	String strMap[][] = new String[40][25];
+	int intTilesX = 256;
+	int intTilesY = 144;
+	int intTileSize = 5;
+	String strMap[][] = new String[intTilesX][intTilesY];
 	{
 		try{
 			String strFile = "res/map1.csv";
-			FileReader fileread = new FileReader(strFile);
-			BufferedReader reader = new BufferedReader(fileread);
+			BufferedReader reader = new BufferedReader(new FileReader(strFile));
 			String strLine = reader.readLine();
 			String strSplit[];
 			while(strLine != null){
-				for(int intRow = 0; intRow < intNumRows; intRow++){
-					strLine = reader.readLine();
-					try{
-						strSplit = strLine.split(",");
-						for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
+				try{
+					for(int intRow = 0; intRow < intTilesY; intRow++){
+						for(int intColumn = 0; intColumn < intTilesX; intColumn++){
+							strSplit = strLine.split(",");
 							strMap[intColumn][intRow] = strSplit[intColumn];
+							System.out.println(strMap[intColumn][intRow]+" -> ("+intColumn+", "+intRow+")");
 						}
-					}catch(NullPointerException e){
-						e.printStackTrace();
-					}catch(ArrayIndexOutOfBoundsException e){
-						e.printStackTrace();
+						strLine = reader.readLine();
 					}
+				}catch(NullPointerException e){
+					e.printStackTrace();
+				}catch(ArrayIndexOutOfBoundsException e){
+					e.printStackTrace();
 				}
 			}
 			reader.close();
@@ -46,20 +47,26 @@ public class MapPanel extends JPanel{
 
 	protected void paintComponent(Graphics g){
         g.setColor(new Color(0,0,0));
-		int intWidth = (int)Math.round(1280.0/intNumColumns);
-		int intHeight = (int)Math.round(720.0/intNumRows);
 		try{
-			for(int intRow = 0; intRow < intNumRows; intRow++){
-				for(int intColumn = 0; intColumn < intNumColumns; intColumn++){
-					if(strMap[intColumn][intRow].equals("a")){
-					}
-					if(strMap[intColumn][intRow].equals("g")){
-						g.setColor(new Color(0, 128, 0));
-						g.fillRect((intColumn*intWidth), (intRow*intHeight), intWidth, intHeight);
+			for(int intY = 0; intY < intTilesY; intY++){
+				for(int intX = 0; intX < intTilesX; intX++){
+					switch(strMap[intX][intY]){
+						// Air
+						case "a":
+							g.setColor(new Color(0, 0, 0));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
+
+						// Grass
+						case "g":
+							g.setColor(new Color(0, 128, 0));
+							g.fillRect((intX*intTileSize), (intY*intTileSize), intTileSize, intTileSize);
+							break;
 					}
 				}
 			}
 			Main.handler.update();
+			Main.handler.draw(g);
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}catch(ArrayIndexOutOfBoundsException e){
