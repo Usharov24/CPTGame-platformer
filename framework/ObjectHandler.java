@@ -62,6 +62,9 @@ public class ObjectHandler {
         objectList.remove(object);
     }
 
+    public GameObject getObject(int intIndex) {
+        return objectList.get(intIndex);
+    }
 
     public boolean containsObject(GameObject object) {
         return objectList.contains(object);

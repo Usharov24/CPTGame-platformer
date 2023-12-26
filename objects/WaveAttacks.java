@@ -15,7 +15,7 @@ public class WaveAttacks extends GameObject {
 
     private ObjectHandler handler;
     private float fltStartAngle;
-    int intSpread = 1;
+    float fltSpread = 1;
     public WaveAttacks(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
@@ -27,7 +27,7 @@ public class WaveAttacks extends GameObject {
     
     public void update(LinkedList<GameObject> objectList) {
         
-        intSpread += 10;
+        fltSpread += 10;
         System.out.println(fltX);
         fltX+= fltVelX;
         fltY += fltVelY;
@@ -39,10 +39,10 @@ public class WaveAttacks extends GameObject {
 
     public void draw(Graphics g) {
         g.setColor(Color.white);
-        //g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
         //g.drawArc((int)(fltX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
         //g.drawArc((int)fltX, (int)fltY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
-        g.fillArc((int)fltX, (int)fltY,intSpread, intSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX-fltSpread/2), (int) (fltY - fltSpread/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         
     }
 
