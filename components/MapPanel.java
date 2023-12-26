@@ -31,7 +31,6 @@ public class MapPanel extends JPanel{
 						for(int intX = 0; intX < intTilesX; intX++){
 							strSplit = strLine.split(",");
 							strMap[intX][intY] = strSplit[intX];
-							System.out.println(strMap[intX][intY]+" -> ("+intX+", "+intY+")");
 						}
 						strLine = reader.readLine();
 					}
