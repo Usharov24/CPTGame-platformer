@@ -98,8 +98,35 @@ public class Player extends GameObject {
 
                 if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
+                float fltStartAngle = 0;
+                //CAST graph to determine angle
+                //A
+                fltDiffY*= -1;
+                if(fltDiffX > 0 && fltDiffY > 0){
+                    fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX);
+                    System.out.println("1");
+                    
+                }
+                //S
+                else if(fltDiffX < 0 && fltDiffY > 0){
+                    fltStartAngle = (float) ((Math.atan(fltDiffY/fltDiffX)) + Math.PI); 
+                    System.out.println("2");
+                }
+                //T
+                else if(fltDiffX < 0 && fltDiffY < 0){
+                    fltStartAngle = (float) ((fltDiffY/fltDiffX) + Math.PI); 
+                    System.out.println("3");
+                }
+                //C
+                else if(fltDiffX > 0 && fltDiffY < 0){
+                    fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX); 
+                    System.out.println("4");
+                }
+                System.out.println("y:" + fltDiffY);
+                System.out.println("x:" + fltDiffX);
+                System.out.println("angle:" + fltStartAngle);
+                
+                handler.addObject(new WaveAttacks(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, ObjectId.BULLET, ssm, handler));
             } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
