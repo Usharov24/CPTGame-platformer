@@ -20,6 +20,7 @@ import objects.HomingBullet;
 import objects.Mango;
 import objects.Player;
 import objects.Wizard;
+import objects.Sniper;
 
 public class Main implements ActionListener {
 
@@ -402,7 +403,7 @@ public class Main implements ActionListener {
             startTime = System.currentTimeMillis();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
-                handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
                 // Need to find a way to specify character/class as well
                 ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
             }
