@@ -64,6 +64,7 @@ public class Wizard extends GameObject {
             }
 
             if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 5000) {
+                //Moving variables
                 lngtimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
                 blnteleporting = true;
@@ -73,7 +74,7 @@ public class Wizard extends GameObject {
                     fltDashVel = -50;
                 }
             }
-            if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2) && System.currentTimeMillis() - lngtimer[1] > 3000) {
+            if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 8000) {
                 lngtimer[1] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.F);
                 handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
@@ -84,6 +85,7 @@ public class Wizard extends GameObject {
                 handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
                 handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
                 handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                //The Ultimate abilty
             }
 
             if(blnFalling) fltVelY += 5;
@@ -121,15 +123,14 @@ public class Wizard extends GameObject {
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 handler.addObject(new FireBall(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler));
                 
-            }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 1000) {
+            }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-            float fltStartAngle = 0;
+                float fltStartAngle = 0;
                 //CAST graph to determine angle
                 //A
                 fltDiffY*= -1;
