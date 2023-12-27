@@ -26,7 +26,7 @@ public class Main implements ActionListener {
 
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
-    private CustomPanel[] thePanels = {new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null), new CustomPanel(null)};
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
     private JPanel characterPanel = new JPanel(null);
 
     // Map
@@ -88,22 +88,18 @@ public class Main implements ActionListener {
     public Main() {
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
-            thePanels[intCount].setFocusable((intCount == 4) ? true : false);
         }
 
-        mapPanel.addKeyListener(input);
-        mapPanel.addMouseListener(input);
-        mapPanel.addMouseMotionListener(input);
-        mapPanel.setFocusable(true);
+        thePanels[4].addKeyListener(input);
+        thePanels[4].addMouseListener(input);
+        thePanels[4].addMouseMotionListener(input);
         
         // TEMP ///////
-        
         handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, ssm, handler));
         handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
-        mapPanel.setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -164,7 +160,7 @@ public class Main implements ActionListener {
         for(int intCount = 0; intCount < 3; intCount++){
             backButtons[intCount].setLocation(20, 20);
             backButtons[intCount].addActionListener(this);
-            thePanels[intCount+1].add(backButtons[intCount]);
+            thePanels[intCount + 1].add(backButtons[intCount]);
         }
 
         // Will redo this
@@ -305,10 +301,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
-                    gameContentPane = theFrame.getContentPane();
-                    gameContentPane.setLayout(new OverlayLayout(gameContentPane));
-                    gameContentPane.add(mapPanel);
-
+                    theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
                 }
             }
@@ -403,17 +396,14 @@ public class Main implements ActionListener {
             startTime = System.currentTimeMillis();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
-                handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
                 // Need to find a way to specify character/class as well
                 ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
             }
 
             state = State.GAME;
 
-            gameContentPane = theFrame.getContentPane();
-            gameContentPane.setLayout(new OverlayLayout(gameContentPane));
-            gameContentPane.add(mapPanel);
-
+            theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
         }
     }
