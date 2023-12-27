@@ -12,7 +12,7 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 import framework.InputHandler.InputButtons;
 
-public class Player extends GameObject {
+public class Wizard extends GameObject {
 
     private ObjectHandler handler;
     private InputHandler input;
@@ -23,11 +23,12 @@ public class Player extends GameObject {
     private int intSessionId;
     private int intJumpCount;
     private int intDirection = 1;
-
+    private long[] lngtimer = {0,0,0,0};
+    
     private boolean blnFalling = true;
     private boolean blnteleporting = false;
 
-    public Player(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
+    public Wizard(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
         this.input = input;
@@ -62,7 +63,8 @@ public class Player extends GameObject {
                 else if(fltVelX < 0) fltVelX += fltDec;
             }
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT)) {
+            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 5000) {
+                lngtimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
                 blnteleporting = true;
                 if(intDirection > 0){
@@ -70,6 +72,18 @@ public class Player extends GameObject {
                 } else if(intDirection < 0){
                     fltDashVel = -50;
                 }
+            }
+            if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2) && System.currentTimeMillis() - lngtimer[1] > 3000) {
+                lngtimer[1] = System.currentTimeMillis();
+                input.buttonSet.remove(InputButtons.F);
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
             }
 
             if(blnFalling) fltVelY += 5;
@@ -92,7 +106,8 @@ public class Player extends GameObject {
             if(intSessionId == 1) ssm.sendText("h>a>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
             else ssm.sendText("c" + intSessionId + ">h>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)) {
+            if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 500) {
+                lngtimer[2] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
@@ -104,44 +119,38 @@ public class Player extends GameObject {
 
                 if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
+                handler.addObject(new FireBall(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler));
                 
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
+            }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 1000) {
+                lngtimer[3] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-
-                if(intSessionId == 1) ssm.sendText("h>a>aHOMING_BULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                else ssm.sendText("c" + intSessionId + ">h>aHOMING_BULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-
-                handler.addObject(new HomingBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler));
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
-                float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-
-                fltDiffX /= fltLength;
-                fltDiffY /= fltLength;
-
-                for(int intCount = 0; intCount < 2; intCount++) {
-                    // Might slightly change how this works in the future
-                    float intRand1 = (float)Math.random() * 3, intRand2 = (float)Math.random() * 3;
-                    float intRand3 = (float)Math.random() * 3, intRand4 = (float)Math.random() * 3;
-
-                    if(intSessionId == 1) {
-                        ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
-                        ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 - intRand3) + "," + 6 + "," + 6);
-                    } else {
-                        ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
-                        ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6);
-                    }
-
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler));
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler));
+            float fltStartAngle = 0;
+                //CAST graph to determine angle
+                //A
+                fltDiffY*= -1;
+                if(fltDiffX > 0 && fltDiffY > 0){
+                    fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX);
+                    
                 }
+                //S
+                else if(fltDiffX < 0 && fltDiffY > 0){
+                    fltStartAngle = (float) ((Math.atan(fltDiffY/fltDiffX)) + Math.PI); 
+                }
+                //T
+                else if(fltDiffX < 0 && fltDiffY < 0){
+                    fltStartAngle = (float) ((fltDiffY/fltDiffX) + Math.PI); 
+                }
+                //C
+                else if(fltDiffX > 0 && fltDiffY < 0){
+                    fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX); 
+                }
+                
+                handler.addObject(new WaveAttacks(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, ObjectId.BULLET, ssm, handler));
             }
         }
     }

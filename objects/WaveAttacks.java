@@ -22,13 +22,11 @@ public class WaveAttacks extends GameObject {
         this.fltVelY = fltVelY;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.handler = handler;
-        System.out.println(Math.toDegrees(Math.tan(fltVelY/fltVelX)));
     }
     
     public void update(LinkedList<GameObject> objectList) {
         
-        fltSpread += 10;
-        System.out.println(fltX);
+        fltSpread += 15;
         fltX+= fltVelX;
         fltY += fltVelY;
         
@@ -39,10 +37,13 @@ public class WaveAttacks extends GameObject {
 
     public void draw(Graphics g) {
         g.setColor(Color.white);
-        g.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
         //g.drawArc((int)(fltX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
         //g.drawArc((int)fltX, (int)fltY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltX-fltSpread/2), (int) (fltY - fltSpread/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX-fltSpread/2)-1, (int) (fltY - fltSpread/2)-1, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX-fltSpread/2)-2, (int) (fltY - fltSpread/2)-2, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX-fltSpread/2)-3, (int) (fltY - fltSpread/2)-3, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX-fltSpread/2)-4, (int) (fltY - fltSpread/2)-4, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         
     }
 
