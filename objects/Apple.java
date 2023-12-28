@@ -20,6 +20,7 @@ public class Apple extends EnemyObject {
     private float fltMaxX = 0;
     private float fltMinY = 0;
     private float fltMaxY = 0;
+    private long startTime = System.nanoTime();
 
     public Apple(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
         super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, ssm);
@@ -38,8 +39,8 @@ public class Apple extends EnemyObject {
 
     public void update(LinkedList<GameObject> objectList) {
 
-        fltVelX = (float)(5*Math.sin(System.currentTimeMillis()/1000.0-(float)framework.Main.startTime/1000.0));
-        fltVelY = (float)(5*Math.cos(System.currentTimeMillis()/1000.0-(float)framework.Main.startTime/1000.0));
+        fltVelX = (float)(5*Math.sin(System.nanoTime()/1000000000.0-(float)framework.Main.startTime/1000000000.0));
+        fltVelY = (float)(-5*Math.cos(System.nanoTime()/1000000000.0-(float)framework.Main.startTime/1000000000.0));
 
         fltX += fltVelX;
         fltY += fltVelY;

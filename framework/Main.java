@@ -58,7 +58,7 @@ public class Main implements ActionListener {
 
     private Timer timer = new Timer(1000/60, this);
 
-    public static long startTime = System.currentTimeMillis();
+    public static long startTime = System.nanoTime();
 
     private SuperSocketMaster ssm;
 
@@ -96,7 +96,7 @@ public class Main implements ActionListener {
         
         // TEMP ///////
         handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, ssm, handler));
-        handler.addObject(new Apple(600, 300, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
+        handler.addObject(new Apple(600, 100, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
         ///////////////
 
         characterPanel.setPreferredSize(new Dimension(1280, 720));
@@ -393,7 +393,7 @@ public class Main implements ActionListener {
 
         if(evt.getSource() == buttonReady) {
             ssm.sendText("h>a>mGAME_PANEL");
-            startTime = System.currentTimeMillis();
+            startTime = System.nanoTime();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
