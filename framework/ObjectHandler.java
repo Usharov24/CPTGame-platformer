@@ -1,7 +1,6 @@
 package framework;
 import java.awt.Graphics;
 import java.util.LinkedList;
-
 import objects.EnemyObject;
 import objects.GameObject;
 
@@ -26,30 +25,6 @@ public class ObjectHandler {
         }
     }
 
-    public GameObject findNearestObject(float fltX, float fltY){
-        float fltDistX = 0;     
-        float fltDistY = 0;
-        float flttotaldist = 0;
-        float fltPastX = 0;
-        float fltPastY = 0;
-        float fltpastTotal = 0;
-        int intreturn = 0;
-        for(int i = 0; i < objectList.size(); i++){
-            if(objectList.get(i).getId() == ObjectId.ENEMY_APPLE || objectList.get(i).getId() == ObjectId.ENEMY_MANGO){
-                fltDistX = fltX - objectList.get(i).getX();
-                fltDistY = fltY - objectList.get(i).getY();
-                flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-                if(flttotaldist > fltpastTotal){
-                    fltpastTotal = flttotaldist;
-                    fltPastX = fltDistX;
-                    fltPastY = fltDistY;
-                    intreturn = i;
-                }
-            }
-        }
-        return objectList.get(intreturn);
-    }
-
     public int sizeHandler() {
         return objectList.size();
     }
@@ -65,6 +40,10 @@ public class ObjectHandler {
     public GameObject getObject(int intIndex) {
         return objectList.get(intIndex);
     }
+
+    //public ObjectId ObjectIdParse(){
+    //    return 2;
+    //}
 
     public boolean containsObject(GameObject object) {
         return objectList.contains(object);

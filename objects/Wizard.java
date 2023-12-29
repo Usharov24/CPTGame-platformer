@@ -5,6 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -22,19 +28,31 @@ public class Wizard extends GameObject {
 
     private int intSessionId;
     private int intJumpCount;
-    private int intDirection = 1;
     private long[] lngtimer = {0,0,0,0};
-    
     private boolean blnFalling = true;
     private boolean blnteleporting = false;
+    private BufferedImage BiFireball = null;
+    private BufferedImage BiEBall = null;
+    
+
 
     public Wizard(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
         this.input = input;
         this.intSessionId = intSessionId;
+        try{
+            BiFireball = ImageIO.read(new File("res/FireBall.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+        try{
+            BiEBall = ImageIO.read(new File("res/ElectricBall.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
     }
-
+    
     public void update(LinkedList<GameObject> objectList) {
         if(intSessionId == Main.intSessionId) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
@@ -51,10 +69,8 @@ public class Wizard extends GameObject {
 
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                 fltVelX -= fltAcc;
-                intDirection = -1;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 fltVelX += fltAcc;
-                intDirection = 1;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 if(fltVelX > 0) fltVelX -= fltDec;
                 else if(fltVelX < 0) fltVelX += fltDec;
@@ -68,23 +84,18 @@ public class Wizard extends GameObject {
                 lngtimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
                 blnteleporting = true;
-                if(intDirection > 0){
-                    fltDashVel = 50;
-                } else if(intDirection < 0){
-                    fltDashVel = -50;
-                }
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 8000) {
                 lngtimer[1] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.F);
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
-                handler.addObject(new WizardUlt(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
                 //The Ultimate abilty
             }
 
@@ -102,11 +113,19 @@ public class Wizard extends GameObject {
             fltY += fltVelY;
 
             collisions();
-            if(blnteleporting == true){
-                drawTeleport(null);
-            }
+            
             if(intSessionId == 1) ssm.sendText("h>a>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
             else ssm.sendText("c" + intSessionId + ">h>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
+
+            if(blnteleporting && input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)){
+                fltX = input.fltMouseX;
+                fltY = input.fltMouseY;
+                
+                blnFalling = true;
+                blnteleporting = false;
+
+                
+            }
 
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 500) {
                 lngtimer[2] = System.currentTimeMillis();
@@ -121,7 +140,7 @@ public class Wizard extends GameObject {
 
                 if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                handler.addObject(new FireBall(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler, false, BiFireball));
                 
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
@@ -153,6 +172,7 @@ public class Wizard extends GameObject {
                 
                 handler.addObject(new WaveAttacks(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, ObjectId.BULLET, ssm, handler));
             }
+            
         }
     }
 
@@ -174,6 +194,10 @@ public class Wizard extends GameObject {
         g2d.fill(getBounds2());
         g2d.setColor(Color.white);
         g2d.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        if (blnteleporting){
+            g2d.setColor(Color.gray);
+            g2d.fillRect((int)(input.fltMouseX - fltWidth/2), (int)(input.fltMouseY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        }
     }
 
     public Rectangle getBounds() {
@@ -187,12 +211,5 @@ public class Wizard extends GameObject {
     // Will likely remove later
     public int getSessionId() {
         return intSessionId;
-    }
-
-    public void drawTeleport(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.gray);
-        g2d.fillRect((int)input.fltMouseX, (int)input.fltMouseY, (int)fltWidth, (int)fltHeight);
-        
     }
 }

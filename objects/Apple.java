@@ -15,7 +15,6 @@ import framework.SuperSocketMaster;
 public class Apple extends EnemyObject {
 
     private ObjectHandler handler;
-
     private float fltMinX = 0;
     private float fltMaxX = 0;
     private float fltMinY = 0;

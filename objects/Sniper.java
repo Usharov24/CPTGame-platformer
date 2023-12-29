@@ -3,7 +3,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import framework.InputHandler;
 import framework.Main;
@@ -24,16 +29,29 @@ public class Sniper extends GameObject {
     private int intJumpCount;
     private int intDirection = 1;
     private long[] lngtimer = {0,0,0,0};
-    
+    private BufferedImage BiBullet = null;
+    private BufferedImage BiBomb = null;
     private boolean blnFalling = true;
     private boolean blnBazooka = false;
     private boolean blnRapidFire = false;
+    private int intRecoilX = 0;
+    private int intRecoilY = 0;
 
     public Sniper(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
         this.input = input;
         this.intSessionId = intSessionId;
+        try{
+            BiBullet = ImageIO.read(new File("res/SniperBullet.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+        try{
+            BiBomb = ImageIO.read(new File("res/Rocket.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
     }
 
     public void update(LinkedList<GameObject> objectList) {
@@ -80,24 +98,6 @@ public class Sniper extends GameObject {
                 blnBazooka = true;
                 //The Ultimate abilty
             }
-
-            if(blnFalling) fltVelY += 5;
-
-            if(fltVelX > 10) fltVelX = 10;
-            else if(fltVelX < -10) fltVelX = -10;
-
-            if(fltVelY > 30) fltVelY = 30;
-
-            if(fltDashVel > 0) fltDashVel -= 5;
-            else if(fltDashVel < 0) fltDashVel += 5;
-
-            fltX += fltVelX + fltDashVel;
-            fltY += fltVelY;
-
-            collisions();
-            if(intSessionId == 1) ssm.sendText("h>a>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
-            else ssm.sendText("c" + intSessionId + ">h>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
-
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 1000) {
                 lngtimer[2] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
@@ -108,13 +108,15 @@ public class Sniper extends GameObject {
 
                 
                 if(blnBazooka == false){
-                    handler.addObject(new SniperBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler));
+                    handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBullet));
                     if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                     else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+                    intRecoilX = (int)(fltVelX + fltDiffX*-20);
+                    intRecoilY = (int)(fltVelY + fltDiffY*-20);
                 }
 
                 if(blnBazooka == true){
-                    handler.addObject(new SniperBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler));
+                    handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBomb));
                     if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                     else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 }
@@ -122,11 +124,6 @@ public class Sniper extends GameObject {
                 
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 7000) {
                 lngtimer[3] = System.currentTimeMillis();
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
-                float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                fltDiffX /= fltLength;
-                fltDiffY /= fltLength;
                 blnRapidFire = true;
 
             }
@@ -139,18 +136,45 @@ public class Sniper extends GameObject {
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
                     if(blnBazooka == false){
-                        handler.addObject(new SniperBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler));
+                        handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBullet));
                         if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                         else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+                        intRecoilX = (int)(fltVelX + fltDiffX*-20);
+                        intRecoilY = (int)(fltVelY + fltDiffY*-20);
                     }
 
                     if(blnBazooka == true){
-                        handler.addObject(new SniperBullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler));
+                        handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBomb));
                         if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                         else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                     }
                 }
             }
+            
+            if(blnFalling) fltVelY += 5;
+
+            if(fltVelX > 10) fltVelX = 10;
+            else if(fltVelX < -10) fltVelX = -10;
+
+            if(fltVelY > 30) fltVelY = 30;
+
+            if(fltDashVel > 0) fltDashVel -= 5;
+            else if(fltDashVel < 0) fltDashVel += 5;
+
+            if(intRecoilX > 0) intRecoilX -= 1;
+            else if(intRecoilX < 0) intRecoilX += 1;
+
+            if(intRecoilY > 0) intRecoilY -= 1;
+            else if(intRecoilY < 0) intRecoilY += 1;
+
+            fltX += fltVelX + fltDashVel + intRecoilX;
+            fltY += fltVelY + intRecoilY;
+            
+            collisions();
+            if(intSessionId == 1) ssm.sendText("h>a>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
+            else ssm.sendText("c" + intSessionId + ">h>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
+
+            
         }
     }
 

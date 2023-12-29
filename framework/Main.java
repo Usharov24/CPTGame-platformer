@@ -4,23 +4,25 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.OverlayLayout;
 import javax.swing.Timer;
-
 import components.*;
 import objects.Apple;
 import objects.Bullet;
-import objects.HomingBullet;
 import objects.Mango;
 import objects.Player;
 import objects.Wizard;
 import objects.Sniper;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main implements ActionListener {
 
@@ -55,6 +57,16 @@ public class Main implements ActionListener {
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
     /////////////////////////////////////////////////////////////////////////////
+    //All Sprites loaded
+    private BufferedImage BiFireball = null;
+    private BufferedImage BiEball = null;
+    private BufferedImage BiWizard = null;
+    private BufferedImage BiSniperBullet = null;
+    private BufferedImage BiRocket = null;
+    private BufferedImage BiSniper = null;
+    private BufferedImage BiBrute = null;
+    private BufferedImage BiKnight = null;
+    private BufferedImage BiVacGrenade = null;
 
     private Timer timer = new Timer(1000/60, this);
 
@@ -89,7 +101,30 @@ public class Main implements ActionListener {
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
         }
+        //loading images
 
+        try{
+            BiSniperBullet = ImageIO.read(new File("res/SniperBullet.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+        try{
+            BiRocket = ImageIO.read(new File("res/Rocket.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+        try{
+            BiFireball = ImageIO.read(new File("res/FireBall.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+        try{
+            BiEball = ImageIO.read(new File("res/ElectricBall.png"));
+        }catch(IOException e){
+            System.out.println("no image");
+        }
+
+        //Listeners
         thePanels[4].addKeyListener(input);
         thePanels[4].addMouseListener(input);
         thePanels[4].addMouseMotionListener(input);
@@ -214,7 +249,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null));
                 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
@@ -222,7 +257,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new HomingBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null));
                 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
@@ -282,11 +317,11 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null));
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new HomingBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null));
                 } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
@@ -396,7 +431,7 @@ public class Main implements ActionListener {
             startTime = System.nanoTime();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
-                handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
                 // Need to find a way to specify character/class as well
                 ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
             }
@@ -404,6 +439,7 @@ public class Main implements ActionListener {
             state = State.GAME;
 
             theFrame.setContentPane(thePanels[4]);
+            thePanels[4].requestFocus(true);
             theFrame.pack();
         }
     }

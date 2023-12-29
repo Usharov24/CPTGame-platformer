@@ -2,10 +2,7 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.geom.Path2D;
 import java.util.LinkedList;
-
-import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;

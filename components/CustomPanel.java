@@ -22,7 +22,6 @@ public class CustomPanel extends JPanel {
     }
 
     public void paintComponent(Graphics g){
-        System.out.println("Focusable: " + isFocusable() + " Focus Owner: " + isFocusOwner());
         // TEMP //////////
         g.setColor(Color.black);
         g.fillRect(0, 0, getWidth(), getHeight());
