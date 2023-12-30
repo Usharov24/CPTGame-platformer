@@ -94,10 +94,13 @@ public class Main implements ActionListener {
     private int intServerSize = 0;
     private int intCurrentButton = -1, intPreviousButton = -1;
     private int[] intCharacterSelections = new int[4];
-
+    private int intCharacterCheck = 0;
     private boolean[] availableIds = {true, true, true};
     
     public Main() {
+        for(int i = 0; i < 4; i++){
+            intCharacterSelections[i] = -1; 
+        }
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
         }
@@ -202,6 +205,7 @@ public class Main implements ActionListener {
         buttonReady.setSize(100, 100);
         buttonReady.setLocation(950, 175);
         buttonReady.addActionListener(this);
+        buttonReady.setEnabled(false);
         characterPanel.add(buttonReady);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -249,7 +253,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
                 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
@@ -257,7 +261,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
                 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
@@ -317,11 +321,11 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
                 } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
@@ -408,7 +412,7 @@ public class Main implements ActionListener {
             if(evt.getSource() == characterButtons[intCount]) {
                 intPreviousButton = intCurrentButton;
                 intCurrentButton = intCount;
-
+                System.out.println(intServerSize);
                 if(intSessionId == 1) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
                 else ssm.sendText("c" + intSessionId + ">mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
 
@@ -416,12 +420,32 @@ public class Main implements ActionListener {
                 
                 if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
                 characterButtons[intCount].setEnabled(false);
+                
+                if(intCharacterSelections[intCount] > -1){
+                    intCharacterCheck++;
+                }
+                if(intCharacterCheck == 2){
+                    buttonReady.setEnabled(true);
+                }
+                
+            }
+            
+        }
+        
+        intCharacterCheck = 0;
+
+        for(int intCount = 0; intCount < 4; intCount++){
+            if(intCharacterSelections[intCount] > -1){
+                intCharacterCheck++;
+            }
+            
+            if(intCharacterCheck == intServerSize + 1){
+                buttonReady.setEnabled(true);
             }
         }
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");
-
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
         }
@@ -431,7 +455,19 @@ public class Main implements ActionListener {
             startTime = System.nanoTime();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
-                handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                if(intCharacterSelections[intCount] == 0){
+                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                }
+                if(intCharacterSelections[intCount] == 1){
+                    handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                }
+                if(intCharacterSelections[intCount] == 2){
+                    handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                }
+                if(intCharacterSelections[intCount] == 3){
+                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                }
+                
                 // Need to find a way to specify character/class as well
                 ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
             }

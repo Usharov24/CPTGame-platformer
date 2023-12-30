@@ -60,7 +60,7 @@ public class Apple extends EnemyObject {
     }
 
     public Rectangle getBounds() {
-        return null;
+        return new Rectangle((int)fltX, (int)fltY, (int)fltHeight, (int)fltWidth);
     }
 }
 

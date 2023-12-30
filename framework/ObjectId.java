@@ -5,5 +5,6 @@ public enum ObjectId {
     ENEMY_APPLE,
     ENEMY_MANGO,
     BULLET,
-    HOMING_BULLET;
+    HOMING_BULLET,
+    BOOM;
 }

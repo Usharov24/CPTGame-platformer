@@ -88,14 +88,14 @@ public class Wizard extends GameObject {
             if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 8000) {
                 lngtimer[1] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.F);
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, -20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
                 //The Ultimate abilty
             }
 
@@ -140,7 +140,7 @@ public class Wizard extends GameObject {
 
                 if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler, false, BiFireball));
+                handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
                 
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
