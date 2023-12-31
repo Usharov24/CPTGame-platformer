@@ -88,6 +88,23 @@ public class Wizard extends GameObject {
             if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 8000) {
                 lngtimer[1] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.F);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100);
+                if(intSessionId == 1) ssm.sendText("h>a>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aELECTRICBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100);
+
                 handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, 0, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
                 handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 20, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
                 handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, 0, -20, 30, 30, ObjectId.HOMING_BULLET, ssm, handler, true, BiEBall, 0));
@@ -114,8 +131,8 @@ public class Wizard extends GameObject {
 
             collisions();
             
-            if(intSessionId == 1) ssm.sendText("h>a>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
-            else ssm.sendText("c" + intSessionId + ">h>oPLAYER~" + fltX + "," + fltY + "," + intSessionId);
+            if(intSessionId == 1) ssm.sendText("h>a>oWIZARD~" + fltX + "," + fltY + "," + intSessionId);
+            else ssm.sendText("c" + intSessionId + ">h>oWIZARD~" + fltX + "," + fltY + "," + intSessionId);
 
             if(blnteleporting && input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)){
                 fltX = input.fltMouseX;
@@ -138,8 +155,8 @@ public class Wizard extends GameObject {
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
 
-                if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
+                if(intSessionId == 1) ssm.sendText("h>a>aFIREBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 100 + "," + 100);
+                else ssm.sendText("c" + intSessionId + ">h>aFIREBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 100 + "," + 100);
                 handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 100, 100, ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
                 
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
@@ -169,7 +186,8 @@ public class Wizard extends GameObject {
                 else if(fltDiffX > 0 && fltDiffY < 0){
                     fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX); 
                 }
-                
+                if(intSessionId == 1) ssm.sendText("h>a>aWAVE~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle);
+                else ssm.sendText("c" + intSessionId + ">h>aWAVE~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle);
                 handler.addObject(new WaveAttacks(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, ObjectId.BULLET, ssm, handler));
             }
             

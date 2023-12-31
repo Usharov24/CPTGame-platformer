@@ -60,13 +60,11 @@ public class Bullet extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.white);
-        g.fillOval((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
-        g.drawImage(biImg, (int)fltX, (int)fltY, null);
+        g.drawImage(biImg, (int)(fltX - fltWidth/2),(int)(fltY - fltHeight/2), null);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
     }
 
     public GameObject findNearestObject(float fltX, float fltY){
