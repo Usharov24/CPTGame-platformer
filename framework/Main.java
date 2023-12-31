@@ -412,7 +412,6 @@ public class Main implements ActionListener {
             if(evt.getSource() == characterButtons[intCount]) {
                 intPreviousButton = intCurrentButton;
                 intCurrentButton = intCount;
-                System.out.println(intServerSize);
                 if(intSessionId == 1) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
                 else ssm.sendText("c" + intSessionId + ">mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
 
@@ -421,28 +420,24 @@ public class Main implements ActionListener {
                 if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
                 characterButtons[intCount].setEnabled(false);
                 
-                if(intCharacterSelections[intCount] > -1){
-                    intCharacterCheck++;
-                }
-                if(intCharacterCheck == 2){
-                    buttonReady.setEnabled(true);
-                }
                 
             }
             
         }
         
-        intCharacterCheck = 0;
+        
 
         for(int intCount = 0; intCount < 4; intCount++){
             if(intCharacterSelections[intCount] > -1){
                 intCharacterCheck++;
             }
             
-            if(intCharacterCheck == intServerSize + 1){
+            if(intCharacterCheck == intServerSize && intServerSize > 0){
                 buttonReady.setEnabled(true);
             }
         }
+        intCharacterCheck = 0;
+
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");
