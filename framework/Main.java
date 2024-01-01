@@ -9,9 +9,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.OverlayLayout;
 import javax.swing.Timer;
 import components.*;
 import objects.Apple;
@@ -33,9 +35,15 @@ public class Main implements ActionListener {
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
     private JPanel characterPanel = new JPanel(null);
 
+    // Game Panels Container
+    private Container gameContentPane = theFrame.getContentPane();
+    private JLayeredPane gameLayeredPane = new JLayeredPane();
+
     // Map
     private MapPanel mapPanel = new MapPanel();
-    private Container gameContentPane = theFrame.getContentPane();
+    
+    // Chat
+    private ChatPanel chatPanel = new ChatPanel();
 
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
@@ -139,6 +147,9 @@ public class Main implements ActionListener {
         handler.addObject(new Apple(600, 100, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
         ///////////////
 
+        gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
+        gameLayeredPane.setLayout(null);
+        mapPanel.setPreferredSize(new Dimension(1280, 720));
         characterPanel.setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
@@ -448,7 +459,21 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
-                    theFrame.setContentPane(thePanels[4]);
+                    thePanels[4].setVisible(true);
+                    thePanels[4].setOpaque(true);
+                    thePanels[4].setBounds(0, 0, 1280, 720);
+
+                    mapPanel.setVisible(true);
+                    mapPanel.setOpaque(true);
+                    mapPanel.setBounds(0, 0, 1280, 720);
+
+                    gameLayeredPane.add(thePanels[4], new Integer(0));
+                    gameLayeredPane.add(mapPanel, new Integer(1));
+                    gameLayeredPane.repaint();
+
+                    theFrame.setContentPane(gameLayeredPane);
+                    gameLayeredPane.requestFocus(true);
+                    thePanels[4].requestFocus(true);
                     theFrame.pack();
                 }
             }
@@ -580,7 +605,20 @@ public class Main implements ActionListener {
 
             state = State.GAME;
 
-            theFrame.setContentPane(thePanels[4]);
+            thePanels[4].setVisible(true);
+            thePanels[4].setOpaque(true);
+            thePanels[4].setBounds(0, 0, 1280, 720);
+
+            mapPanel.setVisible(true);
+            mapPanel.setOpaque(true);
+            mapPanel.setBounds(0, 0, 1280, 720);
+
+            gameLayeredPane.add(thePanels[4], new Integer(0));
+            gameLayeredPane.add(mapPanel, new Integer(1));
+            gameLayeredPane.repaint();
+
+            theFrame.setContentPane(gameLayeredPane);
+            gameLayeredPane.requestFocus(true);
             thePanels[4].requestFocus(true);
             theFrame.pack();
         }
