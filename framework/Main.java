@@ -316,11 +316,11 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("aFIREBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
                 
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aFIREBALL~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aFIREBALL~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aFIREBALL~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aFIREBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aFIREBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aFIREBULLET~" + strMessage.split("~")[1]);
                 }else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -329,7 +329,31 @@ public class Main implements ActionListener {
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);
-                } else if(strMessage.contains("mJOIN")) {
+                } else if(strMessage.contains("aWAVE")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aWAVE~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aWAVE~" + strMessage.split("~")[1]);
+                    handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, ssm, handler));
+                }else if(strMessage.contains("aELECTRICBULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, true, BiEball, 0));
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aELECTRICBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aELECTRICBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aELECTRICBULLET~" + strMessage.split("~")[1]);
+                }else if(strMessage.contains("aBOMB")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBOMB~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOMB~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOMB~" + strMessage.split("~")[1]);
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiRocket, 10));
+                } else if(strMessage.contains("aSBULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSBULLET~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSBULLET~" + strMessage.split("~")[1]);
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiSniperBullet, 0));
+                }else if(strMessage.contains("mJOIN")) {
                     intServerSize++;
                     System.out.println("Server Size: " + intServerSize);
 
@@ -445,7 +469,15 @@ public class Main implements ActionListener {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
-                } else if(strMessage.contains("mSESSION_ID")) {
+                }else if(strMessage.contains("aBOMB")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiRocket, 10));
+                } else if(strMessage.contains("aSBULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiSniperBullet, 0));
+                }else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
                 } else if(strMessage.contains("mCHARACTER_SELECTED")) {
