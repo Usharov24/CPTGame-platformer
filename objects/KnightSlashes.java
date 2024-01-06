@@ -8,22 +8,21 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 
 
-public class WaveAttacks extends GameObject {
+public class KnightSlashes extends GameObject {
 
     private ObjectHandler handler;
     private float fltStartAngle;
-    float fltSpread = 1;
-    public WaveAttacks(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+    private long lngbirth;
+    public KnightSlashes(float fltX, float fltY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
-        this.fltVelY = fltVelY;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.handler = handler;
+        this.lngbirth = lngbirth;
     }
     
     public void update(LinkedList<GameObject> objectList) {
         
-        fltSpread += 15;
         fltX+= fltVelX;
         fltY += fltVelY;
         
@@ -36,11 +35,12 @@ public class WaveAttacks extends GameObject {
         g.setColor(Color.red);
         //g.drawArc((int)(fltX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
         //g.drawArc((int)fltX, (int)fltY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2), (int) (fltY - fltSpread/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-1, (int) (fltY - fltSpread/2)-1, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-2, (int) (fltY - fltSpread/2)-2, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-3, (int) (fltY - fltSpread/2)-3, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-4, (int) (fltY - fltSpread/2)-4, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX - fltWidth/2), (int) (fltY - fltHeight /2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX - fltWidth/2)-1, (int) (fltY - fltHeight /2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX - fltWidth/2)-2, (int) (fltY - fltHeight /2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX - fltWidth/2)+1, (int) (fltY - fltHeight /2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltX - fltWidth/2)+2, (int) (fltY - fltHeight /2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45,  -90);
+        
         
     }
 
