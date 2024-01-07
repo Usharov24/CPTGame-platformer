@@ -26,7 +26,7 @@ public class KnightSlashes extends GameObject {
         fltX+= fltVelX;
         fltY += fltVelY;
         
-        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
+        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0 || System.currentTimeMillis() - lngbirth > 100){
             handler.removeObject(this);
         }
     }
