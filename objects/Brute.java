@@ -19,19 +19,17 @@ public class Brute extends GameObject {
 
     private ObjectHandler handler;
     private InputHandler input;
-
     private float fltAcc = 1f, fltDec = 0.5f;
     private int intSessionId;
     private int intJumpCount;
-    private float fltAngle = 90;
+    private float fltAngle = 270;
     private long[] lngtimer = {0,0,0,0};
     private BufferedImage BiVacGrenade = null;
     private boolean blnFalling = true;
     private boolean blnRocket = false;
     private boolean blnSlamming = false;
     private float fltRocketSpeed = 0;
-    private float fltDiffX = 0;
-    private float fltDiffY = 0;
+    private int intJumpStart = 0;
 
     public Brute(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
@@ -144,6 +142,10 @@ public class Brute extends GameObject {
                 
             }
             else{
+                if(intJumpStart == 0){
+                    fltY -= 50;
+                    intJumpStart = 1;
+                }
                 if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                     fltAngle -= 8;
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
@@ -186,9 +188,11 @@ public class Brute extends GameObject {
                 else ssm.sendText("c" + intSessionId + ">h>aBOOM~" + (fltX) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
             }
             if(blnRocket){
+                intJumpStart = 0;
                 blnRocket = false;
                 handler.addObject(new Explosion(fltX+fltWidth/2, fltY + fltHeight/2, 300, 300, ObjectId.BOOM, ssm, handler));
-                
+                if(intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX + fltWidth/2) + "," + (fltY + fltHeight/2) + "," + (300) + "," + (300));
+                else ssm.sendText("c" + intSessionId + ">h>aBOOM~" + (fltX + fltWidth/2) + "," + (fltY + fltHeight/2) + "," + (300) + "," + (300));
             }
             fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
         }
