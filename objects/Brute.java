@@ -46,104 +46,109 @@ public class Brute extends GameObject {
 
     public void update(LinkedList<GameObject> objectList) {
         if(intSessionId == Main.intSessionId) {
-            if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
-                input.buttonSet.remove(InputButtons.W);
-                fltVelY -= 50;
-                intJumpCount++;
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
-                input.buttonSet.remove(InputButtons.SPACE);
-                fltVelY -= 50;
-                intJumpCount++;
-            }
+            if(blnRocket == false){
+                if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
+                    input.buttonSet.remove(InputButtons.W);
+                    fltVelY -= 50;
+                    intJumpCount++;
+                } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
+                    input.buttonSet.remove(InputButtons.SPACE);
+                    fltVelY -= 50;
+                    intJumpCount++;
+                }
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
-                fltVelX -= fltAcc;
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
-                fltVelX += fltAcc;
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
-                if(fltVelX > 0) fltVelX -= fltDec;
-                else if(fltVelX < 0) fltVelX += fltDec;
-            } else {
-                if(fltVelX > 0) fltVelX -= fltDec;
-                else if(fltVelX < 0) fltVelX += fltDec;
-            }
+                if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
+                    fltVelX -= fltAcc;
+                } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
+                    fltVelX += fltAcc;
+                } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
+                    if(fltVelX > 0) fltVelX -= fltDec;
+                    else if(fltVelX < 0) fltVelX += fltDec;
+                } else {
+                    if(fltVelX > 0) fltVelX -= fltDec;
+                    else if(fltVelX < 0) fltVelX += fltDec;
+                }
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 3000) {
-                //Moving variables
-                lngtimer[0] = System.currentTimeMillis();
-                input.buttonSet.remove(InputButtons.SHIFT);
-                blnSlamming = true;
-                System.out.println(blnSlamming);
-                fltVelY = -65;
-            }
-            if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 1600) {
-                lngtimer[1] = System.currentTimeMillis();
-                input.buttonSet.remove(InputButtons.F);
-                blnRocket = true;
-                //The Ultimate abilty
-            }
-            if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 50) {
-                lngtimer[2] = System.currentTimeMillis();
-                if(fltX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltX + 25, fltY+15, -20, System.currentTimeMillis() - 75, 50, 50, 135, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
-                    else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
+                if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 3000) {
+                    //Moving variables
+                    lngtimer[0] = System.currentTimeMillis();
+                    input.buttonSet.remove(InputButtons.SHIFT);
+                    blnSlamming = true;
+                    System.out.println(blnSlamming);
+                    fltVelY = -65;
+                }
+                if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 1600) {
+                    lngtimer[1] = System.currentTimeMillis();
+                    input.buttonSet.remove(InputButtons.F);
+                    blnRocket = true;
+                    //The Ultimate abilty
+                }
+                if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 50) {
+                    lngtimer[2] = System.currentTimeMillis();
+                    if(fltX + fltWidth/2 > input.fltMouseX){
+                        handler.addObject(new KnightSlashes(fltX + 25, fltY+15, -20, System.currentTimeMillis() - 75, 50, 50, 135, id, ssm, handler));
+                        if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
+                        else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
+                    }
+                    else{
+                        handler.addObject(new KnightSlashes(fltX, fltY+15 , 20, System.currentTimeMillis() - 75, 50, 50, 270, id, ssm, handler));
+                        if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                        else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                    }
+                
+                }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
+                    lngtimer[3] = System.currentTimeMillis();
+                    
+                    float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
+                    float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
+                    float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+                    fltDiffX /= fltLength;
+                    fltDiffY /= fltLength;
+                    fltDiffX = Math.round(fltDiffX*40);
+                    fltDiffY = Math.round(fltDiffY*40);
+                    handler.addObject(new VacGrenade(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX, fltDiffY, 40, 40, System.currentTimeMillis(), ObjectId.BULLET, ssm, handler, BiVacGrenade, 0));
+                    if(intSessionId == 1) ssm.sendText("h>a>aVAC~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
+                    else ssm.sendText("c" + intSessionId + ">h>aVAC~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
+                }
+
+                
+                
+
+                
+
+                
+                
+                if(blnFalling) fltVelY += 5;
+
+                if(fltVelX > 10) fltVelX = 10;
+                else if(fltVelX < -10) fltVelX = -10;
+
+                if(fltVelY > 30) fltVelY = 30;
+
+                if(intRecoilX > 0) intRecoilX -= 1;
+                else if(intRecoilX < 0) intRecoilX += 1;
+
+                if(intRecoilY > 0) intRecoilY -= 1;
+                else if(intRecoilY < 0) intRecoilY += 1;
+                collisions();
+                if(blnSlamming == false){
+                    fltX += fltVelX  + intRecoilX;
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltX, fltY+15 , 20, System.currentTimeMillis() - 75, 50, 50, 270, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
-                    else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                    fltX += fltVelX*2 + intRecoilX ;
                 }
-            
-            }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
-                lngtimer[3] = System.currentTimeMillis();
                 
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
-                float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                fltDiffX /= fltLength;
-                fltDiffY /= fltLength;
-                fltDiffX = Math.round(fltDiffX*40);
-                fltDiffY = Math.round(fltDiffY*40);
-                handler.addObject(new VacGrenade(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX, fltDiffY, 40, 40, System.currentTimeMillis(), ObjectId.BULLET, ssm, handler, BiVacGrenade, 0));
-                if(intSessionId == 1) ssm.sendText("h>a>aVAC~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
-                else ssm.sendText("c" + intSessionId + ">h>aVAC~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
+                fltY += fltVelY + intRecoilY;
+                
+                
+                if(intSessionId == 1) ssm.sendText("h>a>oBRUTE~" + fltX + "," + fltY + "," + intSessionId);
+                else ssm.sendText("c" + intSessionId + ">h>oBRUTE~" + fltX + "," + fltY + "," + intSessionId);
+
+                
             }
+        }
+        else{
 
-            
-            
-
-            
-
-            
-            
-            if(blnFalling) fltVelY += 5;
-
-            if(fltVelX > 10) fltVelX = 10;
-            else if(fltVelX < -10) fltVelX = -10;
-
-            if(fltVelY > 30) fltVelY = 30;
-
-            if(intRecoilX > 0) intRecoilX -= 1;
-            else if(intRecoilX < 0) intRecoilX += 1;
-
-            if(intRecoilY > 0) intRecoilY -= 1;
-            else if(intRecoilY < 0) intRecoilY += 1;
-            collisions();
-            if(blnSlamming == false){
-                fltX += fltVelX  + intRecoilX;
-            }
-            else{
-                fltX += fltVelX*2 + intRecoilX ;
-            }
-            
-            fltY += fltVelY + intRecoilY;
-            
-            
-            if(intSessionId == 1) ssm.sendText("h>a>oKNIGHT~" + fltX + "," + fltY + "," + intSessionId);
-            else ssm.sendText("c" + intSessionId + ">h>oKNIGHT~" + fltX + "," + fltY + "," + intSessionId);
-
-            
         }
     }
 

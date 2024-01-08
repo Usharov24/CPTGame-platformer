@@ -327,6 +327,27 @@ public class Main implements ActionListener {
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
+                }else if(strMessage.contains("oBRUTE")){
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    // Temporary setup until a better system for object identification is made
+                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
+                        Brute object = null;
+                        try {
+                            object = (Brute)handler.objectList.get(intCount);
+
+                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
+                                object.setX(Float.parseFloat(strPayload[0]));
+                                object.setY(Float.parseFloat(strPayload[1]));
+                                break;
+                            }
+                        } catch(ClassCastException e) {
+                            //System.out.println("Cannot cast class to Player...");
+                        }
+                    }
+                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
+                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
+                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -494,6 +515,24 @@ public class Main implements ActionListener {
                             //System.out.println("Cannot cast class to Player...");
                         }
                     }
+                }else if(strMessage.contains("oBRUTE")){
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    // Temporary setup until a better system for object identification is made
+                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
+                        Brute object = null;
+                        try {
+                            object = (Brute)handler.objectList.get(intCount);
+
+                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
+                                object.setX(Float.parseFloat(strPayload[0]));
+                                object.setY(Float.parseFloat(strPayload[1]));
+                                break;
+                            }
+                        } catch(ClassCastException e) {
+                            //System.out.println("Cannot cast class to Player...");
+                        }
+                    }
                 }else if(strMessage.contains("aPLAYER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -510,6 +549,10 @@ public class Main implements ActionListener {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Knight(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
+                }else if(strMessage.contains("aBRUTE")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Brute(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
                 }else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
