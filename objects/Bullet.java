@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
-
+import framework.Main;
 
 public class Bullet extends GameObject {
 
@@ -94,6 +94,8 @@ public class Bullet extends GameObject {
                     if(fltexplosionradius > 0){
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltX - fltexplosionradius/2, fltY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
+                        if(Main.intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+                else    ssm.sendText("c" + Main.intSessionId + ">h>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
                         //arbitary value to make sure bomb doesnt explode multiple times
                         fltX = 10000;
 

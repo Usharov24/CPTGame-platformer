@@ -21,16 +21,16 @@ public class Brute extends GameObject {
     private InputHandler input;
 
     private float fltAcc = 1f, fltDec = 0.5f;
-    private float fltDashVelY;
-    private float fltDashVelX;
     private int intSessionId;
     private int intJumpCount;
     private long[] lngtimer = {0,0,0,0};
     private BufferedImage BiVacGrenade = null;
     private boolean blnFalling = true;
     private boolean blnRocket = false;
+    private boolean blnSlamming = false;
     private int intRecoilX = 0;
     private int intRecoilY = 0;
+    
 
     public Brute(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
@@ -68,19 +68,13 @@ public class Brute extends GameObject {
                 else if(fltVelX < 0) fltVelX += fltDec;
             }
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 800) {
+            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 3000) {
                 //Moving variables
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
-                float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                
-            
-                fltDiffX /= fltLength;
-                fltDiffY /= fltLength;
-                fltDashVelX = Math.round(fltDiffX * 50);
-                fltDashVelY = Math.round(fltDiffY * 50);
                 lngtimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
+                blnSlamming = true;
+                System.out.println(blnSlamming);
+                fltVelY = -65;
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngtimer[1] > 1600) {
                 lngtimer[1] = System.currentTimeMillis();
@@ -130,20 +124,20 @@ public class Brute extends GameObject {
 
             if(fltVelY > 30) fltVelY = 30;
 
-            if(fltDashVelY > 0) fltDashVelY -= 1;
-            else if(fltDashVelY < 0) fltDashVelY += 1;
-
-            if(fltDashVelX > 0) fltDashVelX -= 1;
-            else if(fltDashVelX < 0) fltDashVelX += 1;
-
             if(intRecoilX > 0) intRecoilX -= 1;
             else if(intRecoilX < 0) intRecoilX += 1;
 
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
             collisions();
-            fltX += fltVelX + fltDashVelX + intRecoilX;
-            fltY += fltVelY + intRecoilY + fltDashVelY;
+            if(blnSlamming == false){
+                fltX += fltVelX  + intRecoilX;
+            }
+            else{
+                fltX += fltVelX*2 + intRecoilX ;
+            }
+            
+            fltY += fltVelY + intRecoilY;
             
             
             if(intSessionId == 1) ssm.sendText("h>a>oKNIGHT~" + fltX + "," + fltY + "," + intSessionId);
@@ -158,7 +152,16 @@ public class Brute extends GameObject {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
-
+            if(blnSlamming){
+                blnSlamming = false;
+                handler.addObject(new Explosion(fltX, fltY + fltHeight, 300, 300, ObjectId.BOOM, ssm, handler));
+                handler.addObject(new Explosion(fltX+ fltWidth, fltY + fltHeight, 300, 300, ObjectId.BOOM, ssm, handler));
+                if(intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+                else ssm.sendText("c" + intSessionId + ">h>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+                if(intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+                else ssm.sendText("c" + intSessionId + ">h>aBOOM~" + (fltX) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+            }
+            
             fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
         }
         else{
@@ -177,11 +180,11 @@ public class Brute extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltX + fltVelX + fltDashVelX), (int)fltY + 2, (int)fltWidth, (int)fltHeight - 4);
+        return new Rectangle((int)(fltX + fltVelX), (int)fltY + 2, (int)fltWidth, (int)fltHeight - 4);
     }
 
     public Rectangle getBounds2() {
-        return new Rectangle((int)fltX + 2, (int)(fltY + fltVelY + fltDashVelY), (int)fltWidth - 4, (int)fltHeight);
+        return new Rectangle((int)fltX + 2, (int)(fltY + fltVelY), (int)fltWidth - 4, (int)fltHeight);
     }
 
     // Will likely remove later

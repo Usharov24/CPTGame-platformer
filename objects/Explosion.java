@@ -17,8 +17,6 @@ public class Explosion extends GameObject {
     
     public void update(LinkedList<GameObject> objectList) {
         fltWidth -= 15;
-        fltX += 7.5;
-        fltY += 7.5;
         fltHeight -= 15;
         if(fltWidth < 0){
             handler.removeObject(this);
@@ -30,7 +28,7 @@ public class Explosion extends GameObject {
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        g.fillOval((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        g.fillOval((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
         
     }
 

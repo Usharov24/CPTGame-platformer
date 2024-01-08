@@ -58,12 +58,12 @@ public class Sniper extends GameObject {
         if(intSessionId == Main.intSessionId) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);
-                fltVelY -= 50;
+                fltVelY = -45;
                 blnFalling = true;
                 intJumpCount++;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.SPACE);
-                fltVelY -= 50;
+                fltVelY = -45;
                 blnFalling = true;
                 intJumpCount++;
             }
@@ -111,7 +111,7 @@ public class Sniper extends GameObject {
                     handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBullet, 0));
                     if(intSessionId == 1) ssm.sendText("h>a>aSBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
                     else ssm.sendText("c" + intSessionId + ">h>aSBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
-                    intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-15);
+                    intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-18);
                     intRecoilY = intRecoilY +(int)(fltVelY + fltDiffY*-15);
                 }
 
@@ -119,7 +119,7 @@ public class Sniper extends GameObject {
                     handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBomb, 100));
                     if(intSessionId == 1) ssm.sendText("h>a>aBOMB~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
                     else ssm.sendText("c" + intSessionId + ">h>aBOMB~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
-                    intRecoilX = intRecoilX +(int)(fltVelX + fltDiffX*-24);
+                    intRecoilX = intRecoilX +(int)(fltVelX + fltDiffX*-28);
                     intRecoilY = intRecoilY +(int)(fltVelY + fltDiffY*-24);
                 }
                 
@@ -145,26 +145,25 @@ public class Sniper extends GameObject {
                         handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBullet, 0));
                         if(intSessionId == 1) ssm.sendText("h>a>aSBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
                         else ssm.sendText("c" + intSessionId + ">h>aSBULLET~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
-                        intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-15);
-                        intRecoilY = intRecoilY + (int)(fltVelY + fltDiffY*-15);
+                        intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-12);
+                        intRecoilY = intRecoilY + (int)(fltVelY + fltDiffY*-9);
                     }
 
                     if(blnBazooka == true){
                         handler.addObject(new Bullet(fltX + fltWidth/2 - 5, fltY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, false, BiBomb, 100));
                         if(intSessionId == 1) ssm.sendText("h>a>aBOMB~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
                         else ssm.sendText("c" + intSessionId + ">h>aBOMB~" + (fltX + fltWidth/2 - 5) + "," + (fltY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10);
-                        intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-24);
-                        intRecoilY = intRecoilY + (int)(fltVelY + fltDiffY*-24);
+                        intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-15);
+                        intRecoilY = intRecoilY + (int)(fltVelY + fltDiffY*-12);
                     }
                 }
             }
             
-            if(blnFalling) fltVelY += 5;
+            if(blnFalling) fltVelY += 3;
 
             if(fltVelX > 10) fltVelX = 10;
             else if(fltVelX < -10) fltVelX = -10;
 
-            if(fltVelY > 30) fltVelY = 30;
 
             if(fltDashVel > 0) fltDashVel -= 5;
             else if(fltDashVel < 0) fltDashVel += 5;
@@ -187,12 +186,12 @@ public class Sniper extends GameObject {
     }
 
     private void collisions() {
-        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10))) {
+        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10000))) {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
 
-            fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+            fltY = (float)new Rectangle(0, 660, 1280, 10).getY();
         }
     }
 

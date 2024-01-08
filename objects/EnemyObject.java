@@ -2,7 +2,6 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
-
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;

@@ -50,11 +50,11 @@ public class Knight extends GameObject {
         if(intSessionId == Main.intSessionId) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);
-                fltVelY -= 50;
+                fltVelY = -45;
                 intJumpCount++;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.SPACE);
-                fltVelY -= 50;
+                fltVelY = -45;
                 intJumpCount++;
             }
 
@@ -165,7 +165,7 @@ public class Knight extends GameObject {
 
             
             
-            if(blnFalling) fltVelY += 5;
+            if(blnFalling) fltVelY += 3;
 
             if(fltVelX > 10) fltVelX = 10;
             else if(fltVelX < -10) fltVelX = -10;
@@ -196,7 +196,7 @@ public class Knight extends GameObject {
     }
 
     private void collisions() {
-        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10))) {
+        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10000))) {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;

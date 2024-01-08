@@ -15,7 +15,6 @@ public class VacGrenade extends GameObject {
     private BufferedImage biImg;
     private boolean blnFalling = true;
     private boolean blnSucking = false;
-    private float fltexplosionradius;
     private float fltpastVelX;
     private long lngBirth;
     public VacGrenade(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, long lngBirth, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biImg, float fltexplosionradius) {
@@ -24,7 +23,6 @@ public class VacGrenade extends GameObject {
         this.fltVelY = fltVelY;
         this.handler = handler;
         this.biImg = biImg;
-        this.fltexplosionradius = fltexplosionradius;
         this.lngBirth = lngBirth;
         fltpastVelX = fltVelX;
     }
@@ -123,14 +121,14 @@ public class VacGrenade extends GameObject {
             if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
-                    handler.removeObject(this);
-                    if(fltexplosionradius > 0){
+                    //handler.removeObject(this);
+                    /*if(fltexplosionradius > 0){
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltX - fltexplosionradius/2, fltY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
                         //arbitary value to make sure bomb doesnt explode multiple times
                         fltX = 10000;
 
-                    }        
+                    } */       
                 }
             }        
         }
