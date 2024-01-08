@@ -17,6 +17,7 @@ import javax.swing.OverlayLayout;
 import javax.swing.Timer;
 import components.*;
 import objects.Apple;
+import objects.Brute;
 import objects.Bullet;
 import objects.Mango;
 import objects.Player;
@@ -684,8 +685,8 @@ public class Main implements ActionListener {
                     ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
                 }
                 if(intCharacterSelections[intCount] == 1){
-                    handler.addObject(new Player(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
-                    ssm.sendText("h>a>aPLAYER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
+                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
+                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
                 }
                 if(intCharacterSelections[intCount] == 2){
                     handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
