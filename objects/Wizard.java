@@ -57,12 +57,12 @@ public class Wizard extends GameObject {
         if(intSessionId == Main.intSessionId) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);
-                fltVelY -= 50;
+                fltVelY = -45;
                 blnFalling = true;
                 intJumpCount++;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.SPACE);
-                fltVelY -= 50;
+                fltVelY = -45;
                 blnFalling = true;
                 intJumpCount++;
             }
@@ -116,12 +116,11 @@ public class Wizard extends GameObject {
                 //The Ultimate abilty
             }
 
-            if(blnFalling) fltVelY += 5;
+            if(blnFalling) fltVelY += 3;
 
             if(fltVelX > 10) fltVelX = 10;
             else if(fltVelX < -10) fltVelX = -10;
 
-            if(fltVelY > 30) fltVelY = 30;
 
             if(fltDashVel > 0) fltDashVel -= 5;
             else if(fltDashVel < 0) fltDashVel += 5;
@@ -195,12 +194,12 @@ public class Wizard extends GameObject {
     }
 
     private void collisions() {
-        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10))) {
+        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10000))) {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
 
-            fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+            fltY = (float)new Rectangle(0, 660, 1280, 100000).getY() - fltHeight;
         }
     }
 

@@ -350,25 +350,19 @@ public class Main implements ActionListener {
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
-                
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aFIREBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
-                
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aFIREBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aFIREBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aFIREBULLET~" + strMessage.split("~")[1]);
                 }else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
-                
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);

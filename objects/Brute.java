@@ -23,14 +23,15 @@ public class Brute extends GameObject {
     private float fltAcc = 1f, fltDec = 0.5f;
     private int intSessionId;
     private int intJumpCount;
+    private float fltAngle = 90;
     private long[] lngtimer = {0,0,0,0};
     private BufferedImage BiVacGrenade = null;
     private boolean blnFalling = true;
     private boolean blnRocket = false;
     private boolean blnSlamming = false;
-    private int intRecoilX = 0;
-    private int intRecoilY = 0;
-    
+    private float fltRocketSpeed = 0;
+    private float fltDiffX = 0;
+    private float fltDiffY = 0;
 
     public Brute(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
         super(fltX, fltY, fltWidth, fltHeight, id, ssm);
@@ -125,20 +126,16 @@ public class Brute extends GameObject {
 
                 if(fltVelY > 30) fltVelY = 30;
 
-                if(intRecoilX > 0) intRecoilX -= 1;
-                else if(intRecoilX < 0) intRecoilX += 1;
-
-                if(intRecoilY > 0) intRecoilY -= 1;
-                else if(intRecoilY < 0) intRecoilY += 1;
+                
                 collisions();
                 if(blnSlamming == false){
-                    fltX += fltVelX  + intRecoilX;
+                    fltX += fltVelX;
                 }
                 else{
-                    fltX += fltVelX*2 + intRecoilX ;
+                    fltX += fltVelX*2 ;
                 }
                 
-                fltY += fltVelY + intRecoilY;
+                fltY += fltVelY;
                 
                 
                 if(intSessionId == 1) ssm.sendText("h>a>oBRUTE~" + fltX + "," + fltY + "," + intSessionId);
@@ -146,10 +143,32 @@ public class Brute extends GameObject {
 
                 
             }
-        }
-        else{
+            else{
+                if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
+                    fltAngle -= 8;
+                } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
+                    fltAngle += 8;
+                }
 
+                blnSlamming = false;
+                fltRocketSpeed += 0.3;
+                
+                fltVelY =+ (float)(fltRocketSpeed*Math.sin(Math.toRadians(fltAngle)));
+                fltVelX =+ (float)(fltRocketSpeed*Math.cos(Math.toRadians(fltAngle)));
+
+                System.out.println("Y" + fltVelY);
+                System.out.println("X" + fltVelX);
+                System.out.println("Angle" + fltAngle);
+                collisions();
+                fltY += fltVelY;
+                fltX += fltVelX;
+                //on hit
+                //fltVelY = 0;
+                //fltVely = 0;
+                //new Explosion size*fltRocketSpeed and dmg*speed
+            }
         }
+        
     }
 
     private void collisions() {
@@ -166,7 +185,11 @@ public class Brute extends GameObject {
                 if(intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
                 else ssm.sendText("c" + intSessionId + ">h>aBOOM~" + (fltX) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
             }
-            
+            if(blnRocket){
+                blnRocket = false;
+                handler.addObject(new Explosion(fltX+fltWidth/2, fltY + fltHeight/2, 300, 300, ObjectId.BOOM, ssm, handler));
+                
+            }
             fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
         }
         else{
