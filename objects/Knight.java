@@ -130,7 +130,7 @@ public class Knight extends GameObject {
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
-                System.out.println("shot");
+                
                 float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));

@@ -63,7 +63,7 @@ public class Bullet extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
     }
 
     public GameObject findNearestObject(float fltX, float fltY){
@@ -93,11 +93,11 @@ public class Bullet extends GameObject {
                     handler.removeObject(this);
                     if(fltexplosionradius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltX - fltexplosionradius/2, fltY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
+                        handler.addObject(new Explosion(fltX, fltY,fltexplosionradius,fltexplosionradius,ObjectId.BOOM,ssm,handler));
                         if(Main.intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
                 else    ssm.sendText("c" + Main.intSessionId + ">h>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
                         //arbitary value to make sure bomb doesnt explode multiple times
-                        fltX = 10000;
+                        
 
                     }        
                 }
