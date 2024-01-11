@@ -24,6 +24,7 @@ public class Bullet extends GameObject {
         this.biTexture = biTexture;
         this.blnHoming = blnHoming;
         this.fltExplosionRadius = fltExplosionRadius;
+        System.out.println("bullet made");
     }
     
     public void update(LinkedList<GameObject> objectList) {
@@ -61,6 +62,7 @@ public class Bullet extends GameObject {
 
     public void draw(Graphics g) {
         g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2),(int)(fltWorldY - fltHeight/2), null);
+        g.fillRect((int)fltWorldX, (int)fltWorldX, 10, 10);
     }
 
     public Rectangle getBounds() {

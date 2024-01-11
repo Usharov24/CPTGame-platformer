@@ -158,12 +158,7 @@ public class Knight extends GameObject {
             if(System.currentTimeMillis() - lngtimer[1] > 8000 && blnBoost == true){
                 blnBoost = false;
             }
-            
-
-            
-
-            
-            
+        
             if(blnFalling) fltVelY += 3;
 
             if(fltVelX > 10) fltVelX = 10;
