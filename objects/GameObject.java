@@ -8,15 +8,16 @@ import framework.SuperSocketMaster;
 
 public abstract class GameObject {
     
-    protected float fltX, fltY;
+    protected float fltWorldX, fltWorldY;
+    protected float fltCameraX, fltCameraY;
     protected float fltVelX, fltVelY;
     protected float fltWidth, fltHeight;
     protected ObjectId id;
     protected SuperSocketMaster ssm;
 
-    public GameObject(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm) {
-        this.fltX = fltX;
-        this.fltY = fltY;
+    public GameObject(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm) {
+        this.fltWorldX = fltWorldX;
+        this.fltWorldY = fltWorldY;
         this.fltWidth = fltWidth;
         this.fltHeight = fltHeight;
         this.id = id;
@@ -27,20 +28,36 @@ public abstract class GameObject {
     public abstract void draw(Graphics g);
     public abstract Rectangle getBounds();
 
-    public float getX() {
-        return fltX;
+    public float getWorldX() {
+        return fltWorldX;
     }
 
-    public void setX(float fltX) {
-        this.fltX = fltX;
+    public void setWorldX(float fltWorldX) {
+        this.fltWorldX = fltWorldX;
     }
 
-    public float getY() {
-        return fltY;
+    public float getWorldY() {
+        return fltWorldY;
     }
 
-    public void setY(float fltY) {
-        this.fltY = fltY;
+    public void setWorldY(float fltWorldY) {
+        this.fltWorldY = fltWorldY;
+    }
+
+    public float getCameraX() {
+        return fltCameraX;
+    }
+
+    public void setCameraX(float fltCameraX) {
+        this.fltCameraX = fltCameraX;
+    }
+
+    public float getCameraY() {
+        return fltCameraY;
+    }
+
+    public void setCameraY(float fltCameraY) {
+        this.fltCameraY = fltCameraY;
     }
 
     public float getWidth() {

@@ -17,8 +17,8 @@ public class VacGrenade extends GameObject {
     private boolean blnSucking = false;
     private float fltpastVelX;
     private long lngBirth;
-    public VacGrenade(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, long lngBirth, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biImg, float fltexplosionradius) {
-        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
+    public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, long lngBirth, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biImg, float fltexplosionradius) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
@@ -38,11 +38,11 @@ public class VacGrenade extends GameObject {
                     if(fltVelX > 0)fltVelX -= fltpastVelX/8;
                     if(fltVelX < 0)fltVelX += fltpastVelX/-8;
                 }
-                fltX += fltVelX;
-                fltY += fltVelY;
+                fltWorldX += fltVelX;
+                fltWorldY += fltVelY;
                 System.out.println(fltVelX);
                 
-            if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
+            if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
                 handler.removeObject(this);
             }
             if(fltVelX == 0 && fltVelY == 0){
@@ -58,11 +58,11 @@ public class VacGrenade extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biImg, (int)(fltX - fltWidth/2),(int)(fltY - fltHeight/2), null);
+        g.drawImage(biImg, (int)(fltWorldX - fltWidth/2),(int)(fltWorldY - fltHeight/2), null);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)(fltWorldX - fltWidth/2), (int)(fltWorldY - fltHeight/2), (int)fltWidth, (int)fltHeight);
     }
 
     private ArrayList<Integer> FindNear(){
@@ -70,10 +70,10 @@ public class VacGrenade extends GameObject {
         float fltDistY = 0;
         float fltTotalDist = 0;
         ArrayList<Integer> arylist = new ArrayList<Integer>();
-        for(int i = 0; i < handler.sizeHandler(); i++){
+        for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
-                fltDistX = fltX - handler.getObject(i).getX();
-                fltDistY = fltY - handler.getObject(i).getY();
+                fltDistX = fltWorldX - handler.getObject(i).getWorldX();
+                fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 fltTotalDist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
                 if(fltTotalDist < 400){
                     arylist.add(i);
@@ -88,20 +88,20 @@ public class VacGrenade extends GameObject {
         float fltTargetX;
         float fltTargetY;
         for(int i = 0; arylist.size() > i; i++){
-            fltTargetX = handler.getObject(i).getX();
-            fltTargetY = handler.getObject(i).getY();
+            fltTargetX = handler.getObject(i).getWorldX();
+            fltTargetY = handler.getObject(i).getWorldY();
 
-            if(fltX > fltTargetX){
-                handler.getObject(i).setX(fltTargetX + 5);
+            if(fltWorldX > fltTargetX){
+                handler.getObject(i).setWorldX(fltTargetX + 5);
             }
-            if(fltX < fltTargetX){
-                handler.getObject(i).setX(fltTargetX - 5);
+            if(fltWorldX < fltTargetX){
+                handler.getObject(i).setWorldX(fltTargetX - 5);
             }
-            if(fltY > fltTargetY){
-                handler.getObject(i).setY(fltTargetY + 5);
+            if(fltWorldY > fltTargetY){
+                handler.getObject(i).setWorldY(fltTargetY + 5);
             }
-            if(fltY < fltTargetY){
-                handler.getObject(i).setY(fltTargetY - 5);
+            if(fltWorldY < fltTargetY){
+                handler.getObject(i).setWorldY(fltTargetY - 5);
             }
         }
 
@@ -112,23 +112,22 @@ public class VacGrenade extends GameObject {
         if(getBounds().intersects(new Rectangle(0, 660, 1280, 10))) {
             blnFalling = false;
             fltVelY = 0;
-            fltY = (float)new Rectangle(0, 660, 1280, 10).getY();
+            fltWorldY = (float)new Rectangle(0, 660, 1280, 10).getY();
         }
         else{
             blnFalling  = true;
         } 
-        for(int i = 0; i < handler.sizeHandler(); i++){
+        for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
                     //handler.removeObject(this);
                     /*if(fltexplosionradius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltX - fltexplosionradius/2, fltY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
+                        handler.addObject(new Explosion(fltWorldX - fltexplosionradius/2, fltWorldY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
                         //arbitary value to make sure bomb doesnt explode multiple times
-                        fltX = 10000;
-
-                    } */       
+                        fltWorldX = 10000;
+                    }*/       
                 }
             }        
         }

@@ -21,32 +21,32 @@ public class Mango extends EnemyObject {
     private float fltMinY = 0;
     private float fltMaxY = 0;
 
-    public Mango(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltX, fltY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, ssm);
+    public Mango(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltWorldX, fltWorldY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltRangeX = fltRangeX;
         this.fltRangeY = fltRangeY;
         this.handler = handler;
 
-        this.fltMinX = fltX;
-        this.fltMaxX = fltX + fltRangeX;
-        this.fltMinY = fltY;
-        this.fltMaxY = fltY + fltRangeY;
+        this.fltMinX = fltWorldX;
+        this.fltMaxX = fltWorldX + fltRangeX;
+        this.fltMinY = fltWorldY;
+        this.fltMaxY = fltWorldY + fltRangeY;
     }
 
     public void update(LinkedList<GameObject> objectList) {
         
-        fltX += fltVelX;
-        fltY += fltVelY;
+        fltWorldX += fltVelX;
+        fltWorldY += fltVelY;
 
-        if(fltX < fltMinX || fltX > fltMaxX || fltY < fltMinY || fltY > fltMaxY){
+        if(fltWorldX < fltMinX || fltWorldX > fltMaxX || fltWorldY < fltMinY || fltWorldY > fltMaxY){
             fltVelX = -fltVelX;
             fltVelY = -fltVelY;
         }
     }
 
-    public GameObject findnear(LinkedList<GameObject> objectList, float fltX, float fltY){
+    public GameObject findnear(LinkedList<GameObject> objectList, float fltWorldX, float fltWorldY){
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
@@ -56,8 +56,8 @@ public class Mango extends EnemyObject {
         int intreturn = 0;
         for(int i = 0; i < objectList.size(); i++){
             
-            fltDistX = fltX - objectList.get(i).getX();
-            fltDistY = fltY - objectList.get(i).getY();
+            fltDistX = fltWorldX - objectList.get(i).getWorldX();
+            fltDistY = fltWorldY - objectList.get(i).getWorldY();
             flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
             if(flttotaldist > fltpastTotal){
                 fltpastTotal = flttotaldist;
@@ -74,14 +74,14 @@ public class Mango extends EnemyObject {
     public void draw(Graphics g){
         try{
             BufferedImage imgMango = ImageIO.read(new File("res/mango.png"));
-            g.drawImage(imgMango, Math.round(fltX), Math.round(fltY), null);
+            g.drawImage(imgMango, Math.round(fltWorldX), Math.round(fltWorldY), null);
         }catch(IOException e){
             e.printStackTrace();
         }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)fltX, (int)fltY, (int)fltHeight, (int)fltWidth);
+        return new Rectangle((int)fltWorldX, (int)fltWorldY, (int)fltHeight, (int)fltWidth);
     }
 }
 

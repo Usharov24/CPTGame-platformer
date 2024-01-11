@@ -21,6 +21,20 @@ public class ResourceLoader {
         return biImage;
     }
 
+    public BufferedImage[] loadImages(String... strPaths) {
+        BufferedImage[] biImages = new BufferedImage[strPaths.length];
+
+        for(int intCount = 0; intCount < biImages.length; intCount++) {
+            try {
+                biImages[intCount] = ImageIO.read(getClass().getResourceAsStream(strPaths[intCount]));
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return biImages;
+    }
+
     public BufferedImage[] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight) {
         BufferedImage biSpriteSheet = null;
 
