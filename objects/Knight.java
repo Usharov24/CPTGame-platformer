@@ -14,6 +14,7 @@ import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.ResourceLoader;
 import framework.SuperSocketMaster;
 import framework.InputHandler.InputButtons;
 
@@ -21,33 +22,31 @@ public class Knight extends GameObject {
 
     private ObjectHandler handler;
     private InputHandler input;
+    private ResourceLoader resLoader = new ResourceLoader();
 
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDashVelY;
     private float fltDashVelX;
-    private int intSessionId;
+    private int intPosition;
     private int intJumpCount;
     private long[] lngtimer = {0,0,0,0};
-    private BufferedImage BiShrapnel = null;
     private boolean blnFalling = true;
     private boolean blnBoost = false;
     private int intRecoilX = 0;
     private int intRecoilY = 0;
+    private BufferedImage biBulletTexture;
 
-    public Knight(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
-        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
+    public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intPosition) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
         this.input = input;
-        this.intSessionId = intSessionId;
-        try{
-            BiShrapnel = ImageIO.read(new File("res/Shrapnel.png"));
-        }catch(IOException e){
-            System.out.println("no image");
-        }
+        this.intPosition = intPosition;
+
+        biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
     }
 
     public void update(LinkedList<GameObject> objectList) {
-        if(intSessionId == Main.intSessionId) {
+        if(intPosition == Main.intSessionId - 1) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);
                 fltVelY = -45;
@@ -72,8 +71,8 @@ public class Knight extends GameObject {
 
             if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 800 && blnBoost == false) {
                 //Moving variables
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
+                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 
             
@@ -86,8 +85,8 @@ public class Knight extends GameObject {
             }
             else if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngtimer[0] > 400 && blnBoost) {
                 //Moving variables
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
+                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 
             
@@ -106,33 +105,33 @@ public class Knight extends GameObject {
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 200 && blnBoost == false) {
                 lngtimer[2] = System.currentTimeMillis();
-                if(fltX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltX + 25, fltY+15, -20, System.currentTimeMillis(), 50, 50, 135, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
-                    else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
+                if(fltWorldX + fltWidth/2 > input.fltMouseX){
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, id, ssm, handler));
+                    if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltX, fltY+15 , 20, System.currentTimeMillis(), 50, 50, 270, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
-                    else ssm.sendText("c" + intSessionId + ">h>aSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, id, ssm, handler));
+                    if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 100 && blnBoost) {
                 lngtimer[2] = System.currentTimeMillis();
-                if(fltX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltX + 25, fltY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
-                    else ssm.sendText("c" + intSessionId + ">h>aBIGSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
+                if(fltWorldX + fltWidth/2 > input.fltMouseX){
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135, id, ssm, handler));
+                    if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltX, fltY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270, id, ssm, handler));
-                    if(intSessionId == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
-                    else ssm.sendText("c" + intSessionId + ">h>aBIGSLASH~" + (fltX + 25) + "," + (fltY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270, id, ssm, handler));
+                    if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
                 System.out.println("shot");
-                float fltDiffX = input.fltMouseX - (fltX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
+                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
                 fltDiffX /= fltLength;
@@ -143,16 +142,16 @@ public class Knight extends GameObject {
                     float intRand1 = (float)Math.random() * 3, intRand2 = (float)Math.random() * 3;
                     float intRand3 = (float)Math.random() * 3, intRand4 = (float)Math.random() * 3;
 
-                    if(intSessionId == 1) {
-                        ssm.sendText("h>a>aSHRAPNEL~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
-                        ssm.sendText("h>a>aSHRAPNEL~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 - intRand3) + "," + 6 + "," + 6);
+                    if(intPosition == 1) {
+                        ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6 + "," + 4);
+                        ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 - intRand3) + "," + 6 + "," + 6 + "," + 4);
                     } else {
-                        ssm.sendText("c" + intSessionId + ">h>aSHRAPNEL~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6);
-                        ssm.sendText("c" + intSessionId + ">h>aSHRAPNEL~" + (fltX + fltWidth/2 - 3) + "," + (fltY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6);
+                        ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6 + "," + 4);
+                        ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6 + "," + 4);
                     }
 
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler, false, BiShrapnel, 0));
-                    handler.addObject(new Bullet(fltX + fltWidth/2 - 3, fltY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler, false, BiShrapnel, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler, biBulletTexture, false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler, biBulletTexture, false, 0));
                 }
             }
 
@@ -184,14 +183,12 @@ public class Knight extends GameObject {
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
             collisions();
-            fltX += fltVelX + fltDashVelX + intRecoilX;
-            fltY += fltVelY + intRecoilY + fltDashVelY;
+            fltWorldX += fltVelX + fltDashVelX + intRecoilX;
+            fltWorldY += fltVelY + intRecoilY + fltDashVelY;
             
             
-            if(intSessionId == 1) ssm.sendText("h>a>oKNIGHT~" + fltX + "," + fltY + "," + intSessionId);
-            else ssm.sendText("c" + intSessionId + ">h>oKNIGHT~" + fltX + "," + fltY + "," + intSessionId);
-
-            
+            if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
         }
     }
 
@@ -201,7 +198,7 @@ public class Knight extends GameObject {
             fltVelY = 0;
             intJumpCount = 0;
 
-            fltY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+            fltWorldY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
         }
         else{
             blnFalling  = true;
@@ -215,19 +212,14 @@ public class Knight extends GameObject {
         g2d.setColor(Color.red);
         g2d.fill(getBounds2());
         g2d.setColor(Color.white);
-        g2d.fillRect((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        g2d.fillRect((int)fltWorldX, (int)fltWorldY, (int)fltWidth, (int)fltHeight);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltX + fltVelX + fltDashVelX), (int)fltY + 2, (int)fltWidth, (int)fltHeight - 4);
+        return new Rectangle((int)(fltWorldX + fltVelX + fltDashVelX), (int)fltWorldY + 2, (int)fltWidth, (int)fltHeight - 4);
     }
 
     public Rectangle getBounds2() {
-        return new Rectangle((int)fltX + 2, (int)(fltY + fltVelY + fltDashVelY), (int)fltWidth - 4, (int)fltHeight);
-    }
-
-    // Will likely remove later
-    public int getSessionId() {
-        return intSessionId;
+        return new Rectangle((int)fltWorldX + 2, (int)(fltWorldY + fltVelY + fltDashVelY), (int)fltWidth - 4, (int)fltHeight);
     }
 }

@@ -13,8 +13,8 @@ public class WaveAttacks extends GameObject {
     private ObjectHandler handler;
     private float fltStartAngle;
     float fltSpread = 1;
-    public WaveAttacks(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
+    public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
@@ -24,27 +24,27 @@ public class WaveAttacks extends GameObject {
     public void update(LinkedList<GameObject> objectList) {
         
         fltSpread += 15;
-        fltX+= fltVelX;
-        fltY += fltVelY;
+        fltWorldX+= fltVelX;
+        fltWorldY += fltVelY;
         
-        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
+        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
         }
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        //g.drawArc((int)(fltX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
-        //g.drawArc((int)fltX, (int)fltY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2), (int) (fltY - fltSpread/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-1, (int) (fltY - fltSpread/2)-1, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-2, (int) (fltY - fltSpread/2)-2, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-3, (int) (fltY - fltSpread/2)-3, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        g.drawArc((int)(fltX-fltSpread/2)-4, (int) (fltY - fltSpread/2)-4, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        //g.drawArc((int)(fltWorldX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltWorldY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
+        //g.drawArc((int)fltWorldX, (int)fltWorldY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltWorldX-fltSpread/2), (int) (fltWorldY - fltSpread/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltWorldX-fltSpread/2)-1, (int) (fltWorldY - fltSpread/2)-1, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltWorldX-fltSpread/2)-2, (int) (fltWorldY - fltSpread/2)-2, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltWorldX-fltSpread/2)-3, (int) (fltWorldY - fltSpread/2)-3, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
+        g.drawArc((int)(fltWorldX-fltSpread/2)-4, (int) (fltWorldY - fltSpread/2)-4, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)fltWorldX, (int)fltWorldY, (int)fltWidth, (int)fltHeight);
     }
 }

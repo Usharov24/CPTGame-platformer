@@ -11,47 +11,48 @@ import framework.Main;
 public class Bullet extends GameObject {
 
     private ObjectHandler handler;
+    private BufferedImage biTexture;
+
+    private float fltExplosionRadius;
     private boolean blnHoming;
-    private BufferedImage biImg;
-    private float fltexplosionradius;
     
-    public Bullet(float fltX, float fltY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, Boolean blnHoming, BufferedImage biImg, float fltexplosionradius) {
-        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
+    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;
+        this.biTexture = biTexture;
         this.blnHoming = blnHoming;
-        this.biImg = biImg;
-        this.fltexplosionradius = fltexplosionradius;
+        this.fltExplosionRadius = fltExplosionRadius;
     }
     
     public void update(LinkedList<GameObject> objectList) {
         if(blnHoming == false){
-            fltX += fltVelX;
-            fltY += fltVelY;
+            fltWorldX += fltVelX;
+            fltWorldY += fltVelY;
             collisions();
         }   
         else{
-            float fltTargetX = findNearestObject(fltX, fltY).getX();
-            float fltTargetY = findNearestObject(fltX, fltY).getY();
-            if(fltX > fltTargetX){
+            float fltTargetX = findNearestObject(fltWorldX, fltWorldY).getWorldX();
+            float fltTargetY = findNearestObject(fltWorldX, fltWorldY).getWorldY();
+            if(fltWorldX > fltTargetX){
                 fltVelX -= 5; 
             }
-            if(fltX < fltTargetX){
+            if(fltWorldX < fltTargetX){
                 fltVelX += 5; 
             }
-            if(fltY > fltTargetY){
+            if(fltWorldY > fltTargetY){
                 fltVelY -= 5; 
             }
-            if(fltY < fltTargetY){
+            if(fltWorldY < fltTargetY){
                 fltVelY += 5; 
             }
-            fltX += fltVelX;
-            fltY += fltVelY;
+            fltWorldX += fltVelX;
+            fltWorldY += fltVelY;
             collisions();
         }
 
-        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
+        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
         }
 
@@ -59,23 +60,23 @@ public class Bullet extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biImg, (int)(fltX - fltWidth/2),(int)(fltY - fltHeight/2), null);
+        g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2),(int)(fltWorldY - fltHeight/2), null);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)(fltWorldX - fltWidth/2), (int)(fltWorldY - fltHeight/2), (int)fltWidth, (int)fltHeight);
     }
 
-    public GameObject findNearestObject(float fltX, float fltY){
+    public GameObject findNearestObject(float fltWorldX, float fltWorldY){
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
         float fltpastTotal = 0;
         int intreturn = 0;
-        for(int i = 0; i < handler.sizeHandler(); i++){
+        for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
-                fltDistX = fltX - handler.getObject(i).getX();
-                fltDistY = fltY - handler.getObject(i).getY();
+                fltDistX = fltWorldX - handler.getObject(i).getWorldX();
+                fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
                 if(flttotaldist > fltpastTotal){
                     fltpastTotal = flttotaldist;
@@ -85,20 +86,18 @@ public class Bullet extends GameObject {
         }
         return handler.getObject(intreturn);
     }
+
     private void collisions() {
-        for(int i = 0; i < handler.sizeHandler(); i++){
+        for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(this);
-                    if(fltexplosionradius > 0){
+                    if(fltExplosionRadius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltX - fltexplosionradius/2, fltY - fltexplosionradius/2,fltexplosionradius*2,fltexplosionradius*2,ObjectId.BOOM,ssm,handler));
-                        if(Main.intSessionId == 1) ssm.sendText("h>a>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
-                else    ssm.sendText("c" + Main.intSessionId + ">h>aBOOM~" + (fltX + fltWidth) + "," + (fltY + fltHeight) + "," + (300) + "," + (300));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2,fltExplosionRadius*2,fltExplosionRadius*2,ObjectId.BOOM,ssm,handler));
                         //arbitary value to make sure bomb doesnt explode multiple times
-                        fltX = 10000;
-
+                        fltWorldX = 10000;
                     }        
                 }
             }        

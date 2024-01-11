@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import objects.Explosion;
+import objects.GameObject;
+
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,16 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import components.*;
-import objects.Apple;
-import objects.Brute;
-import objects.Bullet;
-import objects.Mango;
-import objects.Player;
-import objects.Wizard;
-import objects.Sniper;
-import objects.Knight;
-import objects.KnightSlashes;
-import objects.WaveAttacks;
+import objects.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,13 +60,11 @@ public class Main implements ActionListener {
     // TEMPORARY ////////////////////////////////////////////////////////////////
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
+    private ResourceLoader resLoader = new ResourceLoader();
     /////////////////////////////////////////////////////////////////////////////
     //All Sprites loaded
-    private BufferedImage BiFireball = null;
-    private BufferedImage BiEball = null;
+    private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
     private BufferedImage BiWizard = null;
-    private BufferedImage BiSniperBullet = null;
-    private BufferedImage BiRocket = null;
     private BufferedImage BiSniper = null;
     private BufferedImage BiBrute = null;
     private BufferedImage BiKnight = null;
@@ -85,7 +76,7 @@ public class Main implements ActionListener {
 
     private SuperSocketMaster ssm;
 
-    public State state = State.MAIN_MENU;
+    public static State state = State.MAIN_MENU;
 
     public enum State {
         MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4);
@@ -115,38 +106,11 @@ public class Main implements ActionListener {
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
         }
-        //loading images
 
-        try{
-            BiSniperBullet = ImageIO.read(new File("res/SniperBullet.png"));
-        }catch(IOException e){
-            System.out.println("no image");
-        }
-        try{
-            BiRocket = ImageIO.read(new File("res/Rocket.png"));
-        }catch(IOException e){
-            System.out.println("no image");
-        }
-        try{
-            BiFireball = ImageIO.read(new File("res/FireBall.png"));
-        }catch(IOException e){
-            System.out.println("no image");
-        }
-        try{
-            BiEball = ImageIO.read(new File("res/ElectricBall.png"));
-        }catch(IOException e){
-            System.out.println("no image");
-        }
-
-        //Listeners
+        // Listeners
         thePanels[4].addKeyListener(input);
         thePanels[4].addMouseListener(input);
         thePanels[4].addMouseMotionListener(input);
-        
-        // TEMP ///////
-        handler.addObject(new Mango(300, 200, 0, 4, 30, 30, 0, 300, 100, 5, ObjectId.ENEMY_MANGO, ssm, handler));
-        handler.addObject(new Apple(600, 100, 2, 2, 100, 100, 1400, 1400, 100, 20, ObjectId.ENEMY_APPLE, ssm, handler));
-        ///////////////
 
         gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
         gameLayeredPane.setLayout(null);
@@ -242,172 +206,83 @@ public class Main implements ActionListener {
             System.out.println(strMessage);
 
             if(intSessionId == 1) {
-                if(strMessage.contains("oPLAYER")) {
+                if(strMessage.contains("oSNIPER")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Player object = null;
-                        try {
-                            object = (Player)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
-
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oPLAYER~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oPLAYER~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oPLAYER~" + strMessage.split("~")[1]);
-                }else if(strMessage.contains("oSNIPER")){
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Sniper object = null;
-                        try {
-                            object = (Sniper)handler.objectList.get(intCount);
-
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
                 }else if(strMessage.contains("oWIZARD")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Wizard object = null;
-                        try {
-                            object = (Wizard)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
                 }else if(strMessage.contains("oKNIGHT")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Knight object = null;
-                        try {
-                            object = (Knight)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
                 }else if(strMessage.contains("oBRUTE")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Brute object = null;
-                        try {
-                            object = (Brute)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, biBulletTextures[Integer.parseInt(strPayload[6])], false, 0));
+                    
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
-                } else if(strMessage.contains("aFIREBULLET")) {
+                } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aFIREBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aFIREBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aFIREBULLET~" + strMessage.split("~")[1]);
-                }else if(strMessage.contains("aHOMING_BULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
+
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, null, true, 0));
+
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);
-                }else if(strMessage.contains("aWAVE")) {
+                } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, ssm, handler));
+
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aWAVE~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aWAVE~" + strMessage.split("~")[1]);
-                    handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, ssm, handler));
-                }else if(strMessage.contains("aSLASH")) {
+                } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
+
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSLASH~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSLASH~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSLASH~" + strMessage.split("~")[1]);
-                    handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));                }else if(strMessage.contains("aELECTRICBULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, true, BiEball, 0));
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aELECTRICBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aELECTRICBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aELECTRICBULLET~" + strMessage.split("~")[1]);
-                }else if(strMessage.contains("aBOMB")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBOMB~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOMB~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOMB~" + strMessage.split("~")[1]);
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiRocket, 10));
-                }else if(strMessage.contains("aSHRAPNEL")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSHRAPNEL~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSHRAPNEL~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSHRAPNEL~" + strMessage.split("~")[1]);
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiRocket, 10));
-                } else if(strMessage.contains("aSBULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSBULLET~" + strMessage.split("~")[1]);
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiSniperBullet, 0));
-                }else if(strMessage.contains("aBOOM")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-                    if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBOOM~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOOM~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOOM~" + strMessage.split("~")[1]);
-                    handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), ObjectId.BOOM, ssm, handler));
-                }else if(strMessage.contains("mJOIN")) {
+                } else if(strMessage.contains("mJOIN")) {
                     intServerSize++;
                     System.out.println("Server Size: " + intServerSize);
 
@@ -437,157 +312,70 @@ public class Main implements ActionListener {
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
-                if(strMessage.contains("oPLAYER")) {
+                if(strMessage.contains("oSNIPER")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Player object = null;
-                        try {
-                            object = (Player)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
-                } else if(strMessage.contains("oSNIPER")){
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Sniper object = null;
-                        try {
-                            object = (Sniper)handler.objectList.get(intCount);
-
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
                 }else if(strMessage.contains("oWIZARD")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Wizard object = null;
-                        try {
-                            object = (Wizard)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
-                }else if(strMessage.contains("oKNIGHT")){
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
+                } else if(strMessage.contains("oKNIGHT")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Knight object = null;
-                        try {
-                            object = (Knight)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
                 }else if(strMessage.contains("oBRUTE")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    // Temporary setup until a better system for object identification is made
-                    for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-                        Brute object = null;
-                        try {
-                            object = (Brute)handler.objectList.get(intCount);
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
 
-                            if(object.getSessionId() == Integer.parseInt(strPayload[2])) {
-                                object.setX(Float.parseFloat(strPayload[0]));
-                                object.setY(Float.parseFloat(strPayload[1]));
-                                break;
-                            }
-                        } catch(ClassCastException e) {
-                            //System.out.println("Cannot cast class to Player...");
-                        }
-                    }
-                }else if(strMessage.contains("aPLAYER")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Player(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
-                }else if(strMessage.contains("aSNIPER")) {
+                    object.setWorldX(Float.parseFloat(strPayload[0]));
+                    object.setWorldY(Float.parseFloat(strPayload[1]));
+                } else if(strMessage.contains("aSNIPER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Sniper(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
-                }else if(strMessage.contains("aWIZARD")) {
+                } else if(strMessage.contains("aWIZARD")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Wizard(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
-                }else if(strMessage.contains("aKNIGHT")) {
+                } else if(strMessage.contains("aKNIGHT")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Knight(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
-                }else if(strMessage.contains("aBRUTE")) {
+                } else if(strMessage.contains("aBRUTE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Brute(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, ssm, handler, input, Integer.parseInt(strPayload[4])));
-                }else if(strMessage.contains("aBULLET")) {
+                } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, null, 0));
-                }
-                else if(strMessage.contains("aSLASH")) {
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, biBulletTextures[Integer.parseInt(strPayload[6])], false, 0));
+                } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler));
-                }else if(strMessage.contains("aFIREBULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiFireball, 0));
                 } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, ssm, handler));
-                }else if(strMessage.contains("aELECTRICBULLET")) {
+                } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, true, BiEball, 0));
-                }else if(strMessage.contains("aHOMING_BULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, true, null, 0));
-                }else if(strMessage.contains("aBOMB")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiRocket, 10));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.HOMING_BULLET, ssm, handler, null, true, 0));
                 }else if(strMessage.contains("aBOOM")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), ObjectId.BOOM, ssm, handler));
-                } else if(strMessage.contains("aSBULLET")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiSniperBullet, 0));
-                }else if(strMessage.contains("aSHRAPNEL")) {
-                    String[] strPayload = strMessage.split("~")[1].split(",");
-
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, ssm, handler, false, BiSniperBullet, 0));
-                }else if(strMessage.contains("mSESSION_ID")) {
+                } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
                 } else if(strMessage.contains("mCHARACTER_SELECTED")) {
@@ -609,8 +397,8 @@ public class Main implements ActionListener {
                     mapPanel.setOpaque(true);
                     mapPanel.setBounds(0, 0, 1280, 720);
 
-                    gameLayeredPane.add(thePanels[4], new Integer(0));
-                    gameLayeredPane.add(mapPanel, new Integer(1));
+                    gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
+                    gameLayeredPane.add(mapPanel, Integer.valueOf(1));
                     gameLayeredPane.repaint();
 
                     theFrame.setContentPane(gameLayeredPane);
@@ -677,9 +465,8 @@ public class Main implements ActionListener {
             ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
             ssm.connect();
 
-            ssm.sendText("c0>mJOIN");
+            ssm.sendText("c0>h>mJOIN");
 
-            // Display
             netButtons[1].setEnabled(false);
         }
 
@@ -687,6 +474,7 @@ public class Main implements ActionListener {
             if(evt.getSource() == characterButtons[intCount]) {
                 intPreviousButton = intCurrentButton;
                 intCurrentButton = intCount;
+
                 if(intSessionId == 1) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
                 else ssm.sendText("c" + intSessionId + ">mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
 
@@ -694,13 +482,8 @@ public class Main implements ActionListener {
                 
                 if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
                 characterButtons[intCount].setEnabled(false);
-                
-                
             }
-            
         }
-        
-        
 
         for(int intCount = 0; intCount < 4; intCount++){
             if(intCharacterSelections[intCount] > -1){
@@ -725,24 +508,19 @@ public class Main implements ActionListener {
             startTime = System.nanoTime();
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
-                if(intCharacterSelections[intCount] == 0){
-                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
-                    ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
+                if(intCharacterSelections[intCount] == 0) {
+                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount), intCount);
+                    ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                } else if(intCharacterSelections[intCount] == 1) {
+                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount), intCount);
+                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                } else if(intCharacterSelections[intCount] == 2) {
+                    handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount), intCount);
+                    ssm.sendText("h>a>aKNIGHT~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                } else if(intCharacterSelections[intCount] == 3) {
+                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount), intCount);
+                    ssm.sendText("h>a>aWIZARD~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
                 }
-                if(intCharacterSelections[intCount] == 1){
-                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
-                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
-                }
-                if(intCharacterSelections[intCount] == 2){
-                    handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
-                    ssm.sendText("h>a>aKNIGHT~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
-                }
-                if(intCharacterSelections[intCount] == 3){
-                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, ssm, handler, input, intCount + 1));
-                    ssm.sendText("h>a>aWIZARD~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + (intCount + 1));
-                }
-                
-                // Need to find a way to specify character/class as well
             }
 
             state = State.GAME;
@@ -755,8 +533,8 @@ public class Main implements ActionListener {
             mapPanel.setOpaque(true);
             mapPanel.setBounds(0, 0, 1280, 720);
 
-            gameLayeredPane.add(thePanels[4], new Integer(0));
-            gameLayeredPane.add(mapPanel, new Integer(1));
+            gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
+            gameLayeredPane.add(mapPanel, Integer.valueOf(1));
             gameLayeredPane.repaint();
 
             theFrame.setContentPane(gameLayeredPane);

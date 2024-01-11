@@ -10,29 +10,31 @@ import framework.SuperSocketMaster;
 public class Explosion extends GameObject {
 
     private ObjectHandler handler;
-    public Explosion(float fltX, float fltY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltX, fltY, fltWidth, fltHeight, id, ssm);
+    public Explosion(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
         this.handler = handler;
     }
     
     public void update(LinkedList<GameObject> objectList) {
         fltWidth -= 15;
+        fltWorldX += 7.5;
+        fltWorldY += 7.5;
         fltHeight -= 15;
         if(fltWidth < 0){
             handler.removeObject(this);
         }
-        if(fltX > 1280 || fltX < 0 || fltY > 720 || fltY < 0){
+        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
         }
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        g.fillOval((int)(fltX - fltWidth/2), (int)(fltY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        g.fillOval((int)fltWorldX, (int)fltWorldY, (int)fltWidth, (int)fltHeight);
         
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)fltX, (int)fltY, (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)fltWorldX, (int)fltWorldY, (int)fltWidth, (int)fltHeight);
     }
 }
