@@ -91,7 +91,7 @@ public class MapPanel extends JPanel{
 		}
 	}
 
-	public void setRoomNumber(){
+	public void setRoomNumber(Integer intRoomNumber){
 		this.intRoomNumber = intRoomNumber;
 	}
 

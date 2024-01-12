@@ -358,9 +358,9 @@ public class Main implements ActionListener {
                     chatPanel.setOpaque(true);
                     chatPanel.setBounds(880, 0, 400, 720);
 
-                    gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
-                    gameLayeredPane.add(mapPanel, Integer.valueOf(1));
-                    gameLayeredPane.add(chatPanel, Integer.valueOf(2));
+                    gameLayeredPane.add(thePanels[4], Integer.valueOf(100));
+                    gameLayeredPane.add(mapPanel, Integer.valueOf(101));
+                    gameLayeredPane.add(chatPanel, Integer.valueOf(102));
                     gameLayeredPane.repaint();
 
                     theFrame.setContentPane(thePanels[4]);
@@ -504,9 +504,9 @@ public class Main implements ActionListener {
             chatPanel.setOpaque(true);
             chatPanel.setBounds(880, 0, 400, 720);
 
-            gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
-            gameLayeredPane.add(mapPanel, Integer.valueOf(1));
-            gameLayeredPane.add(chatPanel, Integer.valueOf(2));
+            gameLayeredPane.add(thePanels[4], Integer.valueOf(100));
+            gameLayeredPane.add(mapPanel, Integer.valueOf(101));
+            gameLayeredPane.add(chatPanel, Integer.valueOf(102));
             gameLayeredPane.repaint();
 
             theFrame.setContentPane(thePanels[4]);
