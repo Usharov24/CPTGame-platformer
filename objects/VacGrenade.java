@@ -11,14 +11,13 @@ import framework.SuperSocketMaster;
 
 public class VacGrenade extends GameObject {
 
-    private ObjectHandler handler;
     private BufferedImage biImg;
     private boolean blnFalling = true;
     private boolean blnSucking = false;
     private float fltpastVelX;
     private long lngBirth;
-    public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, long lngBirth, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biImg, float fltexplosionradius) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
+    public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, long lngBirth, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biImg, float fltexplosionradius) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.handler = handler;

@@ -4,11 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
-import javax.imageio.ImageIO;
 
 import framework.InputHandler;
 import framework.Main;
@@ -20,14 +17,12 @@ import framework.InputHandler.InputButtons;
 
 public class Sniper extends GameObject {
 
-    private ObjectHandler handler;
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
 
     private float fltAcc = 1f, fltDec = 0.5f;
+    private float fltDispX, fltDispY;
     private float fltDashVel;
-
-    private float fltDispX = 0, fltDispY = 0;
 
     private int intPosition;
     private int intJumpCount;
@@ -40,16 +35,15 @@ public class Sniper extends GameObject {
     private int intRecoilY = 0;
     private BufferedImage[] biBulletTextures;
 
-    public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intPosition) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
-        this.handler = handler;
+    public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intPosition = intPosition;
 
         biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png");
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update(LinkedList<GameObject> objectList) {System.out.println(fltWorldX + " " + fltWorldY);
         if(intPosition == Main.intSessionId - 1) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);
@@ -103,7 +97,7 @@ public class Sniper extends GameObject {
 
                 
                 if(blnBazooka == false){
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, biBulletTextures[0], false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, handler, ssm, biBulletTextures[0], false, 0));
                     if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 0);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 0);
                     intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-15);
@@ -111,7 +105,7 @@ public class Sniper extends GameObject {
                 }
 
                 if(blnBazooka == true){
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, biBulletTextures[1], false, 100));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, handler, ssm, biBulletTextures[1], false, 100));
                     if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 1);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 1);
                     intRecoilX = intRecoilX +(int)(fltVelX + fltDiffX*-24);
@@ -137,7 +131,7 @@ public class Sniper extends GameObject {
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
                     if(blnBazooka == false){
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, biBulletTextures[0], false, 0));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, handler, ssm, biBulletTextures[0], false, 0));
                         if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 0);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 0);
                         intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-15);
@@ -145,7 +139,7 @@ public class Sniper extends GameObject {
                     }
 
                     if(blnBazooka == true){
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, ssm, handler, biBulletTextures[1], false, 100));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 60, fltDiffY * 60, 10, 10, ObjectId.BULLET, handler, ssm, biBulletTextures[1], false, 100));
                         if(intPosition == 1) ssm.sendText("h>a>aBullet~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 1);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBullet~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 60) + "," + (fltDiffY * 60) + "," + 10 + "," + 10 + "," + 1);
                         intRecoilX = intRecoilX + (int)(fltVelX + fltDiffX*-24);
@@ -176,16 +170,18 @@ public class Sniper extends GameObject {
 
             if(intPosition == 0) ssm.sendText("h>a>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + intPosition); 
+        } else {
+            camObject = handler.getObject(Main.intSessionId - 1);
         }
     }
 
     private void collisions() {
-        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10000))) {
+        if(getBounds2().intersects(new Rectangle(-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30))) {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
 
-            fltWorldY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+            fltWorldY = (float)new Rectangle(-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30).getY() - fltHeight/2;
         }
     }
 
@@ -196,15 +192,25 @@ public class Sniper extends GameObject {
         g2d.setColor(Color.red);
         g2d.fill(getBounds2());
         g2d.setColor(Color.white);
-        g2d.fillRect((int)(fltWorldX + fltDispX), (int)(fltWorldY + fltDispY), (int)fltWidth, (int)fltHeight);
+
+        if(intPosition == Main.intSessionId - 1) {
+            g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
+        } else {
+            g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
+        // TEMP
+        if(intPosition == Main.intSessionId - 1) {
+            g2d.setColor(Color.red);
+            g2d.draw(new Rectangle((int)-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30));
+        }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltWorldX + fltVelX), (int)fltWorldY + 2, (int)fltWidth, (int)fltHeight - 4);
+        return new Rectangle((int)(fltDispX + fltVelX - fltWidth/2), (int)(fltDispX - fltHeight/2) + 4, (int)(fltWidth + fltVelX/2), (int)fltHeight - 8);
     }
 
     public Rectangle getBounds2() {
-        return new Rectangle((int)fltWorldX + 2, (int)(fltWorldY + fltVelY), (int)fltWidth - 4, (int)fltHeight);
+        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)(fltDispY + fltVelY - fltHeight/2), (int)fltWidth - 8, (int)(fltHeight + fltVelY/2));
     }
 
     public void drawTeleport(Graphics g) {

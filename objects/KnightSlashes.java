@@ -10,14 +10,12 @@ import framework.SuperSocketMaster;
 
 public class KnightSlashes extends GameObject {
 
-    private ObjectHandler handler;
     private float fltStartAngle;
     private long lngbirth;
-    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
+    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
-        this.handler = handler;
         this.lngbirth = lngbirth;
     }
     

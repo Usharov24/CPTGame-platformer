@@ -14,7 +14,6 @@ import framework.InputHandler.InputButtons;
 
 public class Player extends GameObject {
 
-    private ObjectHandler handler;
     private InputHandler input;
 
     private float fltAcc = 1f, fltDec = 0.5f;
@@ -27,9 +26,8 @@ public class Player extends GameObject {
     private boolean blnFalling = true;
     private boolean blnteleporting = false;
 
-    public Player(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intSessionId) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
-        this.handler = handler;
+    public Player(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intSessionId) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intSessionId = intSessionId;
     }
@@ -104,7 +102,7 @@ public class Player extends GameObject {
 
                 if(intSessionId == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler, null, false, 0));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler, ssm, null, false, 0));
                 
             } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON2)) {
                 float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
@@ -117,7 +115,7 @@ public class Player extends GameObject {
                 if(intSessionId == 1) ssm.sendText("h>a>aHOMING_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
                 else ssm.sendText("c" + intSessionId + ">h>aHOMING_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10);
 
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, ssm, handler, null, true, 0));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20, 10, 10, ObjectId.BULLET, handler, ssm, null, true, 0));
             } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3)) {
                 float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
@@ -139,8 +137,8 @@ public class Player extends GameObject {
                         ssm.sendText("c" + intSessionId + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6);
                     }
 
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler, null, false, 0));
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler, null, false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, handler, ssm, null, false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, handler, ssm, null, false, 0));
                 }
             }
         }

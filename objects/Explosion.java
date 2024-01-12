@@ -9,10 +9,8 @@ import framework.SuperSocketMaster;
 
 public class Explosion extends GameObject {
 
-    private ObjectHandler handler;
-    public Explosion(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
-        this.handler = handler;
+    public Explosion(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
     }
     
     public void update(LinkedList<GameObject> objectList) {

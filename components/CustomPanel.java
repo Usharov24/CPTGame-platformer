@@ -5,6 +5,7 @@ import java.awt.LayoutManager;
 import javax.swing.JPanel;
 
 import framework.Main;
+import objects.GameObject;
 
 public class CustomPanel extends JPanel {
 
@@ -37,8 +38,13 @@ public class CustomPanel extends JPanel {
         } else if(Main.state == Main.State.GAME) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
+
+            g.translate(getWidth()/2, getHeight()/2);
+
             Main.handler.update();
             Main.handler.draw(g);
+
+            g.translate(-getWidth()/2, -getHeight()/2);
         }
     }
 }

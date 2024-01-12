@@ -4,11 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-
-import javax.imageio.ImageIO;
 
 import framework.InputHandler;
 import framework.Main;
@@ -20,11 +16,11 @@ import framework.InputHandler.InputButtons;
 
 public class Knight extends GameObject {
 
-    private ObjectHandler handler;
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
 
     private float fltAcc = 1f, fltDec = 0.5f;
+    private float fltDispX, fltDispY;
     private float fltDashVelY;
     private float fltDashVelX;
     private int intPosition;
@@ -36,9 +32,8 @@ public class Knight extends GameObject {
     private int intRecoilY = 0;
     private BufferedImage biBulletTexture;
 
-    public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, InputHandler input, int intPosition) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
-        this.handler = handler;
+    public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intPosition = intPosition;
 
@@ -106,24 +101,24 @@ public class Knight extends GameObject {
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 200 && blnBoost == false) {
                 lngtimer[2] = System.currentTimeMillis();
                 if(fltWorldX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, id, ssm, handler));
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, id, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, id, ssm, handler));
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, id, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 100 && blnBoost) {
                 lngtimer[2] = System.currentTimeMillis();
                 if(fltWorldX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135, id, ssm, handler));
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135, id, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270, id, ssm, handler));
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270, id, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
                 }
@@ -150,8 +145,8 @@ public class Knight extends GameObject {
                         ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6 + "," + 4);
                     }
 
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, ssm, handler, biBulletTexture, false, 0));
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, ssm, handler, biBulletTexture, false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, ObjectId.BULLET, handler, ssm, biBulletTexture, false, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, ObjectId.BULLET, handler, ssm, biBulletTexture, false, 0));
                 }
             }
 
@@ -182,23 +177,27 @@ public class Knight extends GameObject {
 
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
-            collisions();
+
             fltWorldX += fltVelX + fltDashVelX + intRecoilX;
-            fltWorldY += fltVelY + intRecoilY + fltDashVelY;
+            fltWorldY += fltVelY + fltDashVelY + intRecoilY;
             
             
             if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
+        } else {
+            camObject = handler.getObject(Main.intSessionId - 1);
         }
+
+        collisions();
     }
 
     private void collisions() {
-        if(getBounds2().intersects(new Rectangle(0, 660, 1280, 10000))) {
+        if(getBounds2().intersects(new Rectangle(-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30))) {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
 
-            fltWorldY = (float)new Rectangle(0, 660, 1280, 10).getY() - fltHeight;
+            fltWorldY = (float)new Rectangle(-100, 720, 1280, 30).getY() - fltHeight/2;
         }
         else{
             blnFalling  = true;
@@ -212,14 +211,24 @@ public class Knight extends GameObject {
         g2d.setColor(Color.red);
         g2d.fill(getBounds2());
         g2d.setColor(Color.white);
-        g2d.fillRect((int)fltWorldX, (int)fltWorldY, (int)fltWidth, (int)fltHeight);
+
+        if(intPosition == Main.intSessionId - 1) {
+            g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
+        } else {
+            g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
+        // TEMP
+        if(intPosition == Main.intSessionId - 1) {
+            g2d.setColor(Color.red);
+            g2d.draw(new Rectangle((int)-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30));
+        }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltWorldX + fltVelX + fltDashVelX), (int)fltWorldY + 2, (int)fltWidth, (int)fltHeight - 4);
+        return new Rectangle((int)(fltDispX + fltVelX - fltWidth/2), (int)(fltDispX - fltHeight/2) + 4, (int)(fltWidth + fltVelX/2), (int)fltHeight - 8);
     }
 
     public Rectangle getBounds2() {
-        return new Rectangle((int)fltWorldX + 2, (int)(fltWorldY + fltVelY + fltDashVelY), (int)fltWidth - 4, (int)fltHeight);
+        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)(fltDispY + fltVelY - fltHeight/2), (int)fltWidth - 8, (int)(fltHeight + fltVelY/2));
     }
 }

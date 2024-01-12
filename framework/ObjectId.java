@@ -6,5 +6,6 @@ public enum ObjectId {
     ENEMY_MANGO,
     BULLET,
     HOMING_BULLET,
-    BOOM;
+    BOOM,
+    BARRIER;
 }

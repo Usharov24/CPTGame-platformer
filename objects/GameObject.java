@@ -3,24 +3,27 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
+import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
 
 public abstract class GameObject {
     
     protected float fltWorldX, fltWorldY;
-    protected float fltCameraX, fltCameraY;
     protected float fltVelX, fltVelY;
     protected float fltWidth, fltHeight;
     protected ObjectId id;
+    protected GameObject camObject;
+    protected ObjectHandler handler;
     protected SuperSocketMaster ssm;
 
-    public GameObject(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm) {
+    public GameObject(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         this.fltWorldX = fltWorldX;
         this.fltWorldY = fltWorldY;
         this.fltWidth = fltWidth;
         this.fltHeight = fltHeight;
         this.id = id;
+        this.handler = handler;
         this.ssm = ssm;
     }
 
@@ -42,22 +45,6 @@ public abstract class GameObject {
 
     public void setWorldY(float fltWorldY) {
         this.fltWorldY = fltWorldY;
-    }
-
-    public float getCameraX() {
-        return fltCameraX;
-    }
-
-    public void setCameraX(float fltCameraX) {
-        this.fltCameraX = fltCameraX;
-    }
-
-    public float getCameraY() {
-        return fltCameraY;
-    }
-
-    public void setCameraY(float fltCameraY) {
-        this.fltCameraY = fltCameraY;
     }
 
     public float getWidth() {

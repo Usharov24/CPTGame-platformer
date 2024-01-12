@@ -2,6 +2,8 @@ package objects;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import java.awt.image.BufferedImage;
+
+import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
 import java.awt.Rectangle;
@@ -13,8 +15,8 @@ public class ItemObject extends GameObject {
     private String strItemId = "";
     private FileReader itemList = null;
 
-    public ItemObject(float fltX, float fltY, float fltHeight, float fltWidth, int intRarity, ObjectId id, SuperSocketMaster ssm) {
-        super(fltX, fltY, fltHeight, fltWidth, id, ssm);
+    public ItemObject(float fltX, float fltY, float fltHeight, float fltWidth, int intRarity, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+        super(fltX, fltY, fltHeight, fltWidth, id, handler, ssm);
         int item = (int)Math.floor(Math.random() * 9 + 1);
         if(item == 10){
             this.intRarity = 3;

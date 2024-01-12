@@ -10,11 +10,11 @@ import framework.SuperSocketMaster;
 
 public class WaveAttacks extends GameObject {
 
-    private ObjectHandler handler;
     private float fltStartAngle;
-    float fltSpread = 1;
-    public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
+    private float fltSpread = 1;
+
+    public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);

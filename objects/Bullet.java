@@ -3,27 +3,28 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+
+import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
-import framework.Main;
 
 public class Bullet extends GameObject {
 
-    private ObjectHandler handler;
     private BufferedImage biTexture;
 
     private float fltExplosionRadius;
     private boolean blnHoming;
     
-    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, SuperSocketMaster ssm, ObjectHandler handler, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, ssm);
+    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
-        this.handler = handler;
         this.biTexture = biTexture;
         this.blnHoming = blnHoming;
         this.fltExplosionRadius = fltExplosionRadius;
+
+        camObject = handler.getObject(Main.intSessionId - 1);
     }
     
     public void update(LinkedList<GameObject> objectList) {
@@ -60,11 +61,11 @@ public class Bullet extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2),(int)(fltWorldY - fltHeight/2), null);
+        g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), null);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltWorldX - fltWidth/2), (int)(fltWorldY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+        return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
 
     public GameObject findNearestObject(float fltWorldX, float fltWorldY){
@@ -95,7 +96,7 @@ public class Bullet extends GameObject {
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2,fltExplosionRadius*2,fltExplosionRadius*2,ObjectId.BOOM,ssm,handler));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
                         fltWorldX = 10000;
                     }        
