@@ -18,17 +18,22 @@ public class Brute extends GameObject {
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
 
+    private long[] lngTimer = {0, 0, 0, 0};
+
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDispX, fltDispY;
+    
+    private float fltAngle = 270;
+    private float fltUltSpeed = 0;
+
     private int intPosition;
     private int intJumpCount;
-    private float fltAngle = 270;
-    private long[] lngTimer = {0,0,0,0};
-    private boolean blnFalling = true;
-    private boolean blnUlt = false;
-    private boolean blnSlamming = false;
-    private float fltUltSpeed = 0;
     private int intJumpStart = 0;
+
+    private boolean blnFalling = true;
+    private boolean blnSlamming = false;
+    private boolean blnUlt = false;
+
     private BufferedImage biVacTexture;
 
     public Brute(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
@@ -41,13 +46,9 @@ public class Brute extends GameObject {
 
     public void update(LinkedList<GameObject> objectList) {
         if(intPosition == Main.intSessionId - 1) {
-            if(blnUlt == false) {
-                if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
+            if(!blnUlt) {
+                if(intJumpCount < 2 && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
                     input.buttonSet.remove(InputButtons.W);
-                    fltVelY = -45;
-                    blnFalling = true;
-                    intJumpCount++;
-                } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < 2) {
                     input.buttonSet.remove(InputButtons.SPACE);
                     fltVelY = -45;
                     blnFalling = true;
@@ -67,7 +68,6 @@ public class Brute extends GameObject {
                 }
 
                 if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 3000) {
-                    //Moving variables
                     lngTimer[0] = System.currentTimeMillis();
                     input.buttonSet.remove(InputButtons.SHIFT);
                     blnFalling = true;
@@ -98,8 +98,8 @@ public class Brute extends GameObject {
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 3000) {
                     lngTimer[3] = System.currentTimeMillis();
                     
-                    float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                    float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                    float fltDiffX = input.fltMouseX - 640;
+                    float fltDiffY = input.fltMouseY - 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
@@ -115,7 +115,8 @@ public class Brute extends GameObject {
                 if(fltVelX > 10) fltVelX = 10;
                 else if(fltVelX < -10) fltVelX = -10;
 
-                if(fltVelY > 30) fltVelY = 30;
+                if(fltVelY > 35) fltVelY = 35;
+                else if(fltVelY < -35) fltVelY = -35;
 
                 if(blnSlamming == false) fltWorldX += fltVelX;
                 else fltWorldX += fltVelX * 2;
@@ -211,7 +212,7 @@ public class Brute extends GameObject {
         if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
         else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
 
-        return new Rectangle((int)fltBoundsX, (int)(fltDispX - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+        return new Rectangle((int)fltBoundsX, (int)(fltDispY - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
     }
 
     public Rectangle getBounds2() {
@@ -220,6 +221,6 @@ public class Brute extends GameObject {
         if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
         else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
-        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)(fltDispY + fltVelY - fltHeight/2), (int)fltWidth - 8, (int)fltHeight);
+        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
     }
 }

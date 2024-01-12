@@ -198,6 +198,7 @@ public class Main implements ActionListener {
             thePanels[state.getValue()].repaint();
             mapPanel.repaint();
         }
+        
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
             System.out.println(strMessage);
@@ -346,6 +347,11 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
+                    handler.addObject(new Barrier(0, 1440, 1920, 30, ObjectId.BARRIER, handler, null));
+                    handler.addObject(new Barrier(0, -30, 1920, 30, ObjectId.BARRIER, handler, null));
+                    handler.addObject(new Barrier(-30, 0, 30, 1440, ObjectId.BARRIER, handler, null));
+                    handler.addObject(new Barrier(1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
+
                     thePanels[4].setVisible(true);
                     thePanels[4].setOpaque(true);
                     thePanels[4].setBounds(0, 0, 1280, 720);
@@ -467,7 +473,6 @@ public class Main implements ActionListener {
         }
 
         if(evt.getSource() == buttonReady) {
-            ssm.sendText("h>a>mGAME_PANEL");
             startTime = System.nanoTime();
             chatPanel = new ChatPanel(ssm);
             chatPanel.setPreferredSize(new Dimension(400, 720));
@@ -488,8 +493,13 @@ public class Main implements ActionListener {
                 }
             }
 
-            handler.addObject(new Barrier(-100, 720, 1280, 30, ObjectId.BARRIER, handler, null));
+            ssm.sendText("h>a>mGAME_PANEL");
 
+            for(int intCount = 0; intCount < 2; intCount++) {
+                handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -30, 1920, 30, ObjectId.BARRIER, handler, null));
+                handler.addObject(new Barrier((intCount == 0) ? -30 : 1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
+            }
+            
             state = State.GAME;
 
             thePanels[4].setVisible(true);

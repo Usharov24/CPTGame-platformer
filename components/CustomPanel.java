@@ -39,12 +39,20 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
 
+            // CAMERA START /////////////////////////////////////////////////////
             g.translate(getWidth()/2, getHeight()/2);
 
             Main.handler.update();
             Main.handler.draw(g);
 
             g.translate(-getWidth()/2, -getHeight()/2);
+            // CAMERA END ///////////////////////////////////////////////////////
+            
+            // HUD CODE HERE ////////////////////////////////////////////////////
+
+
+
+            /////////////////////////////////////////////////////////////////////
         }
     }
 }

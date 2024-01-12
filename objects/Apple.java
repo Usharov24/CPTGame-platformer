@@ -30,7 +30,6 @@ public class Apple extends EnemyObject {
         this.fltMaxX = fltWorldX + fltRangeX;
         this.fltMinY = fltWorldY;
         this.fltMaxY = fltWorldY + fltRangeY;
-
     }
 
     public void update(LinkedList<GameObject> objectList) {

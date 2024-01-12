@@ -162,7 +162,8 @@ public class Knight extends GameObject {
             if(fltVelX > 10) fltVelX = 10;
             else if(fltVelX < -10) fltVelX = -10;
 
-            if(fltVelY > 30) fltVelY = 30;
+            if(fltVelY > 35) fltVelY = 35;
+            else if(fltVelY < -35) fltVelY = -35;
 
             if(fltDashVelY > 0) fltDashVelY -= 1;
             else if(fltDashVelY < 0) fltDashVelY += 1;
@@ -223,10 +224,20 @@ public class Knight extends GameObject {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltDispX + fltVelX - fltWidth/2), (int)(fltDispX - fltHeight/2) + 4, (int)(fltWidth + fltVelX/2), (int)fltHeight - 8);
+        float fltBoundsX = fltDispX + fltVelX - fltWidth/2;
+
+        if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
+        else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
+
+        return new Rectangle((int)fltBoundsX, (int)(fltDispY - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
     }
 
     public Rectangle getBounds2() {
-        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)(fltDispY + fltVelY - fltHeight/2), (int)fltWidth - 8, (int)(fltHeight + fltVelY/2));
+        float fltBoundsY = fltDispY + fltVelY - fltHeight/2;
+
+        if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
+        else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
+
+        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
     }
 }
