@@ -366,6 +366,7 @@ public class Main implements ActionListener {
                     theFrame.setContentPane(thePanels[4]);
                     gameLayeredPane.requestFocus(true);
                     thePanels[4].requestFocus(true);
+                    chatPanel.requestFocus(true);
                     theFrame.pack();
                 }
             }
@@ -384,8 +385,7 @@ public class Main implements ActionListener {
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
-            theFrame.setContentPane(chatPanel);
-            theFrame.pack();
+            System.exit(0);
         } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
@@ -512,6 +512,7 @@ public class Main implements ActionListener {
             theFrame.setContentPane(thePanels[4]);
             gameLayeredPane.requestFocus(true);
             thePanels[4].requestFocus(true);
+            chatPanel.requestFocus(true);
             theFrame.pack();
         }
     }
