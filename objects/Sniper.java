@@ -89,8 +89,8 @@ public class Sniper extends GameObject {
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 1000) {
                 lngtimer[2] = System.currentTimeMillis();
-                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - 640;
+                float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
@@ -125,8 +125,8 @@ public class Sniper extends GameObject {
 
             if(blnRapidFire == true){
                 if(System.currentTimeMillis() - lngtimer[3] < 500 && (System.currentTimeMillis() - lngtimer[3]) % 2 == 0){
-                    float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                    float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                    float fltDiffX = 640;
+                    float fltDiffY = 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
@@ -180,8 +180,11 @@ public class Sniper extends GameObject {
             blnFalling = false;
             fltVelY = 0;
             intJumpCount = 0;
-
-            fltWorldY = (float)new Rectangle(-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30).getY() - fltHeight/2;
+            intRecoilY = 0;
+            fltWorldY = (float)new Rectangle(-100, 720, 1280, 30).getY() - fltHeight/2;
+        }
+        else{
+            blnFalling = true;
         }
     }
 

@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -18,7 +17,6 @@ public class Knight extends GameObject {
 
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
-
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDispX, fltDispY;
     private float fltDashVelY;
@@ -125,8 +123,8 @@ public class Knight extends GameObject {
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
                 System.out.println("shot");
-                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - 640;
+                float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
                 fltDiffX /= fltLength;

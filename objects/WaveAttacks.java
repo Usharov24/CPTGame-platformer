@@ -26,9 +26,12 @@ public class WaveAttacks extends GameObject {
         fltSpread += 15;
         fltWorldX+= fltVelX;
         fltWorldY += fltVelY;
-        
+                System.out.println("xplace  " + fltWorldX);
+                System.out.println("yplace " + fltWorldY);
+
         if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
+            System.out.println("out");
         }
     }
 

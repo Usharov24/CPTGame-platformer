@@ -131,12 +131,7 @@ public class Wizard extends GameObject {
                 lngtimer[2] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - 640;
                 float fltDiffY = input.fltMouseY - 360;
-                System.out.println("xmouse " + input.fltMouseX);
-                System.out.println("ymouse " + input.fltMouseY);
-                System.out.println("x " + fltDiffX);
-                System.out.println("y " + fltDiffY);
-                System.out.println("xplace  " + fltWorldX);
-                System.out.println("yplace " + fltWorldY);
+                
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 
                 blnteleporting = false;
@@ -175,6 +170,7 @@ public class Wizard extends GameObject {
                 else if(fltDiffX > 0 && fltDiffY < 0){
                     fltStartAngle = (float) Math.atan(fltDiffY/fltDiffX); 
                 }
+                
                 if(intPosition == 0) ssm.sendText("h>a>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle);
                 else ssm.sendText("c" + (intPosition + 1) + ">h>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle);
                 handler.addObject(new WaveAttacks(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, ObjectId.BULLET, handler, ssm));
