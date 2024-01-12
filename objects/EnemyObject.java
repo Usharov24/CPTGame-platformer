@@ -1,4 +1,8 @@
 package objects;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.LinkedList;
+
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
@@ -15,8 +19,8 @@ public abstract class EnemyObject extends GameObject {
     //protected int intMovementType;
     //protected int intAttackType;
 
-    public EnemyObject(float fltX, float fltY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm){
-        super(fltX, fltY, fltHeight, fltWidth, id, handler, ssm);
+    public EnemyObject(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltHeight, float fltWidth, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm){
+        super(fltWorldX, fltWorldY, fltHeight, fltWidth, id, handler, ssm);
         this.fltRangeX = fltRangeX;
         this.fltRangeY = fltRangeY;
         this.fltVelX = fltVelX;
@@ -37,12 +41,28 @@ public abstract class EnemyObject extends GameObject {
         return fltRangeY;
     }
 
-    public void setRangeX() {
+    public void setRangeX(float fltRangeX) {
         this.fltRangeX = fltRangeX;
     }
 
-    public void setRangeY() {
+    public void setRangeY(float fltRangeY) {
         this.fltRangeY = fltRangeY;
+    }
+
+    public float getX(){
+        return fltWorldX;
+    }
+
+    public float getY(){
+        return fltWorldY;
+    }
+
+    public void setX(float fltWorldX){
+        this.fltWorldX = fltWorldX;
+    }
+    
+    public void setY(float fltWorldY){
+        this.fltWorldY = fltWorldY;
     }
 
     public float getVelX(){
@@ -53,11 +73,11 @@ public abstract class EnemyObject extends GameObject {
         return fltVelY;
     } 
 
-    public void setVelX(){
+    public void setVelX(float fltVelX){
         this.fltVelX = fltVelX;
     }
 
-    public void setVelY(){
+    public void setVelY(float fltVelY){
         this.fltVelY = fltVelY;
     }
 
@@ -69,15 +89,15 @@ public abstract class EnemyObject extends GameObject {
         return fltDamage;
     }
 
-    public void setHealth() {
+    public void setHealth(float fltHealth) {
         this.fltHealth = fltHealth;
     }
 
-    public void setDamage() {
+    public void setDamage(float fltDamage) {
         this.fltDamage = fltDamage;
     }
     
-    // public void setMovement(){
+    // public void setMovement(boolean blnMovement){
     //  this.blnMovement = blnMovement;
     //}
 }

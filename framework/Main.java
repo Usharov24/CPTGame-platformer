@@ -27,15 +27,14 @@ public class Main implements ActionListener {
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
     private JPanel characterPanel = new JPanel(null);
 
-    // Game Panels Container
-    private Container gameContentPane = theFrame.getContentPane();
+    // Game Layered Pane
     private JLayeredPane gameLayeredPane = new JLayeredPane();
 
     // Map
     private MapPanel mapPanel = new MapPanel();
     
     // Chat
-    private ChatPanel chatPanel = new ChatPanel();
+    private ChatPanel chatPanel;
 
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
@@ -355,8 +354,13 @@ public class Main implements ActionListener {
                     mapPanel.setOpaque(true);
                     mapPanel.setBounds(0, 0, 1280, 720);
 
+                    chatPanel.setVisible(true);
+                    chatPanel.setOpaque(true);
+                    chatPanel.setBounds(880, 0, 400, 720);
+
                     gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
                     gameLayeredPane.add(mapPanel, Integer.valueOf(1));
+                    gameLayeredPane.add(chatPanel, Integer.valueOf(2));
                     gameLayeredPane.repaint();
 
                     theFrame.setContentPane(thePanels[4]);
@@ -380,7 +384,8 @@ public class Main implements ActionListener {
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
-            System.exit(0);
+            theFrame.setContentPane(chatPanel);
+            theFrame.pack();
         } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
@@ -464,6 +469,8 @@ public class Main implements ActionListener {
         if(evt.getSource() == buttonReady) {
             ssm.sendText("h>a>mGAME_PANEL");
             startTime = System.nanoTime();
+            chatPanel = new ChatPanel(ssm);
+            chatPanel.setPreferredSize(new Dimension(400, 720));
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 if(intCharacterSelections[intCount] == 0) {
@@ -493,8 +500,13 @@ public class Main implements ActionListener {
             mapPanel.setOpaque(true);
             mapPanel.setBounds(0, 0, 1280, 720);
 
+            chatPanel.setVisible(true);
+            chatPanel.setOpaque(true);
+            chatPanel.setBounds(880, 0, 400, 720);
+
             gameLayeredPane.add(thePanels[4], Integer.valueOf(0));
             gameLayeredPane.add(mapPanel, Integer.valueOf(1));
+            gameLayeredPane.add(chatPanel, Integer.valueOf(2));
             gameLayeredPane.repaint();
 
             theFrame.setContentPane(thePanels[4]);

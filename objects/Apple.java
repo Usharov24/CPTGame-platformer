@@ -18,7 +18,6 @@ public class Apple extends EnemyObject {
     private float fltMaxX = 0;
     private float fltMinY = 0;
     private float fltMaxY = 0;
-    private long startTime = System.nanoTime();
 
     public Apple(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltRangeX, float fltRangeY, float fltHealth, float fltDamage, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltVelX, fltVelY, fltWidth, fltHeight, fltRangeX, fltRangeY, fltHealth, fltDamage, id, handler, ssm);
