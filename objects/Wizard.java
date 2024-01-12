@@ -129,8 +129,14 @@ public class Wizard extends GameObject {
 
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngtimer[2] > 500) {
                 lngtimer[2] = System.currentTimeMillis();
-                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - 640;
+                float fltDiffY = input.fltMouseY - 360;
+                System.out.println("xmouse " + input.fltMouseX);
+                System.out.println("ymouse " + input.fltMouseY);
+                System.out.println("x " + fltDiffX);
+                System.out.println("y " + fltDiffY);
+                System.out.println("xplace  " + fltWorldX);
+                System.out.println("yplace " + fltWorldY);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 
                 blnteleporting = false;
@@ -144,8 +150,8 @@ public class Wizard extends GameObject {
                 
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngtimer[3] > 3000) {
                 lngtimer[3] = System.currentTimeMillis();
-                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - 640;
+                float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
@@ -219,7 +225,7 @@ public class Wizard extends GameObject {
 
         if (blnteleporting){
             g2d.setColor(Color.gray);
-            g2d.fillRect((int)(input.fltMouseX - fltWidth/2), (int)(input.fltMouseY - fltHeight/2), (int)fltWidth, (int)fltHeight);
+            g2d.fillRect((int)(input.fltMouseX - fltWidth/2 - 640), (int)(input.fltMouseY - fltHeight/2 - 360), (int)fltWidth, (int)fltHeight);
         }
     }
 

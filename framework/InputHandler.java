@@ -69,5 +69,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
+        
     }
 }
