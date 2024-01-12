@@ -69,7 +69,7 @@ public class Brute extends GameObject {
                     lngTimer[0] = System.currentTimeMillis();
                     input.buttonSet.remove(InputButtons.SHIFT);
                     blnSlamming = true;
-                    fltVelY = -65;
+                    fltVelY = -35;
                 }
                 if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngTimer[1] > 1600) {
                     lngTimer[1] = System.currentTimeMillis();
@@ -106,7 +106,7 @@ public class Brute extends GameObject {
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aVAC~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
                 }
 
-                if(blnFalling) fltVelY += 5;
+                if(blnFalling) fltVelY += 3;
 
                 if(fltVelX > 10) fltVelX = 10;
                 else if(fltVelX < -10) fltVelX = -10;
@@ -121,7 +121,7 @@ public class Brute extends GameObject {
                 }
                 
                 fltWorldY += fltVelY;
-                
+
                 if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
                 else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             } else {
@@ -141,6 +141,9 @@ public class Brute extends GameObject {
 
                 fltWorldY += fltVelY;
                 fltWorldX += fltVelX;
+
+                if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             }
         } else {
             camObject = handler.getObject(Main.intSessionId - 1);
