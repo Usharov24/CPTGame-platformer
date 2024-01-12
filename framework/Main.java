@@ -204,7 +204,7 @@ public class Main implements ActionListener {
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
             System.out.println(strMessage);
-
+            
             if(intSessionId == 1) {
                 if(strMessage.contains("oSNIPER")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -319,7 +319,7 @@ public class Main implements ActionListener {
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                 }
-            } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[2].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
+            } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
                 System.out.println("msg recieved");
                 if(strMessage.contains("oSNIPER")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -420,6 +420,7 @@ public class Main implements ActionListener {
                     theFrame.pack();
                 }
             }
+            
         }
 
         if(evt.getSource() == mainMenuButtons[0]) {
