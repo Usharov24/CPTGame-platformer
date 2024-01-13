@@ -2,7 +2,6 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 import framework.Main;
 import framework.ObjectHandler;
@@ -24,7 +23,7 @@ public class KnightSlashes extends GameObject {
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;

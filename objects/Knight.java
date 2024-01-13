@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -38,7 +37,7 @@ public class Knight extends GameObject {
         biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         if(intPosition == Main.intSessionId - 1) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);

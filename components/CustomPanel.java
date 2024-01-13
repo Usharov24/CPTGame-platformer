@@ -5,7 +5,6 @@ import java.awt.LayoutManager;
 import javax.swing.JPanel;
 
 import framework.Main;
-import objects.GameObject;
 
 public class CustomPanel extends JPanel {
 

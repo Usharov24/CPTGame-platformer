@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 import framework.InputHandler;
 import framework.Main;
@@ -32,7 +31,7 @@ public class Player extends GameObject {
         this.intSessionId = intSessionId;
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         if(intSessionId == Main.intSessionId) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);

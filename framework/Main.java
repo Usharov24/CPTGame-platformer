@@ -347,6 +347,8 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
+                    chatPanel = new ChatPanel(ssm);
+
                     handler.addObject(new Barrier(0, 1440, 1920, 30, ObjectId.BARRIER, handler, null));
                     handler.addObject(new Barrier(0, -30, 1920, 30, ObjectId.BARRIER, handler, null));
                     handler.addObject(new Barrier(-30, 0, 30, 1440, ObjectId.BARRIER, handler, null));

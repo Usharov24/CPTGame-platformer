@@ -12,7 +12,7 @@ public class ObjectHandler {
         for(int intCount = 0; intCount < objectList.size(); intCount++) {
             GameObject object = objectList.get(intCount);
             
-            object.update(objectList);
+            object.update();
         }
     }
 

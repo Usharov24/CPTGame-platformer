@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 
 import framework.InputHandler;
@@ -43,7 +42,7 @@ public class Sniper extends GameObject {
         biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png");
     }
 
-    public void update(LinkedList<GameObject> objectList) {System.out.println(fltWorldX + " " + fltWorldY);
+    public void update() {System.out.println(fltWorldX + " " + fltWorldY);
         if(intPosition == Main.intSessionId - 1) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);

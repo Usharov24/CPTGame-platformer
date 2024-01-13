@@ -2,7 +2,6 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
@@ -21,7 +20,7 @@ public class WaveAttacks extends GameObject {
         this.handler = handler;
     }
     
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         
         fltSpread += 15;
         fltWorldX+= fltVelX;

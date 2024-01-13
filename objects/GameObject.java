@@ -1,7 +1,6 @@
 package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 import framework.ObjectHandler;
 import framework.ObjectId;
@@ -27,7 +26,7 @@ public abstract class GameObject {
         this.ssm = ssm;
     }
 
-    public abstract void update(LinkedList<GameObject> objectList);
+    public abstract void update();
     public abstract void draw(Graphics g);
     public abstract Rectangle getBounds();
 

@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -32,7 +31,7 @@ public class Apple extends EnemyObject {
         this.fltMaxY = fltWorldY + fltRangeY;
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
 
         fltVelX = (float)(5*Math.sin(System.nanoTime()/1000000000.0-(float)framework.Main.startTime/1000000000.0));
         fltVelY = (float)(-5*Math.cos(System.nanoTime()/1000000000.0-(float)framework.Main.startTime/1000000000.0));

@@ -2,7 +2,6 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 import framework.Main;
 import framework.ObjectHandler;
@@ -27,7 +26,7 @@ public class Bullet extends GameObject {
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         if(blnHoming == false){
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;

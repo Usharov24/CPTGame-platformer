@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 import java.awt.image.BufferedImage;
 
@@ -40,7 +39,7 @@ public class Wizard extends GameObject {
         biBulletTextures = resLoader.loadImages("/res\\FireBall.png", "/res\\ElectricBall.png");
     }
     
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         if(intPosition == Main.intSessionId - 1) {
             if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < 2) {
                 input.buttonSet.remove(InputButtons.W);

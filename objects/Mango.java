@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -32,7 +31,7 @@ public class Mango extends EnemyObject {
         this.fltMaxY = fltWorldY + fltRangeY;
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
         
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
@@ -43,7 +42,7 @@ public class Mango extends EnemyObject {
         }
     }
 
-    public GameObject findnear(LinkedList<GameObject> objectList, float fltWorldX, float fltWorldY){
+    public GameObject findnear(float fltWorldX, float fltWorldY){
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
@@ -51,10 +50,10 @@ public class Mango extends EnemyObject {
         float fltPastY = 0;
         float fltpastTotal = 0;
         int intreturn = 0;
-        for(int i = 0; i < objectList.size(); i++){
+        for(int i = 0; i < handler.objectList.size(); i++){
             
-            fltDistX = fltWorldX - objectList.get(i).getWorldX();
-            fltDistY = fltWorldY - objectList.get(i).getWorldY();
+            fltDistX = fltWorldX - handler.objectList.get(i).getWorldX();
+            fltDistY = fltWorldY - handler.objectList.get(i).getWorldY();
             flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
             if(flttotaldist > fltpastTotal){
                 fltpastTotal = flttotaldist;
@@ -65,7 +64,7 @@ public class Mango extends EnemyObject {
 
            
         }
-        return objectList.get(intreturn);
+        return handler.objectList.get(intreturn);
     }
 
     public void draw(Graphics g){

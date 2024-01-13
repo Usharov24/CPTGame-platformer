@@ -1,9 +1,10 @@
 package objects;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import framework.Main;
 import framework.ObjectHandler;
@@ -31,12 +32,12 @@ public class VacGrenade extends GameObject {
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
-    public void update(LinkedList<GameObject> objectList) {
-        if(blnSucking == false){ 
-            if(blnFalling) fltVelY += 2;
+    public void update() {
+        if(!blnSucking){ 
+            if(blnFalling) fltVelY += 3;
             else {
-                if(fltVelX > 0)fltVelX -= fltpastVelX/8;
-                else if(fltVelX < 0)fltVelX += fltpastVelX/-8;
+                if(fltVelX > 0) fltVelX -= fltpastVelX/8;
+                else if(fltVelX < 0) fltVelX += fltpastVelX/-8;
             }
 
             fltWorldX += fltVelX;
@@ -71,11 +72,26 @@ public class VacGrenade extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biImg, (int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), null);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setColor(Color.blue);
+        g2d.fill(getBounds());
+        g2d.setColor(Color.red);
+        g2d.fill(getBounds2());
+
+        g.drawImage(biImg, (int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), null);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)(fltWorldX - fltWidth/2 - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        float fltBoundsX = fltWorldX - fltWidth/2 + fltVelX - camObject.getWorldX() - camObject.getWidth()/2;
+
+        if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2; 
+        else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
+
+        return new Rectangle((int)fltBoundsX, (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+    }
+
+    public Rectangle getBounds2() {
+        return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
 
     private ArrayList<Integer> FindNear(){
@@ -84,7 +100,7 @@ public class VacGrenade extends GameObject {
         float fltTotalDist = 0;
         ArrayList<Integer> arylist = new ArrayList<Integer>();
         for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
+            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO) {
                 fltDistX = fltWorldX - handler.getObject(i).getWorldX();
                 fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 fltTotalDist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);

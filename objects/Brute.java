@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -28,7 +27,6 @@ public class Brute extends GameObject {
 
     private int intPosition;
     private int intJumpCount;
-    private int intJumpStart = 0;
 
     private boolean blnFalling = true;
     private boolean blnSlamming = false;
@@ -44,14 +42,15 @@ public class Brute extends GameObject {
         biVacTexture = resLoader.loadImage("/res\\VacGren.png");
     }
 
-    public void update(LinkedList<GameObject> objectList) {
+    public void update() {
+        if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
+
         if(intPosition == Main.intSessionId - 1) {
             if(!blnUlt) {
                 if(intJumpCount < 2 && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
                     input.buttonSet.remove(InputButtons.W);
                     input.buttonSet.remove(InputButtons.SPACE);
                     fltVelY = -45;
-                    blnFalling = true;
                     intJumpCount++;
                 }
 
@@ -70,7 +69,6 @@ public class Brute extends GameObject {
                 if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 3000) {
                     lngTimer[0] = System.currentTimeMillis();
                     input.buttonSet.remove(InputButtons.SHIFT);
-                    blnFalling = true;
                     blnSlamming = true;
                     fltVelY = -35;
                 }
@@ -79,6 +77,7 @@ public class Brute extends GameObject {
                     lngTimer[1] = System.currentTimeMillis();
                     input.buttonSet.remove(InputButtons.F);
                     blnUlt = true;
+                    blnSlamming = false;
                     fltWorldY -= 100;
                 }
 
@@ -101,53 +100,51 @@ public class Brute extends GameObject {
                     float fltDiffX = input.fltMouseX - 640;
                     float fltDiffY = input.fltMouseY - 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
-                    fltDiffX = Math.round(fltDiffX*40);
-                    fltDiffY = Math.round(fltDiffY*40);
-                    handler.addObject(new VacGrenade(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX, fltDiffY, 40, 40, System.currentTimeMillis(), ObjectId.BULLET, handler, ssm, biVacTexture, 0));
-                    if(intPosition == 0) ssm.sendText("h>a>aVAC~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aVAC~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX) + "," + (fltDiffY) + "," + 40 + "," + 40);
+
+                    handler.addObject(new VacGrenade(fltWorldX + fltWidth/2 - 20, fltWorldY + fltHeight/2 - 20, fltDiffX * 40, fltDiffY * 40, 40, 40, System.currentTimeMillis(), ObjectId.BULLET, handler, ssm, biVacTexture, 0));
+                    
+                    if(intPosition == 0) ssm.sendText("h>a>aVAC~" + (fltWorldX + fltWidth/2 - 20) + "," + (fltWorldY + fltHeight/2 - 20) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 40 + "," + 40);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aVAC~" + (fltWorldX + fltWidth/2 - 20) + "," + (fltWorldY + fltHeight/2 - 20) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 40 + "," + 40);
                 }
 
                 if(blnFalling) fltVelY += 3;
 
-                if(fltVelX > 10) fltVelX = 10;
-                else if(fltVelX < -10) fltVelX = -10;
+                if(fltVelX > 15) fltVelX = 15;
+                else if(fltVelX < -15) fltVelX = -15;
 
                 if(fltVelY > 35) fltVelY = 35;
                 else if(fltVelY < -35) fltVelY = -35;
-
-                if(blnSlamming == false) fltWorldX += fltVelX;
-                else fltWorldX += fltVelX * 2;
-                
-                fltWorldY += fltVelY;
             } else {
-                if(intJumpStart == 0){
-                    fltWorldY -= 50;
-                    intJumpStart = 1;
-                }
                 if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                     fltAngle -= 8;
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
                     fltAngle += 8;
                 }
-                blnSlamming = false;
+
                 fltUltSpeed += 0.3;
                 fltVelY += (float)(fltUltSpeed*Math.sin(Math.toRadians(fltAngle)));
                 fltVelX += (float)(fltUltSpeed*Math.cos(Math.toRadians(fltAngle)));
 
-                fltWorldY += fltVelY;
-                fltWorldX += fltVelX;
+                if(fltVelX > 35) fltVelX = 35;
+                else if(fltVelX < -35) fltVelX = -35;
+
+                if(fltVelY > 35) fltVelY = 35;
+                else if(fltVelY < -35) fltVelY = -35;
             }
-        } else {
-            camObject = handler.getObject(Main.intSessionId - 1);
+
+            if(!blnSlamming) fltWorldX += fltVelX;
+            else fltWorldX += fltVelX * 2;
+
+            fltWorldY += fltVelY;
+
+            collisions();
+
+            if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
         }
-
-        collisions();
-
-        if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
-        else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
     }
 
     private void collisions() {
@@ -159,35 +156,68 @@ public class Brute extends GameObject {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
 
-                    if(blnSlamming){
-                        blnSlamming = false;
-                        handler.addObject(new Explosion(fltWorldX, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
-                        handler.addObject(new Explosion(fltWorldX+ fltWidth, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
-                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight) + "," + (300) + "," + (300));
-                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight) + "," + (300) + "," + (300));
-                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX) + "," + (fltWorldY + fltHeight) + "," + (300) + "," + (300));
-                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX) + "," + (fltWorldY + fltHeight) + "," + (300) + "," + (300));
-                    }
-                    if(blnUlt){
+                    if(blnUlt) {
                         blnUlt = false;
-                        handler.addObject(new Explosion(fltWorldX, fltWorldY, 300, 300, ObjectId.BOOM, handler, ssm));
-                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX) + "," + (fltWorldY) + "," + (300) + "," + (300));
-                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX) + "," + (fltWorldY) + "," + (300) + "," + (300));
+                        fltAngle = 270;
+
+                        handler.addObject(new Explosion(fltWorldX + fltWidth, fltWorldY + fltHeight/2, 300, 300, ObjectId.BOOM, handler, ssm));
+
+                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
                     }
                 } else if(getBounds().intersects(object.getBounds()) && fltVelX < 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() + object.getWidth();
+
+                    if(blnUlt) {
+                        blnUlt = false;
+                        fltAngle = 270;
+
+                        handler.addObject(new Explosion(fltWorldX, fltWorldY + fltHeight/2, 300, 300, ObjectId.BOOM, handler, ssm));
+
+                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
+                    }
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY > 0) {
                     fltVelY = 0;
-                    blnFalling = false;
                     intJumpCount = 0;
-    
                     fltWorldY = object.getWorldY() - fltHeight;
+
+                    if(blnSlamming) {
+                        blnSlamming = false;
+
+                        for(int intCount2 = 0; intCount2 < 2; intCount2++) {
+                            handler.addObject(new Explosion(fltWorldX + fltWidth * intCount2, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
+
+                            if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth * intCount2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
+                            else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth * intCount2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
+                        }
+                    } else if(blnUlt) {
+                        blnUlt = false;
+                        fltAngle = 270;
+
+                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
+
+                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
+                    }
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
+
+                    if(blnUlt) {
+                        blnUlt = false;
+                        fltAngle = 270;
+
+                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY, 300, 300, ObjectId.BOOM, handler, ssm));
+
+                        if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
+                    }
                 }
             }
+
+            blnFalling = true;
         }
     }
 
