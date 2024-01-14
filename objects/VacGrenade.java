@@ -42,7 +42,6 @@ public class VacGrenade extends GameObject {
 
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
-            System.out.println(fltVelX);
                 
             if(fltVelX == 0 && fltVelY == 0){
                 blnSucking = true;

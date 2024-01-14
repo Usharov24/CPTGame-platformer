@@ -7,5 +7,6 @@ public enum ObjectId {
     BULLET,
     HOMING_BULLET,
     BOOM,
-    BARRIER;
+    BARRIER,
+    ITEM;
 }

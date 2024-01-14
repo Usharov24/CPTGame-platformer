@@ -2,7 +2,6 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
@@ -15,7 +14,7 @@ public class Bullet extends GameObject {
     private float fltExplosionRadius;
     private boolean blnHoming;
     
-    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
+    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intPeirceCount, int intShurikanCount, int intBleedCount, float fltBurnDmg, boolean blnLifeSteal, int intShotCount, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
@@ -54,6 +53,10 @@ public class Bullet extends GameObject {
 
         if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
+            if(fltExplosionRadius > 0){
+                handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                //arbitary value to make sure bomb doesnt explode multiple time
+            }  
         }
 
         
@@ -97,7 +100,6 @@ public class Bullet extends GameObject {
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
-                        fltWorldX = 10000;
                     }        
                 }
             }        
