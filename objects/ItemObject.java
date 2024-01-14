@@ -1,6 +1,5 @@
 package objects;
 import java.awt.Graphics;
-import java.util.LinkedList;
 import java.awt.image.BufferedImage;
 import framework.ObjectHandler;
 import framework.ObjectId;
