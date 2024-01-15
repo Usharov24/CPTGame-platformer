@@ -51,13 +51,6 @@ public class Bullet extends GameObject {
             collisions();
         }
 
-        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
-            handler.removeObject(this);
-            if(fltExplosionRadius > 0){
-                handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
-                //arbitary value to make sure bomb doesnt explode multiple time
-            }  
-        }
 
         
     }
@@ -92,7 +85,18 @@ public class Bullet extends GameObject {
 
     private void collisions() {
         for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
+            if(handler.getObject(i).getId() == ObjectId.ENEMY){
+                if(getBounds().intersects(handler.getObject(i).getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    handler.removeObject(this);
+                    if(fltExplosionRadius > 0){
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        //arbitary value to make sure bomb doesnt explode multiple times
+                    }        
+                }
+            }
+            if(handler.getObject(i).getId() == ObjectId.BARRIER){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(this);

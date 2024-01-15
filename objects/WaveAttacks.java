@@ -12,13 +12,14 @@ public class WaveAttacks extends GameObject {
 
     private float fltStartAngle;
     private float fltSpread = 1;
-
+    private int intBoomRad;
     public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.handler = handler;
+        this.intBoomRad = intBoomRad;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -28,10 +29,8 @@ public class WaveAttacks extends GameObject {
         fltSpread += 15;
         fltWorldX+= fltVelX;
         fltWorldY += fltVelY;
+        collisions();
 
-        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
-            handler.removeObject(this);
-        }
     }
 
     public void draw(Graphics g) {
@@ -48,5 +47,30 @@ public class WaveAttacks extends GameObject {
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+    }
+
+    private void collisions() {
+        for(int i = 0; i < handler.objectList.size(); i++){
+            if(handler.getObject(i).getId() == ObjectId.ENEMY){
+                if(getBounds().intersects(handler.getObject(i).getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    if(intBoomRad > 0){
+                        handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
+                        //arbitary value to make sure bomb doesnt explode multiple times
+                    }        
+                }
+            }
+            if(handler.getObject(i).getId() == ObjectId.BARRIER){
+                if(getBounds().intersects(handler.getObject(i).getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    handler.removeObject(this);
+                    if(intBoomRad > 0){
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
+                        //arbitary value to make sure bomb doesnt explode multiple times
+                    }        
+                }
+            }        
+        }
     }
 }

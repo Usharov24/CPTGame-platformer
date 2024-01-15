@@ -118,7 +118,7 @@ public class EnemyBullet extends GameObject {
         }
     }
 
-    private float getDMG(){
+    public float getDMG(){
         return fltDmg;
     }
 }

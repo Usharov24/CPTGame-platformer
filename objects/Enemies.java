@@ -30,10 +30,9 @@ public class Enemies extends GameObject {
         this.fltVelX = fltVelX;
         this.intEnemyFloor = intEnemyFloor;
         this.fltVelY = fltVelY;
-        intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
-        this.intEnemyClass = 1;
-        this.intEnemyType = 3;
-        //determine sprites off of intenemyclass and enemy type later on
+        this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
+        this.intEnemyType = intEnemyType;
+        //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
         camObject = handler.getObject(Main.intSessionId - 1);
     }
