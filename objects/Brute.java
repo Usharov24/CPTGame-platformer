@@ -104,7 +104,7 @@ public class Brute extends GameObject {
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
 
-                    handler.addObject(new VacGrenade(fltWorldX + fltWidth/2 - 20, fltWorldY + fltHeight/2 - 20, fltDiffX * 40, fltDiffY * 40, 40, 40, System.currentTimeMillis(), ObjectId.BULLET, handler, ssm, biVacTexture, 0));
+                    handler.addObject(new VacGrenade(fltWorldX + fltWidth/2 - 20, fltWorldY + fltHeight/2 - 20, fltDiffX * 40, fltDiffY * 40, 40, 40, ObjectId.BULLET, handler, ssm, biVacTexture));
                     
                     if(intPosition == 0) ssm.sendText("h>a>aVAC~" + (fltWorldX + fltWidth/2 - 20) + "," + (fltWorldY + fltHeight/2 - 20) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 40 + "," + 40);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aVAC~" + (fltWorldX + fltWidth/2 - 20) + "," + (fltWorldY + fltHeight/2 - 20) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 40 + "," + 40);
