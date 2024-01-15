@@ -32,8 +32,52 @@ public class Enemies extends GameObject {
         this.fltVelY = fltVelY;
         this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
+        
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
+        if(intEnemyType == 1){
+            if(intEnemyClass == 1){
+                fltWidth = 40;
+                fltHealth = 100;
+                fltHeight = 40;
+                fltDmg = 40;
+
+            }
+            if(intEnemyClass == 2){
+                fltWidth = 60;
+                fltHealth = 250;
+                fltHeight = 60;
+                fltDmg = 100;
+            }
+        }
+        if(intEnemyType == 2){
+            if(intEnemyClass == 1){
+                fltWidth = 70;
+                fltHeight = 70;
+                fltDmg = 150;
+                fltHealth = 450;
+            }
+            if(intEnemyClass == 2){
+                fltWidth = 40;
+                fltHeight = 40;
+                fltDmg = 100;
+                fltHealth = 600;
+            }
+        }
+        if(intEnemyType == 3){
+            if(intEnemyClass == 2){
+                fltHeight = 100;
+                fltWidth = 100;
+                fltDmg = 300;
+                fltHealth = 600;
+            }
+            if(intEnemyClass == 1){
+                fltHeight = 40;
+                fltWidth = 40;
+                fltDmg = 150;
+                fltHealth = 600;
+            }
+        }
         camObject = handler.getObject(Main.intSessionId - 1);
     }
 
@@ -116,9 +160,9 @@ public class Enemies extends GameObject {
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 300) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 50, 50,  10, ObjectId.BULLET, handler, ssm, null, true, 350));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  10, ObjectId.BULLET, handler, ssm, null, true, 350));
                 }
                 /*if(intJumpCap == 0 && fltWorldY > fltTargetY && blnFalling == false){
                     fltVelY = -15;
