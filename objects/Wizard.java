@@ -264,8 +264,7 @@ public class Wizard extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
-            }
-            if(object.getId() == ObjectId.ITEM) {  
+            } else if(object.getId() == ObjectId.ITEM) {
                 handler.removeObject(handler.getObject(intCount));
                 ItemObject item = (ItemObject) object;
                 if(item.getRarity() == 1){ 
