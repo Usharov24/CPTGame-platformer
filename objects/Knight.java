@@ -65,10 +65,12 @@ public class Knight extends GameObject {
                 input.buttonSet.remove(InputButtons.W);
                 fltVelY = -45;
                 intJumpCount++;
+                blnFalling = true;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < intJumpCap) {
                 input.buttonSet.remove(InputButtons.SPACE);
                 fltVelY = -45;
                 intJumpCount++;
+                blnFalling = true;
             }
 
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
@@ -269,6 +271,7 @@ public class Knight extends GameObject {
                     fltVelY = 0;
                     blnFalling = false;
                     intJumpCount = 0;
+                    fltDashVelY = 0;
 
                     fltWorldY = object.getWorldY() - fltHeight;
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
