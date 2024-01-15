@@ -7,10 +7,13 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import framework.Main;
+import framework.ResourceLoader;
 
 
 public class CustomPanel extends JPanel {
-    private BufferedImage biTitle = null;
+
+    private ResourceLoader resLoader = new ResourceLoader();
+    private BufferedImage biTitle = resLoader.loadImage("/res\\Title.png");
     public CustomPanel() {
         super();
     }
@@ -28,7 +31,7 @@ public class CustomPanel extends JPanel {
         if(Main.state == Main.State.MAIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.drawImage(null, ALLBITS, ABORT, getFocusCycleRootAncestor());
+            g.drawImage(biTitle, 0, 0, null);
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -36,6 +39,9 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else if(Main.state == Main.State.SETTINGS) {
+            g.setColor(Color.black);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else if(Main.state == Main.State.GAME) {

@@ -24,7 +24,7 @@ public class Main implements ActionListener {
 
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
-    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
     private JPanel characterPanel = new JPanel(null);
 
     // Game Layered Pane
@@ -66,7 +66,6 @@ public class Main implements ActionListener {
     private BufferedImage BiBrute = null;
     private BufferedImage BiKnight = null;
     private BufferedImage BiVacGrenade = null;
-    private BufferedImage biTitle = resLoader.loadImage("/res\\Title.png");
 
     private Timer timer = new Timer(1000/60, this);
 
@@ -77,7 +76,7 @@ public class Main implements ActionListener {
     public static State state = State.MAIN_MENU;
 
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4), CHARACTER(5);
 
         private final int intPanelNumber;
 
@@ -164,8 +163,8 @@ public class Main implements ActionListener {
 
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
-            characterButtons[intCount].setSize(100,100);
-            characterButtons[intCount].setLocation((intCount < 2) ? 100 + 100 * intCount : 100 + 100 * (intCount - 2), (intCount < 2) ? 100 : 200);
+            characterButtons[intCount].setSize(300,300);
+            characterButtons[intCount].setLocation((intCount < 2) ? 300 + 300 * intCount : 300 + 300 * (intCount - 2), (intCount < 2) ? 10 : 310);
             characterButtons[intCount].addActionListener(this);
             characterPanel.add(characterButtons[intCount]);
         }
@@ -178,8 +177,8 @@ public class Main implements ActionListener {
         }
 
         // Will redo this
-        buttonReady.setSize(100, 100);
-        buttonReady.setLocation(950, 175);
+        buttonReady.setSize(800, 80);
+        buttonReady.setLocation(200, 630);
         buttonReady.addActionListener(this);
         buttonReady.setEnabled(false);
         characterPanel.add(buttonReady);
@@ -345,6 +344,7 @@ public class Main implements ActionListener {
                 } else if(strMessage.contains("mCHARACTER_PANEL")) {
                     theFrame.setContentPane(characterPanel);
                     theFrame.pack();
+                    state = State.CHARACTER;
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
@@ -473,6 +473,7 @@ public class Main implements ActionListener {
             ssm.sendText("h>a>mCHARACTER_PANEL");
             theFrame.setContentPane(characterPanel);
             theFrame.pack();
+            state = State.CHARACTER;
         }
 
         if(evt.getSource() == buttonReady) {
