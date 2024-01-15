@@ -85,10 +85,10 @@ public class Knight extends GameObject {
 
             if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 800 * fltFireRateMult && blnBoost == false) {
                 //Moving variables
-                float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
-                float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
+                float fltDiffX = input.fltMouseX - 640;
+                float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                
+                blnFalling = true;
             
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
@@ -96,6 +96,7 @@ public class Knight extends GameObject {
                 fltDashVelY = Math.round(fltDiffY * 50);
                 lngTimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
+                
             }
             else if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 400 * fltFireRateMult && blnBoost) {
                 //Moving variables

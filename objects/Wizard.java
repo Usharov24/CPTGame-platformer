@@ -146,8 +146,8 @@ public class Wizard extends GameObject {
             else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition);
 
             if(blnteleporting && input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)){
-                fltWorldX = input.fltMouseX;
-                fltWorldY = input.fltMouseY;
+                fltWorldX += input.fltMouseX - 640;
+                fltWorldY += input.fltMouseY - 360;
                 
                 blnFalling = true;
                 blnteleporting = false;
@@ -401,7 +401,7 @@ public class Wizard extends GameObject {
         return fltDef;
     }
 
-    public float getReflecDmg(){
+    public float getReflectDmg(){
         return fltReflectDmg;
     }
 }
