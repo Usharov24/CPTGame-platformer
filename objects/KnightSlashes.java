@@ -2,7 +2,6 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
@@ -14,7 +13,7 @@ public class KnightSlashes extends GameObject {
     private float fltStartAngle;
     private long lngbirth;
     
-    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, int intPeirceCount, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);

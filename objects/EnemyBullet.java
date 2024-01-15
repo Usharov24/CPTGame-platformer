@@ -1,3 +1,4 @@
+
 package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -6,20 +7,23 @@ import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.SuperSocketMaster;
+import java.awt.Color;
 
-public class Bullet extends GameObject {
+public class EnemyBullet extends GameObject {
 
     private BufferedImage biTexture;
 
     private float fltExplosionRadius;
     private boolean blnHoming;
+    private float fltDmg;
     
-    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intPeirceCount, int intBleedCount, float fltBurnDmg, float fltLifeSteal, int intCelebShot, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
+    public EnemyBullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.biTexture = biTexture;
         this.blnHoming = blnHoming;
+        this.fltDmg = fltDmg;
         this.fltExplosionRadius = fltExplosionRadius;
 
         camObject = handler.getObject(Main.intSessionId - 1);
@@ -51,19 +55,24 @@ public class Bullet extends GameObject {
             collisions();
         }
 
-        if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
+        /*if(fltWorldX > 1280 || fltWorldX < 0 || fltWorldY > 720 || fltWorldY < 0){
             handler.removeObject(this);
             if(fltExplosionRadius > 0){
                 handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                 //arbitary value to make sure bomb doesnt explode multiple time
             }  
         }
-
+        */
         
     }
 
     public void draw(Graphics g) {
         g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), null);
+        g.setColor(Color.red);
+
+        
+        
+        g.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
 
     public Rectangle getBounds() {
@@ -92,7 +101,7 @@ public class Bullet extends GameObject {
 
     private void collisions() {
         for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
+            if(handler.getObject(i).getId() == ObjectId.BARRIER){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(this);
