@@ -318,6 +318,20 @@ public class Enemies extends GameObject {
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
             }
+            if(object.getId() == ObjectId.BULLET){
+                if(getBounds().intersects(object.getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    handler.removeObject(object);
+                    
+                    Bullet bullet = (Bullet) object;
+                    if(bullet.getBoom()> 0){
+                        float fltExplosionRadius = bullet.getBoom();
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        //arbitary value to make sure bomb doesnt explode multiple times
+                    }        
+                }
+            }
             
         }
     }

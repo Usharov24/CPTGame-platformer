@@ -2,12 +2,15 @@ package components;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 import framework.Main;
 
-public class CustomPanel extends JPanel {
 
+public class CustomPanel extends JPanel {
+    private BufferedImage biTitle = null;
     public CustomPanel() {
         super();
     }
@@ -25,6 +28,7 @@ public class CustomPanel extends JPanel {
         if(Main.state == Main.State.MAIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
+            g.drawImage(null, ALLBITS, ABORT, getFocusCycleRootAncestor());
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());

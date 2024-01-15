@@ -37,11 +37,11 @@ public class Main implements ActionListener {
     private ChatPanel chatPanel;
 
     // Main Menu Components
-    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
-                                              new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this)};
+    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", null, this), new CustomButton(200, 100, "Join",null, this), 
+                                              new CustomButton(200, 100, "Help", null, this), new CustomButton(200, 100, "Quit",null, this)};
  
     // Back Buttons
-    private CustomButton[] backButtons = {new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this)};
+    private CustomButton[] backButtons = {new CustomButton(100, 100, "Back", null, this), new CustomButton(100, 100, "Back", null, this), new CustomButton(100, 100, "Back", null, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
@@ -66,6 +66,7 @@ public class Main implements ActionListener {
     private BufferedImage BiBrute = null;
     private BufferedImage BiKnight = null;
     private BufferedImage BiVacGrenade = null;
+    private BufferedImage biTitle = resLoader.loadImage("/res\\Title.png");
 
     private Timer timer = new Timer(1000/60, this);
 

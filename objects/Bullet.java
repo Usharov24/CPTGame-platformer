@@ -109,4 +109,8 @@ public class Bullet extends GameObject {
             }        
         }
     }
+
+    public int getBoom(){
+        return (int)fltExplosionRadius;
+    }
 }
