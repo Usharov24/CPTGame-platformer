@@ -60,17 +60,9 @@ public class WaveAttacks extends GameObject {
                     }        
                 }
             }
-            if(handler.getObject(i).getId() == ObjectId.BARRIER){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    handler.removeObject(this);
-                    if(intBoomRad > 0){
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
-                    }        
-                }
-            }        
+            if(fltWorldX < 0 || fltWorldX > 1920){
+                handler.removeObject(this);
+            }
         }
     }
 }

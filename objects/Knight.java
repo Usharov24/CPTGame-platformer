@@ -150,25 +150,25 @@ public class Knight extends GameObject {
     
                 }
                 lngTimer[2] = System.currentTimeMillis();
-                if(fltWorldX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, 50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, id, handler, ssm));
+                if(input.fltMouseX - 640 < 0){
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, 50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, ObjectId.BULLET, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, 50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, id, handler, ssm));
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, 50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, ObjectId.BULLET, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 100 * fltFireRateMult && blnBoost) {
                 lngTimer[2] = System.currentTimeMillis();
                 if(fltWorldX + fltWidth/2 > input.fltMouseX){
-                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135,  50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, id, handler, ssm));
+                    handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() + 300, 50, 50, 135,  50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, ObjectId.BULLET, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -35 +"," + (50) + "," + (50) + "," + 135);
                 }
                 else{
-                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270,  50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, id, handler, ssm));
+                    handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() + 300, 50, 50, 270,  50*fltDmgMult*fltAirDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, intPeirceCount, ObjectId.BULLET, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270);
                 }
@@ -278,82 +278,88 @@ public class Knight extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
-            }
-            if(object.getId() == ObjectId.ITEM) {  
+            }else if(object.getId() == ObjectId.ENEMY){
+                Enemies enemy = (Enemies) object;
+                fltHP -= enemy.getDMG();
+            } else if(object.getId() == ObjectId.ENEMY_BULLET){
+                EnemyBullet enemy = (EnemyBullet) object;
+                fltHP -= enemy.getDMG();
+                handler.removeObject(object);
+            } else if(object.getId() == ObjectId.ITEM) {  
                 handler.removeObject(handler.getObject(intCount));
                 ItemObject item = (ItemObject) object;
                 if(item.getRarity() == 1){ 
                     if(item.getPlacement() == 1){
                         fltDmgMult += 0.2;
                     }
-                    if(item.getPlacement() == 2){
+                    else if(item.getPlacement() == 2){
                         fltMaxHP += 20;
                         fltHP += 20;
                     }
-                    if(item.getPlacement() == 3){
+                    else if(item.getPlacement() == 3){
                         //add statement later using bln movement
                         intWungoosCount += 1;                       
                     }
-                    if(item.getPlacement() == 4){
+                    else if(item.getPlacement() == 4){
                         fltBSpeedMult *= 1.2;
                     }
-                    if(item.getPlacement() == 5){
+                    else if(item.getPlacement() == 5){
                         fltPSpeedMult *= 1.2;
                     }
-                    if(item.getPlacement() == 6){
+                    else if(item.getPlacement() == 6){
                         fltReflectDmg += 1;
                         //reflect 10% of the dmg and then mult by this
                     }
-                    if(item.getPlacement() == 7){
+                    else if(item.getPlacement() == 7){
                         intPeirceCount += 1;
                     }
-                    if(item.getPlacement() == 8){
+                    else if(item.getPlacement() == 8){
                         fltDef += 0.2;
                     }
 
-                    if(item.getPlacement() == 9){
+                    else if(item.getPlacement() == 9){
                         fltFireRateMult *= 0.9;
                     }
                 }
-                if(item.getRarity() == 2){ 
+                else if(item.getRarity() == 2){ 
                     if(item.getPlacement() == 1){
                         fltAirDmgMult += 0.2;
                     }
-                    if(item.getPlacement() == 2){
+                    else if(item.getPlacement() == 2){
                         fltMaxHP *= 0.2;
                         fltHP *= 0.2;
                     }
-                    if(item.getPlacement() == 3){
+                    else if(item.getPlacement() == 3){
                         intExplodeRad += 25;
                     }
-                    if(item.getPlacement() == 4){
+                    else if(item.getPlacement() == 4){
                         intJumpCap ++;
                     }
-                    if(item.getPlacement() == 5){
+                    else if(item.getPlacement() == 5){
                         intBleedCount += 1;
                     }
-                    if(item.getPlacement() == 6){
+                    else if(item.getPlacement() == 6){
                         intShurikanCount += 1;
                     }
-                    if(item.getPlacement() == 7){
+                    else if(item.getPlacement() == 7){
                         fltBurnDmg += 10;
                     }
                 }
-                if(item.getRarity() == 3){ 
+                else if(item.getRarity() == 3){ 
                     if(item.getPlacement() == 1){
                         fltLifeSteal += 0.2;
                     }
-                    if(item.getPlacement() == 2){
+                    else if(item.getPlacement() == 2){
                         //wont do anything for brute
                         blnHoming = true;
                     }
-                    if(item.getPlacement() == 3){
+                    else if(item.getPlacement() == 3){
                         fltRegen *= 2;
                     }
-                    if(item.getPlacement() == 4){
+                    else if(item.getPlacement() == 4){
                         fltFireRateMult *= 0.75;
                     }
-                    if(item.getPlacement() == 5){
+                    else if(item.getPlacement() == 5){
                         intCelebShot += 1;
                     }
                 }

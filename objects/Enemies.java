@@ -165,7 +165,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 300) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.BULLET, handler, ssm, null, false, 0));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
                 
                 
@@ -200,7 +200,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 1000) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  fltDmg, ObjectId.BULLET, handler, ssm, null, false, 250));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 250));
                 }
             }   
         }
@@ -221,7 +221,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 300) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.BULLET, handler, ssm, null, true, 350));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 350));
                 }
                 /*if(intJumpCap == 0 && fltWorldY > fltTargetY && blnFalling == false){
                     fltVelY = -15;
@@ -322,8 +322,8 @@ public class Enemies extends GameObject {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(object);
-                    
                     Bullet bullet = (Bullet) object;
+                    fltHP -= bullet.getDMG();
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         handler.removeObject(this);
@@ -341,6 +341,10 @@ public class Enemies extends GameObject {
     }
     public void setHP(float fltHp){
         this.fltHP = fltHp;
+    }
+
+    public float getHP(){
+        return fltHP;
     }
 
     public float getDMG(){

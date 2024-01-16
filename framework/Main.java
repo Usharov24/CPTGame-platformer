@@ -73,6 +73,7 @@ public class Main implements ActionListener {
     private ImageIcon ioSniper = new ImageIcon(getClass().getResource("/res/ioSniper.png"));
     private ImageIcon ioBrute = new ImageIcon(getClass().getResource("/res/ioBrute.png"));
     private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
+    private ImageIcon ioLogo = new ImageIcon(getClass().getResource("/res/ioLogo.png"));
     private Timer timer = new Timer(1000/60, this);
     private ImageIcon io = new ImageIcon("FireBall.png");
     public static long startTime = System.nanoTime();
@@ -199,7 +200,8 @@ public class Main implements ActionListener {
         thePanels[5].add(buttonReady);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
-        theFrame.setContentPane(thePanels[0]);
+        theFrame.setContentPane(thePanels[0]);  
+        theFrame.setIconImage(ioLogo.getImage());
         theFrame.pack();
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theFrame.setResizable(false);

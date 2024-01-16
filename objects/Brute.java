@@ -56,6 +56,7 @@ public class Brute extends GameObject {
     private BufferedImage biBulletTexture;
     private float fltPastDmgMult = 1;
     private boolean blnHoming = false;
+    private boolean blnFalling = false;
 
     public Brute(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
@@ -69,8 +70,12 @@ public class Brute extends GameObject {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
         if(intPosition == Main.intSessionId - 1) {
+            if(blnFalling){
+                fltPastDmgMult = fltDmgMult;
+                fltDmgMult *= fltAirDmgMult;
+            }
             if(!blnUlt) {
-                if(intJumpCount < 2 && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
+                if(intJumpCount < intJumpCap && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
                     input.buttonSet.remove(InputButtons.W);
                     input.buttonSet.remove(InputButtons.SPACE);
                     fltVelY = -45;
@@ -106,16 +111,44 @@ public class Brute extends GameObject {
 
                 if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 50 * fltFireRateMult) {
                     lngTimer[2] = System.currentTimeMillis();
-                    if(input.fltMouseX - 640 < 0) {
-                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
-                        
-                        if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
-                        else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);
-                    } else {
-                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                    if(blnFalling){
+                        fltPastDmgMult = fltDmgMult;
+                        fltDmgMult *= fltAirDmgMult;
+                    }
+                    lngTimer[2] = System.currentTimeMillis();
+                    for(int intcount = 0; intcount < intShurikanCount; intcount++){
+                        float fltDiffX = input.fltMouseX - 640;
+                        float fltDiffY = input.fltMouseY - 360;
+                        float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+                        float intRand1 = (float)Math.random() * 3, intRand2 = (float)Math.random() * 3;
+                        float intRand3 = (float)Math.random() * 3, intRand4 = (float)Math.random() * 3;
 
-                        if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
-                        else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270);
+                        fltDiffX /= fltLength;
+                        fltDiffY /= fltLength;
+
+                    
+                        if(intPosition == 1) {
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6 + "," + 4);
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 - intRand3) + "," + 6 + "," + 6 + "," + 4);
+                        } else {
+                            ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand1) + "," + (fltDiffY * 20 + intRand3) + "," + 6 + "," + 6 + "," + 4);
+                            ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6 + "," + 4);
+                        }
+
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad));
+        
+                    }
+                    if(input.fltMouseX - 640 < 0) {
+                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                        
+                        if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 135);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult+"," + (50) + "," + (50) + "," + 135);
+                    } else {
+                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+
+                        if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);
+                        else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);
                     }
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 3000) {
                     lngTimer[3] = System.currentTimeMillis();
@@ -131,6 +164,16 @@ public class Brute extends GameObject {
                     
                     if(intPosition == 0) ssm.sendText("h>a>aVAC~" + (fltWorldX + fltWidth/2 - 10) + "," + (fltWorldY + fltHeight/2 - 10) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 20 + "," + 20);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aVAC~" + (fltWorldX + fltWidth/2 - 10) + "," + (fltWorldY + fltHeight/2 - 10) + "," + (fltDiffX * 40) + "," + (fltDiffY * 40) + "," + 20 + "," + 20);
+                }
+
+                if(System.currentTimeMillis() - lngTimer[4] > 1000){
+                    lngTimer[4] = System.currentTimeMillis();
+                    if(blnMoving == false){
+                        fltHP += fltRegen;
+                    }
+                    else{
+                        fltHP += fltRegen + (fltRegen*intWungoosCount*0.3);
+                    }
                 }
 
                 fltVelY += 3;
@@ -151,8 +194,8 @@ public class Brute extends GameObject {
                 fltVelY += (float)(fltUltSpeed*Math.sin(Math.toRadians(fltAngle)));
                 fltVelX += (float)(fltUltSpeed*Math.cos(Math.toRadians(fltAngle)));
 
-                if(fltVelX > 35) fltVelX = 35;
-                else if(fltVelX < -35) fltVelX = -35;
+                if(fltVelX > 35 * fltPSpeedMult) fltVelX = 35 * fltPSpeedMult;
+                else if(fltVelX < -35 * fltPSpeedMult) fltVelX = -35 * fltPSpeedMult;
 
                 if(fltVelY > 35) fltVelY = 35;
                 else if(fltVelY < -35) fltVelY = -35;
@@ -167,6 +210,7 @@ public class Brute extends GameObject {
 
             if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition);
+            fltDmgMult = fltPastDmgMult;
         }
     }
 
@@ -238,6 +282,94 @@ public class Brute extends GameObject {
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
                     }
                 }
+            } else if(object.getId() == ObjectId.ENEMY){
+                Enemies enemy = (Enemies) object;
+                fltHP -= enemy.getDMG() / fltDef;
+                if(fltReflectDmg > 0){
+                    enemy.setHP(enemy.getHP() - enemy.getDMG()*fltReflectDmg);
+                }
+            } else if(object.getId() == ObjectId.ENEMY_BULLET){
+                EnemyBullet enemy = (EnemyBullet) object;
+                fltHP -= enemy.getDMG() / fltDef;
+                handler.removeObject(object);
+            } else if(object.getId() == ObjectId.ITEM) {  
+                handler.removeObject(handler.getObject(intCount));
+                ItemObject item = (ItemObject) object;
+                if(item.getRarity() == 1){ 
+                    if(item.getPlacement() == 1){
+                        fltDmgMult += 0.2;
+                    }
+                    else if(item.getPlacement() == 2){
+                        fltMaxHP += 20;
+                        fltHP += 20;
+                    }
+                    else if(item.getPlacement() == 3){
+                        //add statement later using bln movement
+                        intWungoosCount += 1;                       
+                    }
+                    else if(item.getPlacement() == 4){
+                        fltBSpeedMult *= 1.2;
+                    }
+                    else if(item.getPlacement() == 5){
+                        fltPSpeedMult *= 1.2;
+                    }
+                    else if(item.getPlacement() == 6){
+                        fltReflectDmg += 1;
+                        //reflect 10% of the dmg and then mult by this
+                    }
+                    else if(item.getPlacement() == 7){
+                        intPeirceCount += 1;
+                    }
+                    else if(item.getPlacement() == 8){
+                        fltDef += 0.2;
+                    }
+
+                    else if(item.getPlacement() == 9){
+                        fltFireRateMult *= 0.9;
+                    }
+                }
+                else if(item.getRarity() == 2){ 
+                    if(item.getPlacement() == 1){
+                        fltAirDmgMult += 0.2;
+                    }
+                    else if(item.getPlacement() == 2){
+                        fltMaxHP *= 0.2;
+                        fltHP *= 0.2;
+                    }
+                    else if(item.getPlacement() == 3){
+                        intExplodeRad += 25;
+                    }
+                    else if(item.getPlacement() == 4){
+                        intJumpCap ++;
+                    }
+                    else if(item.getPlacement() == 5){
+                        intBleedCount += 1;
+                    }
+                    else if(item.getPlacement() == 6){
+                        intShurikanCount += 1;
+                    }
+                    else if(item.getPlacement() == 7){
+                        fltBurnDmg += 10;
+                    }
+                }
+                else if(item.getRarity() == 3){ 
+                    if(item.getPlacement() == 1){
+                        fltLifeSteal += 0.2;
+                    }
+                    else if(item.getPlacement() == 2){
+                        //wont do anything for brute
+                        blnHoming = true;
+                    }
+                    else if(item.getPlacement() == 3){
+                        fltRegen *= 2;
+                    }
+                    else if(item.getPlacement() == 4){
+                        fltFireRateMult *= 0.75;
+                    }
+                    else if(item.getPlacement() == 5){
+                        intCelebShot += 1;
+                    }
+                }
             }
         }
     }
@@ -273,5 +405,25 @@ public class Brute extends GameObject {
         else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
         return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+    }
+
+    public float getHP(){
+        return fltHP;
+    }
+
+    public float getMaxHP(){
+        return fltMaxHP;
+    }
+
+    public void setHP(float fltHP){
+        this.fltHP = fltHP;
+    }
+
+    public float getDef(){
+        return fltDef;
+    }
+
+    public float getReflecDmg(){
+        return fltReflectDmg;
     }
 }
