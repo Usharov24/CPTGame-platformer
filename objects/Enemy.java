@@ -12,7 +12,7 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 import java.awt.Color;
 
-public class Enemies extends GameObject {
+public class Enemy extends GameObject {
     private int intEnemyType;
     private int intEnemyClass;
     private int intEnemyFloor;
@@ -20,7 +20,6 @@ public class Enemies extends GameObject {
     private float fltHP;
     private float fltTargetX;
     private float fltTargetY;
-    private boolean blnFalling = true;
     private double dblTimer = System.currentTimeMillis();
     private int intJumpCap = 0;
     private int intBleedCount = 0;
@@ -28,7 +27,7 @@ public class Enemies extends GameObject {
 
     
 
-    public Enemies(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.intEnemyFloor = intEnemyFloor;
@@ -135,6 +134,7 @@ public class Enemies extends GameObject {
                 }
             }
         }
+
         camObject = handler.getObject(Main.intSessionId - 1);
     }
 
@@ -146,10 +146,10 @@ public class Enemies extends GameObject {
             //crawlers
             if(intEnemyClass == 1){
                 if(fltTargetX > fltWorldX){
-                    fltWorldX +=8;
+                    fltVelX = 8;
                 }
                 else{
-                    fltWorldX -= 8;
+                    fltVelX = -8;
                 }
             }
             //shooters
@@ -212,7 +212,7 @@ public class Enemies extends GameObject {
                     fltWorldX +=10;
                 }
                 else{
-                    fltWorldX -= 10;
+                    fltVelX -= 10;
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
@@ -243,24 +243,23 @@ public class Enemies extends GameObject {
                 
             }
         }
+
         collisions();
-        if(blnFalling){
-            fltVelY += 3;
-        } 
+
+        fltVelY += 3;
+        
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
-        //if(fltHP <= 0 ){
-        //    handler.removeObject(this);
-        //}
+
+        /*if(fltHP <= 0 ){
+            handler.removeObject(this);
+        }*/
         if(intBleedCount >= 5){
             fltHP *= 0.6;
         }
-
         if(fltBurnDmg > 0){
             fltHP -= fltBurnDmg;
         }
-        
-        
     }
 
     public GameObject findNearestObject(float fltWorldX, float fltWorldY){
@@ -283,55 +282,71 @@ public class Enemies extends GameObject {
         return handler.getObject(intreturn);
     }
 
-    public void draw(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.red);
-        g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
-        
-    }
-
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
 
             if(object.getId() == ObjectId.BARRIER) {
                 if(getBounds().intersects(object.getBounds()) && fltVelX > 0) {
+                    intJumpCap = 0;
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
-                    intJumpCap = 0;
                 } else if(getBounds().intersects(object.getBounds()) && fltVelX < 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() + object.getWidth();
-                }else if(getBounds().intersects(object.getBounds()) && fltVelY > 0) {
+                }else if(getBounds2().intersects(object.getBounds()) && fltVelY > 0) {
                     fltVelY = 0;
-                    blnFalling = false;
                     fltWorldY = object.getWorldY() - fltHeight;
-                } else if(getBounds().intersects(object.getBounds()) && fltVelY < 0) {
+                } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
-            }
-            if(object.getId() == ObjectId.BULLET){
+            } else if(object.getId() == ObjectId.BULLET) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(object);
                     Bullet bullet = (Bullet) object;
                     fltHP -= bullet.getDMG();
+
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                     }        
                 }
             }
-            
         }
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle((int)fltWorldX, (int)fltWorldY, (int)fltHeight, (int)fltWidth);
+    public void draw(Graphics g) {
+        System.out.println(fltWorldX + " " + fltWorldY);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setColor(Color.green);
+        g2d.fill(getBounds());
+        g2d.setColor(Color.cyan);
+        g2d.fill(getBounds2());
+        g2d.setColor(Color.red);
+        g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
+
+    public Rectangle getBounds() {
+        float fltBoundsX = fltWorldX + fltVelX - camObject.getWorldX() - camObject.getWidth()/2;
+
+        if(fltBoundsX > fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2;
+        else if(fltBoundsX < fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2;
+
+        return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+    }
+
+    public Rectangle getBounds2() {
+        float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
+
+        if(fltBoundsY > fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2;
+        else if(fltBoundsY < fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2;
+
+        return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+    }
+
     public void setHP(float fltHp){
         this.fltHP = fltHp;
     }
@@ -340,9 +355,7 @@ public class Enemies extends GameObject {
         return fltHP;
     }
 
-    public float getDMG(){
+    public float getDmg(){
         return fltDmg;
     }
-
-
 }

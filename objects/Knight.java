@@ -247,17 +247,19 @@ public class Knight extends GameObject {
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
 
-            fltWorldX += fltVelX + fltDashVelX + intRecoilX;
-            fltWorldY += fltVelY + fltDashVelY + intRecoilY;
-            
+            fltVelX += fltDashVelX + intRecoilX;
+            fltVelY += fltDashVelY + intRecoilY;
+
+            collisions();
+
+            fltWorldX += fltVelX;
+            fltWorldY += fltVelY;
             
             if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
         } else {
             camObject = handler.getObject(Main.intSessionId - 1);
         }
-
-        collisions();
     }
 
     private void collisions() {
@@ -283,8 +285,8 @@ public class Knight extends GameObject {
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
             }else if(object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())){
-                Enemies enemy = (Enemies) object;
-                fltHP -= enemy.getDMG();
+                Enemy enemy = (Enemy) object;
+                fltHP -= enemy.getDmg();
             } else if(object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())){
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG();
@@ -383,11 +385,6 @@ public class Knight extends GameObject {
             g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
         } else {
             g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
-        }
-        // TEMP
-        if(intPosition == Main.intSessionId - 1) {
-            g2d.setColor(Color.red);
-            g2d.draw(new Rectangle((int)-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30));
         }
     }
 
