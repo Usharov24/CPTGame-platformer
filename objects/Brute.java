@@ -140,12 +140,12 @@ public class Brute extends GameObject {
         
                     }
                     if(input.fltMouseX - 640 < 0) {
-                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, id, handler, ssm));
                         
                         if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 135);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult+"," + (50) + "," + (50) + "," + 135);
                     } else {
-                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, id, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);

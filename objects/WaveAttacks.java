@@ -13,6 +13,13 @@ public class WaveAttacks extends GameObject {
     private float fltStartAngle;
     private float fltSpread = 1;
     private int intBoomRad;
+    private float fltExplosionRadius;
+    private float fltDmg;
+    private int intBleedCount;
+    private float fltBurnDmg;
+    private float fltLifeSteal;
+    private int intSender;
+    private int intCelebShot;
     public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
@@ -64,5 +71,32 @@ public class WaveAttacks extends GameObject {
                 handler.removeObject(this);
             }
         }
+    }
+
+    public int getBoom(){
+        return (int)fltExplosionRadius;
+    }
+    public float getDMG(){
+        return fltDmg;
+    }
+
+    public float getBurn(){
+        return fltBurnDmg;
+    }
+
+    public float getBleed(){
+        return intBleedCount;
+    }
+
+    public int getChar(){
+        return this.intSender;
+    }
+
+    public float getLifeSteal(){
+        return this.fltLifeSteal;
+    }
+
+    public float getCelebShot(){
+        return this.intCelebShot;
     }
 }
