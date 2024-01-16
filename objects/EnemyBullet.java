@@ -96,7 +96,7 @@ public class EnemyBullet extends GameObject {
             if(handler.getObject(i).getId() == ObjectId.BARRIER){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
-                    handler.removeObject(this);
+                    //handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.addObject(new EnemyExplosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times

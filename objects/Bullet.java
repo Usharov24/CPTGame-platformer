@@ -14,8 +14,15 @@ public class Bullet extends GameObject {
     private float fltExplosionRadius;
     private boolean blnHoming;
     private float fltDmg;
+    private int intBleedCount;
+    private float fltBurnDmg;
+    private int intPeirceCount;
+    private float fltLifeSteal;
+    private int intSender;
+    private int intCelebShot;
+
     
-    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intPeirceCount, int intBleedCount, float fltBurnDmg, float fltLifeSteal, int intCelebShot, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
+    public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intPeirceCount, int intBleedCount, float fltBurnDmg, float fltLifeSteal, int intCelebShot, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius, int intSender) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
@@ -23,7 +30,10 @@ public class Bullet extends GameObject {
         this.blnHoming = blnHoming;
         this.fltExplosionRadius = fltExplosionRadius;
         this.fltDmg = fltDmg;
-
+        this.intBleedCount = intBleedCount;
+        this.fltBurnDmg = fltBurnDmg;
+        this.intPeirceCount = intPeirceCount;
+        this.intSender = intSender;
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
@@ -117,5 +127,33 @@ public class Bullet extends GameObject {
     }
     public float getDMG(){
         return fltDmg;
+    }
+
+    public float getBurn(){
+        return fltBurnDmg;
+    }
+
+    public float getBleed(){
+        return intBleedCount;
+    }
+
+    public int getPeirce(){
+        return intPeirceCount;
+    }
+
+    public void setPeirce(int intPeirceCount){
+        this.intPeirceCount = intPeirceCount;
+    }
+
+    public int getChar(){
+        return this.intSender;
+    }
+
+    public float getLifeSteal(){
+        return this.fltLifeSteal;
+    }
+
+    public float getCelebShot(){
+        return this.intCelebShot;
     }
 }

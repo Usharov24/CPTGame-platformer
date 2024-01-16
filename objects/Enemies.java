@@ -35,10 +35,7 @@ public class Enemies extends GameObject {
         this.fltVelY = fltVelY;
         this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
-        this.intEnemyType = 3;
-        this.intEnemyClass = 1;
         this.fltDmg = intEnemyFloor;
-
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
         if(intEnemyType == 1){
@@ -252,9 +249,9 @@ public class Enemies extends GameObject {
         } 
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
-        if(fltHP <= 0 ){
-            handler.removeObject(this);
-        }
+        //if(fltHP <= 0 ){
+        //    handler.removeObject(this);
+        //}
         if(intBleedCount >= 5){
             fltHP *= 0.6;
         }
@@ -262,6 +259,7 @@ public class Enemies extends GameObject {
         if(fltBurnDmg > 0){
             fltHP -= fltBurnDmg;
         }
+        
         
     }
 
@@ -288,9 +286,6 @@ public class Enemies extends GameObject {
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(Color.red);
-
-        
-        
         g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         
     }
