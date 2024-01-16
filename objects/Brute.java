@@ -106,7 +106,7 @@ public class Brute extends GameObject {
 
                 if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 50 * fltFireRateMult) {
                     lngTimer[2] = System.currentTimeMillis();
-                    if(fltWorldX + fltWidth/2 > input.fltMouseX) {
+                    if(input.fltMouseX - 640 < 0) {
                         handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
                         
                         if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + (50) + "," + (50) + "," + 135);

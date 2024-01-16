@@ -1,11 +1,13 @@
 package framework;
-import java.awt.Container;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,15 +21,16 @@ import objects.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 
 public class Main implements ActionListener {
 
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
-    private JPanel characterPanel = new JPanel(null);
 
     // Game Layered Pane
+    
     private JLayeredPane gameLayeredPane = new JLayeredPane();
 
     // Map
@@ -66,9 +69,12 @@ public class Main implements ActionListener {
     private BufferedImage BiBrute = null;
     private BufferedImage BiKnight = null;
     private BufferedImage BiVacGrenade = null;
-
+    private ImageIcon ioWizard = new ImageIcon(getClass().getResource("/res/ioWiz.png"));
+    private ImageIcon ioSniper = new ImageIcon(getClass().getResource("/res/ioSniper.png"));
+    private ImageIcon ioBrute = new ImageIcon(getClass().getResource("/res/ioBrute.png"));
+    private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
     private Timer timer = new Timer(1000/60, this);
-
+    private ImageIcon io = new ImageIcon("FireBall.png");
     public static long startTime = System.nanoTime();
 
     private SuperSocketMaster ssm;
@@ -112,7 +118,7 @@ public class Main implements ActionListener {
         gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
         gameLayeredPane.setLayout(null);
         mapPanel.setPreferredSize(new Dimension(1280, 720));
-        characterPanel.setPreferredSize(new Dimension(1280, 720));
+        thePanels[5].setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -165,10 +171,19 @@ public class Main implements ActionListener {
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             characterButtons[intCount].setSize(300,300);
             characterButtons[intCount].setLocation((intCount < 2) ? 300 + 300 * intCount : 300 + 300 * (intCount - 2), (intCount < 2) ? 10 : 310);
+            characterButtons[intCount].setVerticalTextPosition(JButton.BOTTOM);
+            characterButtons[intCount].setHorizontalTextPosition(JButton.CENTER);
             characterButtons[intCount].addActionListener(this);
-            characterPanel.add(characterButtons[intCount]);
+            thePanels[5].add(characterButtons[intCount]);
         }
 
+        characterButtons[0].setIcon(ioSniper);
+        characterButtons[1].setIcon(ioBrute);
+        characterButtons[2].setIcon(ioKnight);
+        characterButtons[3].setIcon(ioWizard);
+
+        //(ioWizard, BorderLayout.SOUTH);
+        
         // Back Buttons
         for(int intCount = 0; intCount < 3; intCount++){
             backButtons[intCount].setLocation(20, 20);
@@ -181,7 +196,7 @@ public class Main implements ActionListener {
         buttonReady.setLocation(200, 630);
         buttonReady.addActionListener(this);
         buttonReady.setEnabled(false);
-        characterPanel.add(buttonReady);
+        thePanels[5].add(buttonReady);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         theFrame.setContentPane(thePanels[0]);
@@ -342,7 +357,7 @@ public class Main implements ActionListener {
                     characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
                     if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
                 } else if(strMessage.contains("mCHARACTER_PANEL")) {
-                    theFrame.setContentPane(characterPanel);
+                    theFrame.setContentPane(thePanels[5]);
                     theFrame.pack();
                     state = State.CHARACTER;
                 } else if(strMessage.contains("mGAME_PANEL")) {
@@ -471,7 +486,7 @@ public class Main implements ActionListener {
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");
-            theFrame.setContentPane(characterPanel);
+            theFrame.setContentPane(thePanels[5]);
             theFrame.pack();
             state = State.CHARACTER;
         }
