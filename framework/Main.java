@@ -441,7 +441,6 @@ public class Main implements ActionListener{
             }
 
             netTextFields[1].setText(new String(chrCharacters));
-        
             netStartButton.setEnabled(true);
             netButtons[0].setEnabled(false);
         } else if(evt.getSource() == netButtons[1]) {
@@ -454,9 +453,7 @@ public class Main implements ActionListener{
 
             ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
             ssm.connect();
-
             ssm.sendText("c0>h>mJOIN");
-
             netButtons[1].setEnabled(false);
         }
 
@@ -485,7 +482,6 @@ public class Main implements ActionListener{
             }
         }
         intCharacterCheck = 0;
-
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");

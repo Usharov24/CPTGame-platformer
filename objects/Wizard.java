@@ -411,7 +411,7 @@ public class Wizard extends GameObject {
         return fltDef;
     }
 
-    public float getReflectDmg(){
+    public float getReflecDmg(){
         return fltReflectDmg;
     }
 
