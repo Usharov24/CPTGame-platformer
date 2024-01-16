@@ -94,6 +94,10 @@ public class CustomPanel extends JPanel {
                 }
             }
 
+            if(fltSniperHP <= 0 && fltBruteHP <= 0 && fltKnightHP <= 0 && fltWizardHP <= 0 ){
+                System.exit(0);
+            }
+
             g.setColor(Color.gray);
             g.fillRect(0, 0, getWidth(), getHeight()/5);
 

@@ -412,7 +412,7 @@ public class Main implements ActionListener{
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
-            System.exit(2147483647);
+            System.exit(0);
         } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
