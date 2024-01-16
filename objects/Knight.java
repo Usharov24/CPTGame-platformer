@@ -255,6 +255,7 @@ public class Knight extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             
+            
             if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition);
         } else {
@@ -386,6 +387,11 @@ public class Knight extends GameObject {
         } else {
             g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
+        // TEMP
+        if(intPosition == Main.intSessionId - 1) {
+            g2d.setColor(Color.red);
+            g2d.draw(new Rectangle((int)-100 - (int)fltWorldX, 720 - (int)fltWorldY, 1280, 30));
+        }
     }
 
     public Rectangle getBounds() {
@@ -422,7 +428,7 @@ public class Knight extends GameObject {
         return fltDef;
     }
 
-    public float getReflecDmg(){
+    public float getReflectDmg(){
         return fltReflectDmg;
     }
 

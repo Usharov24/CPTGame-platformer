@@ -137,10 +137,10 @@ public class Wizard extends GameObject {
             if(fltVelY > 35) fltVelY = 35;
             else if(fltVelY < -35) fltVelY = -35;
 
-            collisions();
-
             fltWorldX += fltVelX + fltDashVel;
             fltWorldY += fltVelY;
+
+            collisions();
             
             if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition);
@@ -411,7 +411,7 @@ public class Wizard extends GameObject {
         return fltDef;
     }
 
-    public float getReflecDmg(){
+    public float getReflectDmg(){
         return fltReflectDmg;
     }
 

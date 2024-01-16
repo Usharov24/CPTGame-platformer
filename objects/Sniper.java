@@ -252,8 +252,8 @@ public class Sniper extends GameObject {
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
 
-            fltVelX += fltDashVel + intRecoilX;
-            fltVelY += intRecoilY;
+            fltWorldX += fltVelX + fltDashVel + intRecoilX;
+            fltWorldY += fltVelY + intRecoilY;
 
             collisions();
 
@@ -432,7 +432,7 @@ public class Sniper extends GameObject {
         return fltDef;
     }
 
-    public float getReflecDmg(){
+    public float getReflectDmg(){
         return fltReflectDmg;
     }
 
