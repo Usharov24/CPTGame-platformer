@@ -390,7 +390,7 @@ public class Main implements ActionListener{
                     gameLayeredPane.add(chatPanel, Integer.valueOf(102));
                     gameLayeredPane.repaint();
 
-                    theFrame.setContentPane(chatPanel);
+                    theFrame.setContentPane(thePanels[4]);
                     gameLayeredPane.requestFocus(true);
                     thePanels[4].requestFocus(true);
                     chatPanel.requestFocus(true);
@@ -543,7 +543,7 @@ public class Main implements ActionListener{
             gameLayeredPane.add(chatPanel, Integer.valueOf(102));
             gameLayeredPane.repaint();
 
-            theFrame.setContentPane(chatPanel);
+            theFrame.setContentPane(thePanels[4]);
             gameLayeredPane.requestFocus(true);
             thePanels[4].requestFocus(true);
             chatPanel.requestFocus(true);
