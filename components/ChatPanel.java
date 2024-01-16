@@ -33,11 +33,15 @@ public class ChatPanel extends JPanel implements ActionListener {
         if(evt.getSource() == sendButton){
             try{
                 String strMessage = chatInput.getText();
-                ssm.sendText(strMessage);
-                chatTextArea.setText(strMessage);
+                ssm.sendText(strMessage+"\n");
+                chatTextArea.append(strMessage+"\n");
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
+        }
+        if(evt.getSource() == ssm){
+            String strMessage = ssm.readText();
+            chatTextArea.append(strMessage+"\n");
         }
     }
 }

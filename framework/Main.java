@@ -1,4 +1,5 @@
 package framework;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,14 +24,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
 
-public class Main implements ActionListener {
+public class Main implements ActionListener{
 
+    // Frame
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
 
     // Game Layered Pane
-    
     private JLayeredPane gameLayeredPane = new JLayeredPane();
 
     // Map
@@ -44,7 +45,7 @@ public class Main implements ActionListener {
                                               new CustomButton(200, 100, "Help", null, this), new CustomButton(200, 100, "Quit",null, this)};
  
     // Back Buttons
-    private CustomButton[] backButtons = {new CustomButton(100, 100, "Back", null, this), new CustomButton(100, 100, "Back", null, this), new CustomButton(100, 100, "Back", null, this)};
+    private CustomButton[] backButtons = {new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
@@ -389,7 +390,7 @@ public class Main implements ActionListener {
                     gameLayeredPane.add(chatPanel, Integer.valueOf(102));
                     gameLayeredPane.repaint();
 
-                    theFrame.setContentPane(thePanels[4]);
+                    theFrame.setContentPane(chatPanel);
                     gameLayeredPane.requestFocus(true);
                     thePanels[4].requestFocus(true);
                     chatPanel.requestFocus(true);
@@ -411,7 +412,7 @@ public class Main implements ActionListener {
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
-            System.exit(0);
+            System.exit(2147483647);
         } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
@@ -542,7 +543,7 @@ public class Main implements ActionListener {
             gameLayeredPane.add(chatPanel, Integer.valueOf(102));
             gameLayeredPane.repaint();
 
-            theFrame.setContentPane(thePanels[4]);
+            theFrame.setContentPane(chatPanel);
             gameLayeredPane.requestFocus(true);
             thePanels[4].requestFocus(true);
             chatPanel.requestFocus(true);

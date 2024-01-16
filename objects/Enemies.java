@@ -305,8 +305,6 @@ public class Enemies extends GameObject {
                 }else if(getBounds().intersects(object.getBounds()) && fltVelY > 0) {
                     fltVelY = 0;
                     blnFalling = false;
-
-
                     fltWorldY = object.getWorldY() - fltHeight;
                 } else if(getBounds().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
