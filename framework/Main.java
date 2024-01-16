@@ -1,11 +1,9 @@
 package framework;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,13 +15,13 @@ import javax.swing.Timer;
 import components.*;
 import objects.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-public class Main implements ActionListener {
+public class Main implements ActionListener{
 
+    // Frame
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
+    // Panels
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
     private JPanel characterPanel = new JPanel(null);
 

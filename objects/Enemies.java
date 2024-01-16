@@ -23,7 +23,6 @@ public class Enemies extends GameObject {
     private boolean blnFalling = true;
     private double dblTimer = System.currentTimeMillis();
     private int intJumpCap = 0;
-    
 
     public Enemies(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
@@ -242,8 +241,6 @@ public class Enemies extends GameObject {
                 }else if(getBounds().intersects(object.getBounds()) && fltVelY > 0) {
                     fltVelY = 0;
                     blnFalling = false;
-
-
                     fltWorldY = object.getWorldY() - fltHeight;
                 } else if(getBounds().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
