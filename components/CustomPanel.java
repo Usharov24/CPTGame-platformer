@@ -109,6 +109,9 @@ public class CustomPanel extends JPanel {
             g.fillRect(100+(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), 76, intBarWidth-(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
             g.fillRect(100+(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), 106, intBarWidth-(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
 
+            g.setColor(Color.gray);
+            g.fillRect(0, 0, 100, getHeight()/5);
+
             for(int intBar = 0; intBar <= 3; intBar++){
                 g.setColor(Color.black);
                 g.drawRect(100, 16+30*intBar, intBarWidth, intBarHeight);
