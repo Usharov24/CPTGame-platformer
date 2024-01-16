@@ -139,12 +139,12 @@ public class Brute extends GameObject {
                         handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad, 0));
                     }
                     if(input.fltMouseX - 640 < 0) {
-                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                        handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 135, 0, 0, 0, 0, 0, 0, id, handler, ssm));
                         
                         if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 135);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 * fltBSpeedMult+"," + (50) + "," + (50) + "," + 135);
                     } else {
-                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, 0, id, handler, ssm));
+                        handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20 * fltBSpeedMult, System.currentTimeMillis() - 75, 50, 50, 270, 0, 0, 0, 0, 0, 0, id, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 * fltBSpeedMult +"," + (50) + "," + (50) + "," + 270);

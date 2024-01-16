@@ -13,8 +13,15 @@ public class KnightSlashes extends GameObject {
     private float fltStartAngle;
     private long lngbirth;
     private int intBoomRad;
+    private float fltExplosionRadius;
+    private float fltDmg;
+    private int intBleedCount;
+    private float fltBurnDmg;
+    private float fltLifeSteal;
+    private int intSender;
+    private int intCelebShot;
     
-    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, int intPeirceCount, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
@@ -67,5 +74,32 @@ public class KnightSlashes extends GameObject {
                 handler.removeObject(this);
             }      
         }
+    }
+
+    public int getBoom(){
+        return (int)fltExplosionRadius;
+    }
+    public float getDMG(){
+        return fltDmg;
+    }
+
+    public float getBurn(){
+        return fltBurnDmg;
+    }
+
+    public float getBleed(){
+        return intBleedCount;
+    }
+
+    public int getChar(){
+        return this.intSender;
+    }
+
+    public float getLifeSteal(){
+        return this.fltLifeSteal;
+    }
+
+    public float getCelebShot(){
+        return this.intCelebShot;
     }
 }
