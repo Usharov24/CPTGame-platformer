@@ -2,7 +2,6 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import framework.Main;
 import framework.ObjectHandler;
@@ -12,37 +11,51 @@ import framework.SuperSocketMaster;
 
 public class VacGrenade extends GameObject {
 
-    private BufferedImage biImg;
-    private int intLifetime = 600;
-    private boolean blnActive = false;long previous = 0;
+    private BufferedImage[] biTextures;
+    private int intStartTime;
+    private boolean blnActive = false;
 
-    public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biImg) {
+    public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage[] biTextures) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
-        this.biImg = biImg;
+        this.biTextures = biTextures;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
     public void update() {
-        long current = System.currentTimeMillis() - previous;
-        System.out.println(current);
-        previous = current;
         if(blnActive) {
-            Suck(FindNear());
-            if((intLifetime -= 1) == 0) {
+            for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
+                GameObject object = handler.getObject(intCount);
+
+                if(object.getId() == ObjectId.ENEMY) {
+                    float fltDiffX = fltWorldX + fltWidth/2 - object.getWorldX() - object.getWidth()/2;
+                    float fltDiffY = fltWorldY + fltHeight/2 - object.getWorldY() - object.getHeight()/2;
+                    float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+
+                    if(fltLength <= 400) {
+                        fltDiffX /= fltLength;
+                        fltDiffY /= fltLength;
+
+                        object.setWorldX(object.getWorldX() + fltDiffX * 12);
+                        object.setWorldY(object.getWorldY() + fltDiffY * 12);
+                    }
+                }
+            }
+            
+            if(((int)System.currentTimeMillis() - intStartTime)/1000 == 10) {
                 handler.removeObject(this);
             }
         }
 
         fltVelY += 3;
 
-        if(fltVelX > 35) fltVelX = 35;
-        else if(fltVelX < -35) fltVelX = -35;
+        if(fltVelX > 30) fltVelX = 30;
+        else if(fltVelX < -30) fltVelX = -30;
 
-        if(fltVelY > 35) fltVelY = 35;
-        else if(fltVelY < -35) fltVelY = -35;
+        if(fltVelY > 30) fltVelY = 30;
+        else if(fltVelY < -30) fltVelY = -30;
 
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
@@ -62,8 +75,10 @@ public class VacGrenade extends GameObject {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() + object.getWidth();
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY > 0) {
+                    if(intStartTime == 0) intStartTime = (int)System.currentTimeMillis();
                     blnActive = true;
                     fltVelY = 0;
+                    fltVelX = 0;
                     fltWorldY = object.getWorldY() - fltHeight;
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
@@ -74,7 +89,8 @@ public class VacGrenade extends GameObject {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biImg, (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+        if(blnActive) g.drawImage(biTextures[1], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+        else g.drawImage(biTextures[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
     }
 
     public Rectangle getBounds() {
@@ -93,47 +109,5 @@ public class VacGrenade extends GameObject {
         else if(fltBoundsY < fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2;
 
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
-    }
-
-    private ArrayList<Integer> FindNear() {
-        float fltDistX = 0;
-        float fltDistY = 0;
-        float fltTotalDist = 0;
-        ArrayList<Integer> arylist = new ArrayList<Integer>();
-        for(int i = 0; i < handler.objectList.size(); i++) {
-            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO) {
-                fltDistX = fltWorldX - handler.getObject(i).getWorldX();
-                fltDistY = fltWorldY - handler.getObject(i).getWorldY();
-                fltTotalDist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-                if(fltTotalDist < 400){
-                    arylist.add(i);
-                }
-            }
-        }
-        return arylist;
-    }
-
-    private void Suck(ArrayList<Integer> arylist) {
-        float fltTargetX;
-        float fltTargetY;
-        for(int i = 0; arylist.size() > i; i++){
-            fltTargetX = handler.getObject(i).getWorldX();
-            fltTargetY = handler.getObject(i).getWorldY();
-
-            if(fltWorldX > fltTargetX) {
-                handler.getObject(i).setWorldX(fltTargetX + 5);
-            }
-            if(fltWorldX < fltTargetX) {
-                handler.getObject(i).setWorldX(fltTargetX - 5);
-            }
-            if(fltWorldY > fltTargetY) {
-                handler.getObject(i).setWorldY(fltTargetY + 5);
-            }
-            if(fltWorldY < fltTargetY) {
-                handler.getObject(i).setWorldY(fltTargetY - 5);
-            }
-        }
-
-
     }
 }

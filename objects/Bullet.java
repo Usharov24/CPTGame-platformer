@@ -13,6 +13,7 @@ public class Bullet extends GameObject {
 
     private float fltExplosionRadius;
     private boolean blnHoming;
+    private float fltDmg;
     
     public Bullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intPeirceCount, int intBleedCount, float fltBurnDmg, float fltLifeSteal, int intCelebShot, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
@@ -21,6 +22,7 @@ public class Bullet extends GameObject {
         this.biTexture = biTexture;
         this.blnHoming = blnHoming;
         this.fltExplosionRadius = fltExplosionRadius;
+        this.fltDmg = fltDmg;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -108,5 +110,12 @@ public class Bullet extends GameObject {
                 }
             }        
         }
+    }
+
+    public int getBoom(){
+        return (int)fltExplosionRadius;
+    }
+    public float getDMG(){
+        return fltDmg;
     }
 }

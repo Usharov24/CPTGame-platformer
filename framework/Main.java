@@ -1,9 +1,14 @@
 package framework;
+
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,15 +20,16 @@ import javax.swing.Timer;
 import components.*;
 import objects.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 
 public class Main implements ActionListener{
 
     // Frame
     public static JFrame theFrame = new JFrame("CPT Game Proto");
 
-    // Panels
-    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
-    private JPanel characterPanel = new JPanel(null);
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
 
     // Game Layered Pane
     private JLayeredPane gameLayeredPane = new JLayeredPane();
@@ -35,11 +41,11 @@ public class Main implements ActionListener{
     private ChatPanel chatPanel;
 
     // Main Menu Components
-    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this), 
-                                              new CustomButton(200, 100, null, this), new CustomButton(200, 100, null, this)};
+    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", null, this), new CustomButton(200, 100, "Join",null, this), 
+                                              new CustomButton(200, 100, "Help", null, this), new CustomButton(200, 100, "Quit",null, this)};
  
     // Back Buttons
-    private CustomButton[] backButtons = {new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this), new CustomButton(100, 100, null, this)};
+    private CustomButton[] backButtons = {new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
@@ -64,9 +70,13 @@ public class Main implements ActionListener{
     private BufferedImage BiBrute = null;
     private BufferedImage BiKnight = null;
     private BufferedImage BiVacGrenade = null;
-
+    private ImageIcon ioWizard = new ImageIcon(getClass().getResource("/res/ioWiz.png"));
+    private ImageIcon ioSniper = new ImageIcon(getClass().getResource("/res/ioSniper.png"));
+    private ImageIcon ioBrute = new ImageIcon(getClass().getResource("/res/ioBrute.png"));
+    private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
+    private ImageIcon ioLogo = new ImageIcon(getClass().getResource("/res/ioLogo.png"));
     private Timer timer = new Timer(1000/60, this);
-
+    private ImageIcon io = new ImageIcon("FireBall.png");
     public static long startTime = System.nanoTime();
 
     private SuperSocketMaster ssm;
@@ -74,7 +84,7 @@ public class Main implements ActionListener{
     public static State state = State.MAIN_MENU;
 
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4), CHARACTER(5);
 
         private final int intPanelNumber;
 
@@ -110,7 +120,7 @@ public class Main implements ActionListener{
         gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
         gameLayeredPane.setLayout(null);
         mapPanel.setPreferredSize(new Dimension(1280, 720));
-        characterPanel.setPreferredSize(new Dimension(1280, 720));
+        thePanels[5].setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -161,12 +171,21 @@ public class Main implements ActionListener{
 
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
-            characterButtons[intCount].setSize(100,100);
-            characterButtons[intCount].setLocation((intCount < 2) ? 100 + 100 * intCount : 100 + 100 * (intCount - 2), (intCount < 2) ? 100 : 200);
+            characterButtons[intCount].setSize(300,300);
+            characterButtons[intCount].setLocation((intCount < 2) ? 300 + 300 * intCount : 300 + 300 * (intCount - 2), (intCount < 2) ? 10 : 310);
+            characterButtons[intCount].setVerticalTextPosition(JButton.BOTTOM);
+            characterButtons[intCount].setHorizontalTextPosition(JButton.CENTER);
             characterButtons[intCount].addActionListener(this);
-            characterPanel.add(characterButtons[intCount]);
+            thePanels[5].add(characterButtons[intCount]);
         }
 
+        characterButtons[0].setIcon(ioSniper);
+        characterButtons[1].setIcon(ioBrute);
+        characterButtons[2].setIcon(ioKnight);
+        characterButtons[3].setIcon(ioWizard);
+
+        //(ioWizard, BorderLayout.SOUTH);
+        
         // Back Buttons
         for(int intCount = 0; intCount < 3; intCount++){
             backButtons[intCount].setLocation(20, 20);
@@ -175,14 +194,15 @@ public class Main implements ActionListener{
         }
 
         // Will redo this
-        buttonReady.setSize(100, 100);
-        buttonReady.setLocation(950, 175);
+        buttonReady.setSize(800, 80);
+        buttonReady.setLocation(200, 630);
         buttonReady.addActionListener(this);
         buttonReady.setEnabled(false);
-        characterPanel.add(buttonReady);
+        thePanels[5].add(buttonReady);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
-        theFrame.setContentPane(thePanels[0]);
+        theFrame.setContentPane(thePanels[0]);  
+        theFrame.setIconImage(ioLogo.getImage());
         theFrame.pack();
         theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theFrame.setResizable(false);
@@ -340,8 +360,9 @@ public class Main implements ActionListener{
                     characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
                     if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
                 } else if(strMessage.contains("mCHARACTER_PANEL")) {
-                    theFrame.setContentPane(characterPanel);
+                    theFrame.setContentPane(thePanels[5]);
                     theFrame.pack();
+                    state = State.CHARACTER;
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
@@ -369,7 +390,7 @@ public class Main implements ActionListener{
                     gameLayeredPane.add(chatPanel, Integer.valueOf(102));
                     gameLayeredPane.repaint();
 
-                    theFrame.setContentPane(thePanels[4]);
+                    theFrame.setContentPane(chatPanel);
                     gameLayeredPane.requestFocus(true);
                     thePanels[4].requestFocus(true);
                     chatPanel.requestFocus(true);
@@ -391,7 +412,7 @@ public class Main implements ActionListener{
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
-            System.exit(0);
+            System.exit(2147483647);
         } else if(evt.getSource() == backButtons[0]) {
             state = State.MAIN_MENU;
             theFrame.setContentPane(thePanels[0]);
@@ -468,8 +489,9 @@ public class Main implements ActionListener{
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");
-            theFrame.setContentPane(characterPanel);
+            theFrame.setContentPane(thePanels[5]);
             theFrame.pack();
+            state = State.CHARACTER;
         }
 
         if(evt.getSource() == buttonReady) {
@@ -520,7 +542,7 @@ public class Main implements ActionListener{
             gameLayeredPane.add(chatPanel, Integer.valueOf(102));
             gameLayeredPane.repaint();
 
-            theFrame.setContentPane(thePanels[4]);
+            theFrame.setContentPane(chatPanel);
             gameLayeredPane.requestFocus(true);
             thePanels[4].requestFocus(true);
             chatPanel.requestFocus(true);

@@ -23,6 +23,10 @@ public class Enemies extends GameObject {
     private boolean blnFalling = true;
     private double dblTimer = System.currentTimeMillis();
     private int intJumpCap = 0;
+    private int intBleedCount = 0;
+    private float fltBurnDmg = 0;
+
+    
 
     public Enemies(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
@@ -31,7 +35,10 @@ public class Enemies extends GameObject {
         this.fltVelY = fltVelY;
         this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
-        
+        this.intEnemyType = 3;
+        this.intEnemyClass = 1;
+        this.fltDmg = intEnemyFloor;
+
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
         if(intEnemyType == 1){
@@ -40,6 +47,15 @@ public class Enemies extends GameObject {
                 fltHealth = 100;
                 fltHeight = 40;
                 fltDmg = 40;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
 
             }
             if(intEnemyClass == 2){
@@ -47,6 +63,15 @@ public class Enemies extends GameObject {
                 fltHealth = 250;
                 fltHeight = 60;
                 fltDmg = 100;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
         if(intEnemyType == 2){
@@ -55,12 +80,30 @@ public class Enemies extends GameObject {
                 fltHeight = 70;
                 fltDmg = 150;
                 fltHealth = 450;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
             if(intEnemyClass == 2){
                 fltWidth = 40;
                 fltHeight = 40;
                 fltDmg = 100;
                 fltHealth = 600;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
         if(intEnemyType == 3){
@@ -69,12 +112,30 @@ public class Enemies extends GameObject {
                 fltWidth = 100;
                 fltDmg = 300;
                 fltHealth = 600;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
             if(intEnemyClass == 1){
                 fltHeight = 40;
                 fltWidth = 40;
                 fltDmg = 150;
                 fltHealth = 600;
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
         camObject = handler.getObject(Main.intSessionId - 1);
@@ -104,7 +165,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 300) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  10, ObjectId.BULLET, handler, ssm, null, false, 0));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
                 
                 
@@ -139,7 +200,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 1000) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  10, ObjectId.BULLET, handler, ssm, null, false, 250));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 250));
                 }
             }   
         }
@@ -149,7 +210,6 @@ public class Enemies extends GameObject {
             if(intEnemyClass == 1){
                 float fltDiffX = fltTargetX - fltWorldX - fltWidth/2;
                 float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
-                
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 if(fltTargetX > fltWorldX){
                     fltWorldX +=10;
@@ -161,7 +221,7 @@ public class Enemies extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 300) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  10, ObjectId.BULLET, handler, ssm, null, true, 350));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 350));
                 }
                 /*if(intJumpCap == 0 && fltWorldY > fltTargetY && blnFalling == false){
                     fltVelY = -15;
@@ -192,7 +252,16 @@ public class Enemies extends GameObject {
         } 
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
+        if(fltHP <= 0 ){
+            handler.removeObject(this);
+        }
+        if(intBleedCount >= 5){
+            fltHP *= 0.6;
+        }
 
+        if(fltBurnDmg > 0){
+            fltHP -= fltBurnDmg;
+        }
         
     }
 
@@ -247,6 +316,20 @@ public class Enemies extends GameObject {
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
             }
+            if(object.getId() == ObjectId.BULLET){
+                if(getBounds().intersects(object.getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    handler.removeObject(object);
+                    Bullet bullet = (Bullet) object;
+                    fltHP -= bullet.getDMG();
+                    if(bullet.getBoom()> 0){
+                        float fltExplosionRadius = bullet.getBoom();
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        //arbitary value to make sure bomb doesnt explode multiple times
+                    }        
+                }
+            }
             
         }
     }
@@ -256,6 +339,10 @@ public class Enemies extends GameObject {
     }
     public void setHP(float fltHp){
         this.fltHP = fltHp;
+    }
+
+    public float getHP(){
+        return fltHP;
     }
 
     public float getDMG(){

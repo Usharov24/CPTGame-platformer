@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,30 +18,31 @@ public class CustomButton extends AbstractButton implements MouseListener {
     private ResourceLoader resLoader = new ResourceLoader();
 
     private Dimension size = new Dimension();
+    private Point location = new Point();
 
     private ActionListener listener;
-
     private BufferedImage biImage;
     private Font font;
+    private String strText;
 
     private boolean blnMouseEntered = false;
 
     public CustomButton() {
-        this(0, 0, null, null);
+        //this(0, 0, null, null);
     }
 
     public CustomButton(int intWidth, int intHeight) {
-        this(intWidth, intHeight, null, null);
+        this(intWidth, intHeight, null, null, null);
     }
 
     public CustomButton(int intWidth, int intHeight, BufferedImage biImage) {
-        this(intWidth, intHeight, biImage, null);
+        this(intWidth, intHeight, null, biImage, null);
     }
 
-    public CustomButton(int intWidth, int intHeight, BufferedImage biImage, ActionListener listener) {
+    public CustomButton(int intWidth, int intHeight, String strText, BufferedImage biImage, ActionListener listener) {
         super();
-        
         size.setSize(intWidth, intHeight);
+        this.strText = strText;
         this.biImage = biImage;
         this.listener = listener;
 
@@ -49,7 +51,6 @@ public class CustomButton extends AbstractButton implements MouseListener {
         enableInputMethods(true);
         addActionListener(this.listener);
         addMouseListener(this);
-
         setSize(size);
         setMaximumSize(new Dimension(intWidth + 10, intHeight + 10));
         setMinimumSize(size);
@@ -67,6 +68,9 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
             g.setColor(Color.green);
             g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.white);
+            g.setFont(font);
+            g.drawString(strText, getWidth()/2, getHeight()/2);
         } else {
             if(getWidth() > getMinimumSize().width && getHeight() > getMinimumSize().height) {
                 setSize(new Dimension(getWidth() - 2, getHeight() - 2));
@@ -75,11 +79,26 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
             g.setColor(Color.red);
             g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.white);
+            g.setFont(font);
+            g.drawString(strText, getWidth()/2, getHeight()/2);
+        }
+    }
+
+    public void setLocation(int intX, int intY) {
+        super.setLocation(intX, intY);
+        
+        if(location.x == 0 && location.y == 0) {
+            location.x = intX;
+            location.y = intY;
         }
     }
 
     public void mouseReleased(MouseEvent evt) {
         if(listener != null) listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), evt.getWhen(), evt.getModifiersEx()));
+        setSize(size);
+        setLocation(location.x, location.y);
+        blnMouseEntered = false;
     }
 
     public void mouseEntered(MouseEvent evt) {
