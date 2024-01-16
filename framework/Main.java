@@ -516,9 +516,9 @@ public class Main implements ActionListener{
             for(int intCount = 0; intCount < 2; intCount++) {
                 handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -30, 1920, 30, ObjectId.BARRIER, handler, null));
                 handler.addObject(new Barrier((intCount == 0) ? -30 : 1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
-                handler.addObject(new Enemies(75,300,0,0,50,59, 10, 1, 1, ObjectId.ENEMY,handler,ssm));
-                System.out.println("Enemy");
             }
+
+            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 1, 1, ObjectId.ENEMY,handler,ssm));
             
             state = State.GAME;
 

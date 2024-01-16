@@ -137,10 +137,10 @@ public class Wizard extends GameObject {
             if(fltVelY > 35) fltVelY = 35;
             else if(fltVelY < -35) fltVelY = -35;
 
+            collisions();
+
             fltWorldX += fltVelX + fltDashVel;
             fltWorldY += fltVelY;
-
-            collisions();
             
             if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition);
@@ -269,8 +269,8 @@ public class Wizard extends GameObject {
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
             } else if(object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())){
-                Enemies enemy = (Enemies) object;
-                fltHP -= enemy.getDMG();
+                Enemy enemy = (Enemy) object;
+                fltHP -= enemy.getDmg();
             } else if(object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())){
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG();

@@ -81,8 +81,8 @@ public class Bullet extends GameObject {
         float flttotaldist = 0;
         float fltpastTotal = 0;
         int intreturn = 0;
-        for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY_APPLE || handler.getObject(i).getId() == ObjectId.ENEMY_MANGO){
+        for(int i = 0; i < handler.objectList.size(); i++) {
+            if(handler.getObject(i).getId() == ObjectId.ENEMY) {
                 fltDistX = fltWorldX - handler.getObject(i).getWorldX();
                 fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);

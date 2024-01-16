@@ -57,10 +57,10 @@ public class VacGrenade extends GameObject {
         if(fltVelY > 30) fltVelY = 30;
         else if(fltVelY < -30) fltVelY = -30;
 
+        collisions();
+
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
-
-        collisions();
     }
 
     private void collisions() {
