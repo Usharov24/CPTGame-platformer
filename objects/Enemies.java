@@ -28,7 +28,7 @@ public class Enemies extends GameObject {
 
     
 
-    public Enemies(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public Enemies(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHP, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.intEnemyFloor = intEnemyFloor;
@@ -41,7 +41,7 @@ public class Enemies extends GameObject {
         if(intEnemyType == 1){
             if(intEnemyClass == 1){
                 fltWidth = 40;
-                fltHealth = 100;
+                fltHP = 100;
                 fltHeight = 40;
                 fltDmg = 40;
                 if(intEnemyFloor == 1){
@@ -57,7 +57,7 @@ public class Enemies extends GameObject {
             }
             if(intEnemyClass == 2){
                 fltWidth = 60;
-                fltHealth = 250;
+                fltHP = 250;
                 fltHeight = 60;
                 fltDmg = 100;
                 if(intEnemyFloor == 1){
@@ -76,7 +76,7 @@ public class Enemies extends GameObject {
                 fltWidth = 70;
                 fltHeight = 70;
                 fltDmg = 150;
-                fltHealth = 450;
+                fltHP = 450;
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -91,7 +91,7 @@ public class Enemies extends GameObject {
                 fltWidth = 40;
                 fltHeight = 40;
                 fltDmg = 100;
-                fltHealth = 600;
+                fltHP = 600;
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -108,7 +108,7 @@ public class Enemies extends GameObject {
                 fltHeight = 100;
                 fltWidth = 100;
                 fltDmg = 300;
-                fltHealth = 600;
+                fltHP = 600;
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -123,7 +123,7 @@ public class Enemies extends GameObject {
                 fltHeight = 40;
                 fltWidth = 40;
                 fltDmg = 150;
-                fltHealth = 600;
+                fltHP = 600;
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -305,6 +305,8 @@ public class Enemies extends GameObject {
                 }else if(getBounds().intersects(object.getBounds()) && fltVelY > 0) {
                     fltVelY = 0;
                     blnFalling = false;
+
+
                     fltWorldY = object.getWorldY() - fltHeight;
                 } else if(getBounds().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
@@ -322,6 +324,9 @@ public class Enemies extends GameObject {
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
+                        fltBurnDmg = bullet.getBleed();
+                        intBleedCount = (int) bullet.getBleed();
+                        
                     }        
                 }
             }
@@ -332,8 +337,8 @@ public class Enemies extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)fltWorldX, (int)fltWorldY, (int)fltHeight, (int)fltWidth);
     }
-    public void setHP(float fltHp){
-        this.fltHP = fltHp;
+    public void setHP(float fltHP){
+        this.fltHP = fltHP;
     }
 
     public float getHP(){
