@@ -1,5 +1,6 @@
 package components;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
@@ -115,6 +116,13 @@ public class CustomPanel extends JPanel {
 
             g.setColor(Color.gray);
             g.fillRect(0, 0, 100, getHeight()/5);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Dialog", Font.BOLD, 18));
+            g.drawString("Sniper", 20, 32);
+            g.drawString("Brute", 20, 62);
+            g.drawString("Knight", 20, 92);
+            g.drawString("Wizard", 20, 122);
 
             for(int intBar = 0; intBar <= 3; intBar++){
                 g.setColor(Color.black);

@@ -21,7 +21,6 @@ import components.*;
 import objects.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.Buffer;
 
 public class Main implements ActionListener{
@@ -143,6 +142,7 @@ public class Main implements ActionListener{
             netTextFields[intCount].setSize(465, 50);
             netTextFields[intCount].setLocation(475, (intCount < 2) ? 330 + 75 * intCount : 330 + 75 * (intCount - 2));
             netTextFields[intCount].setEditable((intCount == 1) ? false : true);
+            netTextFields[intCount].addActionListener(this);
             thePanels[(intCount < 2) ? 1 : 2].add(netTextFields[intCount]);
         }
 
@@ -152,6 +152,7 @@ public class Main implements ActionListener{
             netButtons[intCount].addActionListener(this);
             thePanels[intCount + 1].add(netButtons[intCount]);
         }
+        netButtons[0].setEnabled(false);
 
         for(int intCount = 0; intCount < netLabels.length; intCount++){
             netLabels[intCount].setFont(new Font("Dialog", Font.BOLD, 18));
@@ -426,6 +427,12 @@ public class Main implements ActionListener{
             theFrame.setContentPane(thePanels[0]);
             theFrame.pack();
         }
+
+        if(evt.getSource() == netTextFields[0]){
+            if(netTextFields[0].getText().toString().isEmpty() == false){
+                netButtons[0].setEnabled(true);
+            }
+        }
         
         if(evt.getSource() == netButtons[0]) {
             backButtons[0].setVisible(false);
@@ -441,8 +448,8 @@ public class Main implements ActionListener{
             }
 
             netTextFields[1].setText(new String(chrCharacters));
-            netStartButton.setEnabled(true);
             netButtons[0].setEnabled(false);
+            netStartButton.setEnabled(true);
         } else if(evt.getSource() == netButtons[1]) {
             backButtons[1].setVisible(false);
             char[] chrJoinCode = netTextFields[3].getText().toCharArray();
