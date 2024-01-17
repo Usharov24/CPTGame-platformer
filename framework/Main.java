@@ -83,7 +83,7 @@ public class Main implements ActionListener{
     public static State state = State.MAIN_MENU;
 
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), SETTINGS(3), GAME(4), CHARACTER(5);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), GAME(4), CHARACTER(5);
 
         private final int intPanelNumber;
 
@@ -409,7 +409,7 @@ public class Main implements ActionListener{
             theFrame.setContentPane(thePanels[2]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[2]) {
-            state = State.SETTINGS;
+            state = State.HELP;
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {

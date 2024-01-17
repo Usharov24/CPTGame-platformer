@@ -1,6 +1,7 @@
 package components;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -8,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import framework.Main;
 import framework.SuperSocketMaster;
 
 public class ChatPanel extends JPanel implements ActionListener {
@@ -33,8 +35,14 @@ public class ChatPanel extends JPanel implements ActionListener {
         if(evt.getSource() == sendButton){
             try{
                 String strMessage = chatInput.getText();
-                ssm.sendText(strMessage+"\n");
-                chatTextArea.append(strMessage+"\n");
+
+                if(Main.intSessionId == 1){
+                    ssm.sendText("h>a>cCHAT~"+strMessage+", "+(Main.intSessionId-1));
+                    chatTextArea.append(strMessage+"\n");
+                }else{
+                    ssm.sendText("c"+Main.intSessionId+">h>cCHAT~"+strMessage+", "+(Main.intSessionId-1));
+                    chatTextArea.append(strMessage+"\n");
+                }
             }catch(NullPointerException e){
                 e.printStackTrace();
             }

@@ -47,9 +47,11 @@ public class CustomPanel extends JPanel {
         } else if(Main.state == Main.State.JOIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
-        } else if(Main.state == Main.State.SETTINGS) {
-            g.setColor(Color.black);
+        } else if(Main.state == Main.State.HELP) {
+            g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(new Color(187, 143, 19));
+            g.drawString("help", 400, 300);
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -99,9 +101,6 @@ public class CustomPanel extends JPanel {
                 System.exit(0);
             }
 
-            g.setColor(Color.gray);
-            g.fillRect(0, 0, getWidth(), getHeight()/5);
-
             g.setColor(Color.red);
             g.fillRect(100, 16, (int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
             g.fillRect(100, 46, (int)(intBarWidth*fltBruteHP/fltBruteMaxHP), intBarHeight);
@@ -114,10 +113,7 @@ public class CustomPanel extends JPanel {
             g.fillRect(100+(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), 76, intBarWidth-(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
             g.fillRect(100+(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), 106, intBarWidth-(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
 
-            g.setColor(Color.gray);
-            g.fillRect(0, 0, 100, getHeight()/5);
-
-            g.setColor(Color.black);
+            g.setColor(Color.white);
             g.setFont(new Font("Dialog", Font.BOLD, 18));
             g.drawString("Sniper", 20, 32);
             g.drawString("Brute", 20, 62);
@@ -129,7 +125,7 @@ public class CustomPanel extends JPanel {
                 g.drawRect(100, 16+30*intBar, intBarWidth, intBarHeight);
             }
 
-            /////////////////////////////////////////////////////////////////////
+            // HUD CODE END ////////////////////////////////////////////////////
         }
     }
 }
