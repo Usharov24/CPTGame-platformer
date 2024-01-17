@@ -51,7 +51,7 @@ public class Main implements ActionListener{
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
     private JButton[] netButtons = {new JButton("Host Game"), new JButton("Join Game")};
     private JLabel[] netLabels = {new JLabel("Enter Name"), new JLabel("Join Code"), new JLabel("Enter Name"), new JLabel("Enter Join Code")};
-    private JButton netStartButton = new JButton("Start game");
+    private CustomButton netStartButton = new CustomButton(100, 100, "Start game", null, this);
     
     // WIP
     public static JButton[] characterButtons = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
@@ -162,10 +162,8 @@ public class Main implements ActionListener{
         }
 
         // Will redo this
-        netStartButton.setSize(100, 100);
         netStartButton.setLocation(950, 175);
         netStartButton.setEnabled(false);
-        netStartButton.addActionListener(this);
         thePanels[1].add(netStartButton);
 
         ///////////////////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,7 @@ package components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -27,16 +28,8 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
     private boolean blnMouseEntered = false;
 
-    public CustomButton() {
-        //this(0, 0, null, null);
-    }
-
-    public CustomButton(int intWidth, int intHeight) {
-        this(intWidth, intHeight, null, null, null);
-    }
-
-    public CustomButton(int intWidth, int intHeight, BufferedImage biImage) {
-        this(intWidth, intHeight, null, biImage, null);
+    public CustomButton(int intWidth, int intHeight, BufferedImage biImage, ActionListener listener) {
+        this(intWidth, intHeight, null, biImage, listener);
     }
 
     public CustomButton(int intWidth, int intHeight, String strText, BufferedImage biImage, ActionListener listener) {
@@ -46,7 +39,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
         this.biImage = biImage;
         this.listener = listener;
 
-        font = resLoader.loadFont("res\\bitwise.ttf");
+        font = resLoader.loadFont("res\\bitwise.ttf", intHeight/2);
 
         enableInputMethods(true);
         addActionListener(this.listener);
@@ -68,9 +61,11 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
             g.setColor(Color.green);
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.white);
+
             g.setFont(font);
-            g.drawString(strText, getWidth()/2, getHeight()/2);
+            FontMetrics fm = g.getFontMetrics();
+            g.setColor(Color.white);
+            g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
         } else {
             if(getWidth() > getMinimumSize().width && getHeight() > getMinimumSize().height) {
                 setSize(new Dimension(getWidth() - 2, getHeight() - 2));
@@ -79,9 +74,11 @@ public class CustomButton extends AbstractButton implements MouseListener {
 
             g.setColor(Color.red);
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.white);
+
             g.setFont(font);
-            g.drawString(strText, getWidth()/2, getHeight()/2);
+            FontMetrics fm = g.getFontMetrics();
+            g.setColor(Color.white);
+            g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
         }
     }
 

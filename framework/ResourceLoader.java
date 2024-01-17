@@ -99,4 +99,18 @@ public class ResourceLoader {
 
         return font;
     }
+
+    public Font loadFont(String strPath, float fltSize) {
+        Font font = null;
+
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new File(strPath)).deriveFont(fltSize);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font);
+        } catch(IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+
+        return font;
+    }
 }
