@@ -78,7 +78,7 @@ public class EnemyBullet extends GameObject {
         float fltpastTotal = 0;
         int intreturn = 0;
         for(int i = 0; i < handler.objectList.size(); i++) {
-            if(handler.getObject(i).getId() == ObjectId.ENEMY) {
+            if(handler.getObject(i).getId() == ObjectId.PLAYER) {
                 fltDistX = fltWorldX - handler.getObject(i).getWorldX();
                 fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
@@ -95,20 +95,8 @@ public class EnemyBullet extends GameObject {
         for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.BARRIER){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    //handler.removeObject(this);
-                    if(fltExplosionRadius > 0){
-                        handler.addObject(new EnemyExplosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
-                    }        
-                }
-            }   
-            else if(handler.getObject(i).getId() == ObjectId.PLAYER){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
-                        handler.removeObject(this);
                         handler.addObject(new EnemyExplosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
                     }        

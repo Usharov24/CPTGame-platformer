@@ -27,6 +27,7 @@ public class KnightSlashes extends GameObject {
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.lngbirth = lngbirth;
         this.intBoomRad = intBoomRad;
+        this.id = ObjectId.SLASH;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -58,21 +59,10 @@ public class KnightSlashes extends GameObject {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
     private void collisions() {
-        for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    handler.removeObject(this);
-                    if(intBoomRad > 0){
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
-                    }        
-                }
-            }
-            if(fltWorldX < 0 || fltWorldX > 1920){
-                handler.removeObject(this);
-            }      
+        
+        if(fltWorldX < 0 || fltWorldX > 1920){
+            handler.removeObject(this);
+            
         }
     }
 

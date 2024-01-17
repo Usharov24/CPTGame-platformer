@@ -15,7 +15,6 @@ import framework.SuperSocketMaster;
 import framework.InputHandler.InputButtons;
 
 public class Wizard extends GameObject {
-
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
 
@@ -52,14 +51,18 @@ public class Wizard extends GameObject {
     private float fltPastDmgMult = 1;
     private BufferedImage biBulletTexture;
     private boolean blnHoming = false;
+    private BufferedImage[] biSprite;
+    private boolean blnLeft = false;
     
     public Wizard(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.handler = handler;
         this.input = input;
         this.intPosition = intPosition;
-
+        biSprite = resLoader.loadImages("/res\\Wizard.png"); 
         biBulletTextures = resLoader.loadImages("/res\\FireBall.png", "/res\\ElectricBall.png");
+        this.fltWidth = 32;
+        this.fltHeight = 64;
     }
     
     public void update() {
@@ -78,8 +81,10 @@ public class Wizard extends GameObject {
 
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                 fltVelX -= fltAcc;
+                blnLeft = true;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 fltVelX += fltAcc;
+                blnLeft = false;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 if(fltVelX > 0) fltVelX -= fltDec;
                 else if(fltVelX < 0) fltVelX += fltDec;
@@ -366,9 +371,15 @@ public class Wizard extends GameObject {
         g2d.setColor(Color.white);
 
         if(intPosition == Main.intSessionId - 1) {
-            g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
+            if(blnLeft){
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
+            }
+            else{
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
+            }
+             
         } else {
-            g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+            g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
         }
 
         if (blnteleporting){

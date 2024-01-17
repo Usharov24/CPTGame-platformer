@@ -32,7 +32,7 @@ public class Brute extends GameObject {
     private boolean blnUlt = false;
 
     private BufferedImage[] biVacTextures;
-
+    private BufferedImage[] biSprite;
     private float fltHP = 1000;
     private int intWungoosCount = 0;
     private boolean blnMoving = false;
@@ -57,13 +57,16 @@ public class Brute extends GameObject {
     private float fltPastDmgMult = 1;
     private boolean blnHoming = false;
     private boolean blnFalling = false;
+    private boolean blnLeft = false;
 
     public Brute(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intPosition = intPosition;
-
+        biSprite = resLoader.loadImages("/res\\Brute.png");
         biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
+        this.fltWidth = 32;
+        this.fltHeight = 64;
     }
 
     public void update() {
@@ -84,8 +87,10 @@ public class Brute extends GameObject {
 
                 if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                     fltVelX -= fltAcc;
+                    blnLeft = false;
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
                     fltVelX += fltAcc;
+                    blnLeft = false;
                 } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
                     if(fltVelX > 0) fltVelX -= fltDec;
                     else if(fltVelX < 0) fltVelX += fltDec;
@@ -286,18 +291,25 @@ public class Brute extends GameObject {
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
                     }
                 }
-            } else if(object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())){
+            } else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) ){
                 Enemy enemy = (Enemy) object;
                 fltHP -= enemy.getDmg() / fltDef;
                 if(fltReflectDmg > 0){
-                    enemy.setHP(enemy.getHP() - enemy.getDmg()*fltReflectDmg);
+                    enemy.setHP(enemy.getHP() - (float)(enemy.getDmg()*fltReflectDmg*0.1));
                 }
-            } else if(object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())){
+            } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds()))){
+                System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
-            } else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
-                handler.removeObject(handler.getObject(intCount));
+            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds()))){
+                System.out.println("you got shot");
+                EnemyBullet enemy = (EnemyBullet) object;
+                fltHP -= enemy.getDMG() / fltDef;
+                handler.removeObject(object);
+            }if((object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ITEM && getBounds2().intersects(object.getBounds()))) {  
+                System.out.println("picked up item");
+                handler.removeObject(object);
                 ItemObject item = (ItemObject) object;
                 if(item.getRarity() == 1){ 
                     if(item.getPlacement() == 1){
@@ -345,6 +357,7 @@ public class Brute extends GameObject {
                     }
                     else if(item.getPlacement() == 4){
                         intJumpCap ++;
+                        System.out.println("yippee jump");
                     }
                     else if(item.getPlacement() == 5){
                         intBleedCount += 1;
@@ -387,9 +400,14 @@ public class Brute extends GameObject {
         g2d.setColor(Color.white);
 
         if(intPosition == Main.intSessionId - 1) {
-            g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
+            if(blnLeft){
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
+            }
+            else{
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
+            }
         } else {
-            g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+            g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
         }
     }
 

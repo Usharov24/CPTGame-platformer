@@ -4,16 +4,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.ResourceLoader;
 import objects.Brute;
-import objects.Explosion;
 import objects.GameObject;
 import objects.Knight;
 import objects.Sniper;
@@ -97,9 +93,6 @@ public class CustomPanel extends JPanel {
                 }
             }
 
-            if(fltSniperHP <= 0 && fltBruteHP <= 0 && fltKnightHP <= 0 && fltWizardHP <= 0 ){
-                System.exit(0);
-            }
 
             g.setColor(Color.red);
             g.fillRect(100, 16, (int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);

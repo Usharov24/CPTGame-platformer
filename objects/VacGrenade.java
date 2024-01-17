@@ -20,6 +20,7 @@ public class VacGrenade extends GameObject {
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.biTextures = biTextures;
+        this.id = null;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -37,9 +38,9 @@ public class VacGrenade extends GameObject {
                     if(fltLength <= 400) {
                         fltDiffX /= fltLength;
                         fltDiffY /= fltLength;
-
-                        object.setWorldX(object.getWorldX() + fltDiffX * 12);
-                        object.setWorldY(object.getWorldY() + fltDiffY * 12);
+                        Enemy enemy = (Enemy) object;
+                        enemy.setVelX(enemy.getVelX() + fltDiffX * 12);
+                        enemy.setVelY(enemy.getVelY() + fltDiffY * 12);
                     }
                 }
             }
@@ -48,7 +49,8 @@ public class VacGrenade extends GameObject {
                 handler.removeObject(this);
             }
         }
-
+        collisions();
+        
         fltVelY += 3;
 
         if(fltVelX > 30) fltVelX = 30;
@@ -57,7 +59,7 @@ public class VacGrenade extends GameObject {
         if(fltVelY > 30) fltVelY = 30;
         else if(fltVelY < -30) fltVelY = -30;
 
-        collisions();
+        
 
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;

@@ -13,7 +13,6 @@ public class WaveAttacks extends GameObject {
     private float fltStartAngle;
     private float fltSpread = 1;
     private int intBoomRad;
-    private float fltExplosionRadius;
     private float fltDmg;
     private int intBleedCount;
     private float fltBurnDmg;
@@ -27,6 +26,7 @@ public class WaveAttacks extends GameObject {
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.handler = handler;
         this.intBoomRad = intBoomRad;
+        this.id = ObjectId.WAVE;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -57,24 +57,15 @@ public class WaveAttacks extends GameObject {
     }
 
     private void collisions() {
-        for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    if(intBoomRad > 0){
-                        handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
-                    }        
-                }
-            }
-            if(fltWorldX < 0 || fltWorldX > 1920){
-                handler.removeObject(this);
-            }
+        
+        if(fltWorldX < 0 || fltWorldX > 1920){
+            handler.removeObject(this);
         }
+        
     }
 
     public int getBoom(){
-        return (int)fltExplosionRadius;
+        return intBoomRad;
     }
     public float getDMG(){
         return fltDmg;

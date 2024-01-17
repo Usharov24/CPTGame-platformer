@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
-
 import framework.InputHandler;
 import framework.Main;
 import framework.ObjectHandler;
@@ -22,8 +20,8 @@ public class Sniper extends GameObject {
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDispX, fltDispY;
     private float fltDashVel;
-
-    private int intPosition;
+    private BufferedImage[] biSprite;
+    private int intPosition;    
     private int intJumpCount;
     private int intDirection = 1;
     private long[] lngTimer = {0,0,0,0,0};
@@ -56,13 +54,16 @@ public class Sniper extends GameObject {
     private BufferedImage biBulletTexture;
     private float fltPastDmgMult = 1;
     private boolean blnHoming = false;
-
+    private boolean blnLeft = false;
+    
     public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intPosition = intPosition;
-
+        biSprite = resLoader.loadImages("/res\\Sniper.png");
         biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png");
+        this.fltWidth = 32;
+        this.fltHeight = 64;
     }
 
     public void update() {
@@ -82,9 +83,11 @@ public class Sniper extends GameObject {
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                 fltVelX -= fltAcc;
                 intDirection = -1;
+                blnLeft = true;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 fltVelX += fltAcc;
                 intDirection = 1;
+                blnLeft = false;
             } else if(input.buttonSet.contains(InputHandler.InputButtons.A) && input.buttonSet.contains(InputHandler.InputButtons.D)) {
                 if(fltVelX > 0) fltVelX -= fltDec;
                 else if(fltVelX < 0) fltVelX += fltDec;
@@ -176,8 +179,8 @@ public class Sniper extends GameObject {
                         fltPastDmgMult = fltDmgMult;
                         fltDmgMult *= fltAirDmgMult;
                     }
-                    float fltDiffX = 640;
-                    float fltDiffY = 360;
+                    float fltDiffX = input.fltMouseX - 640;
+                    float fltDiffY = input.fltMouseY - 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
@@ -236,7 +239,7 @@ public class Sniper extends GameObject {
             }
             
             if(blnFalling) fltVelY += 3;
-
+            collisions();
             if(fltVelX > 10 * fltPSpeedMult) fltVelX = 10 * fltPSpeedMult;
             else if(fltVelX < -10 * fltPSpeedMult) fltVelX = -10 * fltPSpeedMult;
 
@@ -255,7 +258,7 @@ public class Sniper extends GameObject {
             fltWorldX += fltVelX + fltDashVel + intRecoilX;
             fltWorldY += fltVelY + intRecoilY;
 
-            collisions();
+            
 
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
@@ -386,9 +389,14 @@ public class Sniper extends GameObject {
         g2d.setColor(Color.white);
 
         if(intPosition == Main.intSessionId - 1) {
-            g2d.fillRect((int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), (int)fltWidth, (int)fltHeight);
+            if(blnLeft){
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
+            }
+            else{
+                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
+            }
         } else {
-            g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+            g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
         }
     }
 
@@ -408,12 +416,6 @@ public class Sniper extends GameObject {
         else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
         return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
-    }
-
-    public void drawTeleport(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.gray);
-        g2d.fillRect((int)input.fltMouseX, (int)input.fltMouseY, (int)fltWidth, (int)fltHeight);
     }
 
     public float getHP(){

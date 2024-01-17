@@ -5,10 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslServer;
+
 import java.awt.Graphics2D;
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
+import framework.ResourceLoader;
 import framework.SuperSocketMaster;
 import java.awt.Color;
 
@@ -24,6 +28,12 @@ public class Enemy extends GameObject {
     private int intJumpCap = 0;
     private int intBleedCount = 0;
     private float fltBurnDmg = 0;
+    private boolean blnFalling = false;
+    private ResourceLoader resLoader = new ResourceLoader();
+    private BufferedImage biSmallEnem[] = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
+    private BufferedImage biMedEnem[] = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
+    private BufferedImage biBigEnem[] = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
+    private BufferedImage biImg = null;
 
     
 
@@ -39,10 +49,11 @@ public class Enemy extends GameObject {
         //use the class to determine the size of the enemy
         if(intEnemyType == 1){
             if(intEnemyClass == 1){
-                fltWidth = 40;
+                fltWidth = 60;
                 fltHP = 100;
-                fltHeight = 40;
+                fltHeight = 60;
                 fltDmg = 40;
+                biImg = biSmallEnem[0];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -55,10 +66,11 @@ public class Enemy extends GameObject {
 
             }
             if(intEnemyClass == 2){
-                fltWidth = 60;
+                fltWidth = 30;
                 fltHP = 250;
                 fltHeight = 60;
                 fltDmg = 100;
+                biImg = biSmallEnem[1];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -72,10 +84,11 @@ public class Enemy extends GameObject {
         }
         if(intEnemyType == 2){
             if(intEnemyClass == 1){
-                fltWidth = 70;
-                fltHeight = 70;
+                fltWidth = 60;
+                fltHeight = 60;
                 fltDmg = 150;
                 fltHP = 450;
+                biImg = biMedEnem[0];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -88,9 +101,10 @@ public class Enemy extends GameObject {
             }
             if(intEnemyClass == 2){
                 fltWidth = 40;
-                fltHeight = 40;
+                fltHeight = 60;
                 fltDmg = 100;
                 fltHP = 600;
+                biImg = biMedEnem[1];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -103,11 +117,13 @@ public class Enemy extends GameObject {
             }
         }
         if(intEnemyType == 3){
-            if(intEnemyClass == 2){
+            if(intEnemyClass == 1){
                 fltHeight = 100;
                 fltWidth = 100;
                 fltDmg = 300;
                 fltHP = 600;
+
+                biImg = biBigEnem[0];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -118,11 +134,12 @@ public class Enemy extends GameObject {
                     //load special img
                 }
             }
-            if(intEnemyClass == 1){
-                fltHeight = 40;
-                fltWidth = 40;
+            if(intEnemyClass == 2){
+                fltHeight = 70;
+                fltWidth = 50;
                 fltDmg = 150;
                 fltHP = 600;
+                biImg = biBigEnem[1];
                 if(intEnemyFloor == 1){
                     //load special img
                 }
@@ -154,8 +171,8 @@ public class Enemy extends GameObject {
             }
             //shooters
             if(intEnemyClass == 2){
-                float fltDiffX = fltTargetX - fltWorldX - fltWidth/2;
-                float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
+                float fltDiffX = fltTargetX - fltWorldX;
+                float fltDiffY = fltTargetY - fltWorldY;
                 
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
@@ -191,20 +208,19 @@ public class Enemy extends GameObject {
                 float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
                 
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                System.out.println("x" + fltDiffX);
-                System.out.println("Y" + fltDiffY);
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 1000) {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 250));
                 }
+                blnFalling = true;
             }   
         }
         //large enemies
         if(intEnemyType == 3){
             //big crawler
-            if(intEnemyClass == 1){
+            if(intEnemyClass == 2){
                 float fltDiffX = fltTargetX - fltWorldX - fltWidth/2;
                 float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
@@ -225,9 +241,10 @@ public class Enemy extends GameObject {
                     blnFalling = true;
                     intJumpCap = 1;
                 } */
+                blnFalling = true;
             }
             //big homer
-            if(intEnemyClass == 2){
+            if(intEnemyClass == 1){
                 if(fltWorldX > fltTargetX){
                     fltVelX -= 3; 
                 }
@@ -243,10 +260,16 @@ public class Enemy extends GameObject {
                 
             }
         }
+        if(fltVelY > 35) fltVelY = 35;
+        else if(fltVelY < -35) fltVelY = -35; 
+
+        if(fltVelX > 35) fltVelX = 35;
+        else if(fltVelX < -35) fltVelX = -35; 
 
         collisions();
-
-        fltVelY += 3;
+        if(blnFalling){
+            fltVelY += 3;
+        }
         
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
@@ -259,6 +282,10 @@ public class Enemy extends GameObject {
         }
         if(fltBurnDmg > 0){
             fltHP -= fltBurnDmg;
+        }
+        if(fltHP <= 0){
+            System.out.println("enemy dead");
+            handler.removeObject(this);
         }
     }
 
@@ -317,18 +344,42 @@ public class Enemy extends GameObject {
                     }        
                 }
             }
+            else if(object.getId() == ObjectId.WAVE) {
+                if(getBounds().intersects(object.getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    WaveAttacks bullet = (WaveAttacks) object;
+                    fltHP -= bullet.getDMG();
+
+                    if(bullet.getBoom()> 0){
+                        float fltExplosionRadius = bullet.getBoom();
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        fltBurnDmg = bullet.getBleed();
+                        intBleedCount = (int) bullet.getBleed();
+                    }        
+                }
+            }
+            else if(object.getId() == ObjectId.SLASH) {
+                if(getBounds().intersects(object.getBounds())){
+                    //handler.getObject(i) -- player dmg
+                    KnightSlashes bullet = (KnightSlashes) object;
+                    fltHP -= bullet.getDMG();
+
+                    if(bullet.getBoom()> 0){
+                        float fltExplosionRadius = bullet.getBoom();
+                        handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        fltBurnDmg = bullet.getBleed();
+                        intBleedCount = (int) bullet.getBleed();
+                    }        
+                }
+            }
         }
     }
 
     public void draw(Graphics g) {
-        System.out.println(fltWorldX + " " + fltWorldY);
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.green);
-        g2d.fill(getBounds());
-        g2d.setColor(Color.cyan);
-        g2d.fill(getBounds2());
-        g2d.setColor(Color.red);
-        g2d.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        g2d.drawImage(biImg, (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
     }
 
     public Rectangle getBounds() {
@@ -359,5 +410,21 @@ public class Enemy extends GameObject {
 
     public float getDmg(){
         return fltDmg;
+    }
+
+    public float getVelX(){
+        return this.fltVelX;
+    }
+
+    public float getVelY(){
+        return this.fltVelX;
+    }
+
+    public void setVelX(float fltVelX){
+        this.fltVelX = fltVelX;
+    }
+
+    public void setVelY(float fltVelY){
+        this.fltVelY = fltVelY;
     }
 }
