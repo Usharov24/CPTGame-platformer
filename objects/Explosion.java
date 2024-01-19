@@ -8,9 +8,10 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 
 public class Explosion extends GameObject {
-
-    public Explosion(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    private float fltDmg;
+    public Explosion(float fltWorldX, float fltWorldY, float fltDmg, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
+        this.fltDmg = fltDmg;
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
@@ -30,5 +31,9 @@ public class Explosion extends GameObject {
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY -fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+    }
+
+    public float getDMG(){
+        return this.fltDmg;
     }
 }

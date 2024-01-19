@@ -39,7 +39,7 @@ public class KnightSlashes extends GameObject {
         
         if(System.currentTimeMillis() - lngbirth > 100){
             if(intBoomRad > 0){
-                handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
+                handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, fltDmg, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
                 //arbitary value to make sure bomb doesnt explode multiple times
             }  
             handler.removeObject(this);
@@ -89,7 +89,15 @@ public class KnightSlashes extends GameObject {
         return this.fltLifeSteal;
     }
 
-    public float getCelebShot(){
+    public int getCelebShot(){
         return this.intCelebShot;
+    }
+
+    public float getVelX(){
+        return this.fltVelX;
+    }
+
+    public float getVelY(){
+        return 0;
     }
 }

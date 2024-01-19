@@ -103,7 +103,7 @@ public class Bullet extends GameObject {
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
                     }        
                 }
@@ -114,7 +114,7 @@ public class Bullet extends GameObject {
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         //arbitary value to make sure bomb doesnt explode multiple times
                     }        
                 }
@@ -153,7 +153,15 @@ public class Bullet extends GameObject {
         return this.fltLifeSteal;
     }
 
-    public float getCelebShot(){
+    public int getCelebShot(){
         return this.intCelebShot;
+    }
+
+    public float getVelX(){
+        return this.fltVelX;
+    }
+
+    public float getVelY(){
+        return this.fltVelY;
     }
 }

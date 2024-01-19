@@ -22,7 +22,7 @@ public class Knight extends GameObject {
     private float fltDashVelX;
     private int intPosition;
     private int intJumpCount;
-    private long[] lngTimer = {0,0,0,0,0};
+    private long[] lngTimer = {0,0,0,0,0,0};
     private boolean blnFalling = true;
     private boolean blnBoost = false;
     private int intRecoilX = 0;
@@ -290,14 +290,26 @@ public class Knight extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
-            }else if(object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())){
+            }else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 Enemy enemy = (Enemy) object;
-                fltHP -= enemy.getDmg();
-            } else if(object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())){
+                fltHP -= enemy.getDmg() / fltDef;
+                if(fltReflectDmg > 0){
+                    enemy.setHP(enemy.getHP() - (float)(enemy.getDmg()*fltReflectDmg*0.1));
+                }
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
+                System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG();
+                fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
-            } else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
+                System.out.println("you got shot");
+                EnemyBullet enemy = (EnemyBullet) object;
+                fltHP -= enemy.getDMG() / fltDef;
+                handler.removeObject(object);
+                lngTimer[5] = System.currentTimeMillis();
+            }else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));
                 ItemObject item = (ItemObject) object;
                 if(item.getRarity() == 1){ 

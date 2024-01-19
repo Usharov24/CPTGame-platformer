@@ -87,7 +87,15 @@ public class WaveAttacks extends GameObject {
         return this.fltLifeSteal;
     }
 
-    public float getCelebShot(){
+    public int getCelebShot(){
         return this.intCelebShot;
+    }
+
+    public float getVelX(){
+        return this.fltVelX;
+    }
+
+    public float getVelY(){
+        return this.fltVelY;
     }
 }

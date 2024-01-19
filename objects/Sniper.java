@@ -24,7 +24,7 @@ public class Sniper extends GameObject {
     private int intPosition;    
     private int intJumpCount;
     private int intDirection = 1;
-    private long[] lngTimer = {0,0,0,0,0};
+    private long[] lngTimer = {0,0,0,0,0,0};
     private boolean blnFalling = true;
     private boolean blnBazooka = false;
     private boolean blnRapidFire = false;
@@ -51,7 +51,6 @@ public class Sniper extends GameObject {
     private int intCelebShot = 0;
     private int intJumpCap = 2;
     private float fltMaxHP = 1000;
-    private BufferedImage biBulletTexture;
     private float fltPastDmgMult = 1;
     private boolean blnHoming = false;
     private boolean blnLeft = false;
@@ -61,7 +60,7 @@ public class Sniper extends GameObject {
         this.input = input;
         this.intPosition = intPosition;
         biSprite = resLoader.loadImages("/res\\Sniper.png");
-        biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png");
+        biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\Shrapnel.png");
         this.fltWidth = 32;
         this.fltHeight = 64;
     }
@@ -140,8 +139,8 @@ public class Sniper extends GameObject {
                         ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 + intRand2) * fltBSpeedMult + "," + (fltDiffY * 20 + intRand4) * fltBSpeedMult + "," + 6 + "," + 6 + "," + 4);
                     }
 
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand1) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad, 0));
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand2) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand1) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[2], blnHoming, intExplodeRad, 0));
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand2) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[2], blnHoming, intExplodeRad, 0));
     
                 }
 
@@ -201,8 +200,8 @@ public class Sniper extends GameObject {
                             ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 + intRand2) * fltBSpeedMult + "," + (fltDiffY * 20 + intRand4) * fltBSpeedMult + "," + 6 + "," + 6 + "," + 4);
                         }
     
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand1) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad,0));
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand2) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad,0));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand1) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[2], blnHoming, intExplodeRad,0));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand2) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[2], blnHoming, intExplodeRad,0));
         
                     }
                     
@@ -254,14 +253,11 @@ public class Sniper extends GameObject {
 
             if(intRecoilY > 0) intRecoilY -= 1;
             else if(intRecoilY < 0) intRecoilY += 1;
-
+            collisions();
             fltWorldX += fltVelX + fltDashVel + intRecoilX;
             fltWorldY += fltVelY + intRecoilY;
 
             
-
-            fltWorldX += fltVelX;
-            fltWorldY += fltVelY;
 
             if(intPosition == 0) ssm.sendText("h>a>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + intPosition);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + intPosition); 
@@ -291,13 +287,25 @@ public class Sniper extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
-            } else if(object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())){
+            } else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 Enemy enemy = (Enemy) object;
-                fltHP -= enemy.getDmg();
-            } else if(object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())){
+                fltHP -= enemy.getDmg() / fltDef;
+                if(fltReflectDmg > 0){
+                    enemy.setHP(enemy.getHP() - (float)(enemy.getDmg()*fltReflectDmg*0.1));
+                }
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
+                System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG();
+                fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
+                System.out.println("you got shot");
+                EnemyBullet enemy = (EnemyBullet) object;
+                fltHP -= enemy.getDMG() / fltDef;
+                handler.removeObject(object);
+                lngTimer[5] = System.currentTimeMillis();
             } else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));
                 ItemObject item = (ItemObject) object;

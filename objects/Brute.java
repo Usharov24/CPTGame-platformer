@@ -17,7 +17,7 @@ public class Brute extends GameObject {
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
 
-    private long[] lngTimer = {0, 0, 0, 0, 0};
+    private long[] lngTimer = {0, 0, 0, 0, 0, 0};
 
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDispX, fltDispY;
@@ -53,7 +53,7 @@ public class Brute extends GameObject {
     private int intCelebShot = 0;
     private int intJumpCap = 2;
     private float fltMaxHP = 1000;
-    private BufferedImage biBulletTexture;
+    private BufferedImage biBulletTexture[];
     private float fltPastDmgMult = 1;
     private boolean blnHoming = false;
     private boolean blnFalling = false;
@@ -65,6 +65,7 @@ public class Brute extends GameObject {
         this.intPosition = intPosition;
         biSprite = resLoader.loadImages("/res\\Brute.png");
         biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
+        biBulletTexture = resLoader.loadImages("/res\\Shrapnel.png");;
         this.fltWidth = 32;
         this.fltHeight = 64;
     }
@@ -140,8 +141,8 @@ public class Brute extends GameObject {
                             ssm.sendText("c" + (intPosition + 1) + ">h>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - intRand2) + "," + (fltDiffY * 20 - intRand4) + "," + 6 + "," + 6 + "," + 4);
                         }
 
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad, 0));
-                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad, 0));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand1, fltDiffY * 20 + intRand3, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture[0], blnHoming, intExplodeRad, 0));
+                        handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture[0], blnHoming, intExplodeRad, 0));
         
                     }
                     if(input.fltMouseX - 640 < 0) {
@@ -236,7 +237,7 @@ public class Brute extends GameObject {
                         blnUlt = false;
                         fltAngle = 270;
 
-                        handler.addObject(new Explosion(fltWorldX + fltWidth, fltWorldY + fltHeight/2, 300, 300, ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX + fltWidth, fltWorldY + fltHeight/2, fltDmgMult*100, 300, 300, ObjectId.BOOM, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth) + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
@@ -249,7 +250,7 @@ public class Brute extends GameObject {
                         blnUlt = false;
                         fltAngle = 270;
 
-                        handler.addObject(new Explosion(fltWorldX, fltWorldY + fltHeight/2, 300, 300, ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX, fltWorldY + fltHeight/2, fltDmgMult*100, 300, 300, ObjectId.BOOM, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + 300 + "," + 300);
@@ -263,7 +264,7 @@ public class Brute extends GameObject {
                         blnSlamming = false;
 
                         for(int intCount2 = 0; intCount2 < 2; intCount2++) {
-                            handler.addObject(new Explosion(fltWorldX + fltWidth * intCount2, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
+                            handler.addObject(new Explosion(fltWorldX + fltWidth * intCount2, fltWorldY + fltHeight, fltDmgMult*100, 300, 300, ObjectId.BOOM, handler, ssm));
 
                             if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth * intCount2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
                             else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth * intCount2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
@@ -272,7 +273,7 @@ public class Brute extends GameObject {
                         blnUlt = false;
                         fltAngle = 270;
 
-                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY + fltHeight, 300, 300, ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY + fltHeight, fltDmgMult*100, 300, 300, ObjectId.BOOM, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + "," + 300 + "," + 300);
@@ -285,28 +286,31 @@ public class Brute extends GameObject {
                         blnUlt = false;
                         fltAngle = 270;
 
-                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY, 300, 300, ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX + fltWidth/2, fltWorldY, fltDmgMult*100, 300, 300, ObjectId.BOOM, handler, ssm));
 
                         if(intPosition == 0) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
                         else ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + fltWorldY + "," + 300 + "," + 300);
                     }
                 }
-            } else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) ){
+            } else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 Enemy enemy = (Enemy) object;
                 fltHP -= enemy.getDmg() / fltDef;
                 if(fltReflectDmg > 0){
                     enemy.setHP(enemy.getHP() - (float)(enemy.getDmg()*fltReflectDmg*0.1));
                 }
-            } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds()))){
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
-            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds()))){
+                lngTimer[5] = System.currentTimeMillis();
+            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
+                lngTimer[5] = System.currentTimeMillis();
             }if((object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ITEM && getBounds2().intersects(object.getBounds()))) {  
                 System.out.println("picked up item");
                 handler.removeObject(object);

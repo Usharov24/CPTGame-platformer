@@ -2,12 +2,6 @@ package objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslServer;
-
 import java.awt.Graphics2D;
 import framework.Main;
 import framework.ObjectHandler;
@@ -19,32 +13,31 @@ import java.awt.Color;
 public class Enemy extends GameObject {
     private int intEnemyType;
     private int intEnemyClass;
-    private int intEnemyFloor;
     private float fltDmg;
     private float fltHP;
     private float fltTargetX;
     private float fltTargetY;
     private double dblTimer = System.currentTimeMillis();
-    private int intJumpCap = 0;
+    private int intJumpCap = 1;
     private int intBleedCount = 0;
     private float fltBurnDmg = 0;
-    private boolean blnFalling = false;
+    private boolean blnFalling = true;
     private ResourceLoader resLoader = new ResourceLoader();
-    private BufferedImage biSmallEnem[] = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
-    private BufferedImage biMedEnem[] = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
-    private BufferedImage biBigEnem[] = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
+    private BufferedImage[] biSmallEnem = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
+    private BufferedImage[] biMedEnem = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
+    private BufferedImage[] biBigEnem = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
+    private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
     private BufferedImage biImg = null;
 
     
 
     public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.fltVelX = fltVelX;
-        this.intEnemyFloor = intEnemyFloor;
+        this.fltVelX = fltVelX; 
         this.fltVelY = fltVelY;
         this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
-        this.fltDmg = intEnemyFloor;
+        this.fltDmg *= intEnemyFloor;
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
         if(intEnemyType == 1){
@@ -167,6 +160,9 @@ public class Enemy extends GameObject {
                 }
                 else{
                     fltVelX = -8;
+                }
+                if(fltTargetY > fltWorldY ){
+                    
                 }
             }
             //shooters
@@ -338,10 +334,16 @@ public class Enemy extends GameObject {
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = bullet.getBleed();
                         intBleedCount = (int) bullet.getBleed();
-                    }        
+                    }    
+                    if(bullet.getCelebShot() > 0){
+                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
+                        }
+                    }     
                 }
             }
             else if(object.getId() == ObjectId.WAVE) {
@@ -353,10 +355,17 @@ public class Enemy extends GameObject {
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = bullet.getBleed();
                         intBleedCount = (int) bullet.getBleed();
-                    }        
+                    }
+                    
+                    if(bullet.getCelebShot() > 0){
+                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));                        
+                        }
+                    } 
                 }
             }
             else if(object.getId() == ObjectId.SLASH) {
@@ -368,11 +377,21 @@ public class Enemy extends GameObject {
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = bullet.getBleed();
                         intBleedCount = (int) bullet.getBleed();
-                    }        
+                    } 
+                    if(bullet.getCelebShot() > 0){
+                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
+                        }
+                    }      
                 }
+            }
+            else if(object.getId() == ObjectId.BOOM) {
+                Explosion boom = (Explosion) object;
+                fltHP -= boom.getDMG();
             }
         }
     }

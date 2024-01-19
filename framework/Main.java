@@ -70,7 +70,7 @@ public class Main implements ActionListener{
     private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
     private ImageIcon ioLogo = new ImageIcon(getClass().getResource("/res/ioLogo.png"));
     private Timer timer = new Timer(1000/60, this);
-    private ImageIcon io = new ImageIcon("FireBall.png");
+    private String[] strNameList = {"", "", "", "",};
     public static long startTime = System.nanoTime();
 
     private SuperSocketMaster ssm;
@@ -148,6 +148,7 @@ public class Main implements ActionListener{
             thePanels[intCount + 1].add(netButtons[intCount]);
         }
         netButtons[0].setEnabled(false);
+        netButtons[1].setEnabled(false);
 
         for(int intCount = 0; intCount < netLabels.length; intCount++){
             netLabels[intCount].setFont(new Font("Dialog", Font.BOLD, 18));
@@ -271,6 +272,13 @@ public class Main implements ActionListener{
                     intServerSize++;
                     System.out.println("Player Joined\nServer Size: " + intServerSize);
 
+                    strNameList[intServerSize-1] = strMessage.split("~")[1];
+                    netTextAreas[0].append("\n " + strNameList[intServerSize-1]);
+                    
+                    for(int i = 0; i < intServerSize; i++){
+                        ssm.sendText("h>c0>mNAMELIST~" + (strNameList[i]) + "," + i);
+                    }
+
                     if(availableIds[intServerSize - 2]) {
                         availableIds[intServerSize - 2] = false;
                         ssm.sendText("h>c0>mSESSION_ID~" + intServerSize);
@@ -281,6 +289,7 @@ public class Main implements ActionListener{
                         availableIds[intServerSize - 4] = false;
                         ssm.sendText("h>c0>mSESSION_ID~" + (intServerSize - 2));
                     }
+                    
                 } else if(strMessage.contains("mPLAYER_DISCONNECT")) {
                     intServerSize--;
                     System.out.println("Player Disconnected\nServer Size: " + intServerSize);
@@ -344,9 +353,23 @@ public class Main implements ActionListener{
                 }else if(strMessage.contains("aBOOM")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), ObjectId.BOOM, handler, ssm));
+                    //handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), ObjectId.BOOM, handler, ssm));
                 } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
+                    System.out.println("Session Id: " + intSessionId);
+                } else if(strMessage.contains("mNAMELIST")) {
+                    System.out.println("recieved");
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    strNameList[Integer.parseInt(strPayload[1])] = strPayload[0];
+                    netTextAreas[1].setText(" ");
+                    for(int i = 0; i < 4; i++){
+                        if(i == 0){
+                            netTextAreas[1].append(" " + strNameList[i]);
+                        }
+                        else{
+                            netTextAreas[1].append(" \n" + strNameList[i]);
+                        }
+                    }
                     System.out.println("Session Id: " + intSessionId);
                 } else if(strMessage.contains("mCHARACTER_SELECTED")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -426,6 +449,12 @@ public class Main implements ActionListener{
                 netButtons[0].setEnabled(true);
             }
         }
+
+        if(evt.getSource() == netTextFields[2]){
+            if(netTextFields[2].getText().toString().isEmpty() == false){
+                netButtons[1].setEnabled(true);
+            }
+        }
         
         if(evt.getSource() == netButtons[0]) {
             backButtons[0].setVisible(false);
@@ -442,19 +471,23 @@ public class Main implements ActionListener{
 
             netTextFields[1].setText(new String(chrCharacters));
             netButtons[0].setEnabled(false);
+            netTextAreas[0].append(" " + netTextFields[0].getText());
+            strNameList[0] = netTextFields[0].getText().toString();
             //netStartButton.setEnabled(true);
         } else if(evt.getSource() == netButtons[1]) {
-            backButtons[1].setVisible(false);
-            char[] chrJoinCode = netTextFields[3].getText().toCharArray();
+            if(netTextFields[2].getText().toString().isEmpty() == false){
+                netButtons[1].setEnabled(false);
+                backButtons[1].setVisible(false);
+                char[] chrJoinCode = netTextFields[3].getText().toCharArray();
+                for(int intCount = 0; intCount < chrJoinCode.length; intCount++) {
+                    chrJoinCode[intCount] -= 55;
+                }
 
-            for(int intCount = 0; intCount < chrJoinCode.length; intCount++) {
-                chrJoinCode[intCount] -= 55;
+                ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
+                ssm.connect();
+                ssm.sendText("c0>h>mJOIN~"+netTextFields[2].getText().toString());
+                netButtons[1].setEnabled(false);
             }
-
-            ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
-            ssm.connect();
-            ssm.sendText("c0>h>mJOIN");
-            netButtons[1].setEnabled(false);
         }
 
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
@@ -519,7 +552,7 @@ public class Main implements ActionListener{
                 handler.addObject(new Barrier((intCount == 0) ? -30 : 1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
             }
 
-            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 2, 1, ObjectId.ENEMY,handler,ssm));
+            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 1, 1, ObjectId.ENEMY,handler,ssm));
             
             state = State.GAME;
 
