@@ -104,7 +104,7 @@ public class ResourceLoader {
         Font font = null;
 
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File(strPath)).deriveFont(fltSize);
+            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream(strPath)).deriveFont(fltSize);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);
         } catch(IOException | FontFormatException e) {

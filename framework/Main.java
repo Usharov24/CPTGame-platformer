@@ -34,6 +34,11 @@ public class Main implements ActionListener{
     // Chat
     private ChatPanel chatPanel;
 
+    public static ObjectHandler handler = new ObjectHandler();
+    private InputHandler input = new InputHandler();
+    private ResourceLoader resLoader = new ResourceLoader();
+
+    private BufferedImage[] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300);
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", null, this), new CustomButton(200, 100, "Join",null, this), 
                                               new CustomButton(200, 100, "Help", null, this), new CustomButton(200, 100, "Quit",null, this)};
@@ -44,19 +49,14 @@ public class Main implements ActionListener{
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
-    private JButton[] netButtons = {new JButton("Host Game"), new JButton("Join Game")};
+    private CustomButton[] netButtons = {new CustomButton(500, 70, "Host Game", null, this), new CustomButton(500, 70, "Join Game", null, this)};
+    private CustomButton netStartButton = new CustomButton(100, 100, "Start", null, this);
     private JLabel[] netLabels = {new JLabel("Enter Name"), new JLabel("Join Code"), new JLabel("Enter Name"), new JLabel("Enter Join Code")};
-    private CustomButton netStartButton = new CustomButton(100, 100, "Start game", null, this);
     
     // WIP
-    public static JButton[] characterButtons = {new JButton("Sniper"), new JButton("Brute"), new JButton("Knight"), new JButton("Wizard")};
-    private JButton buttonReady = new JButton("Ready");
+    private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this)};
+    private CustomButton readyButton = new CustomButton(800, 80, "Ready", null, this);
 
-    // TEMPORARY ////////////////////////////////////////////////////////////////
-    public static ObjectHandler handler = new ObjectHandler();
-    private InputHandler input = new InputHandler();
-    private ResourceLoader resLoader = new ResourceLoader();
-    /////////////////////////////////////////////////////////////////////////////
     //All Sprites loaded
     private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
     private BufferedImage BiWizard = null;
@@ -94,14 +94,11 @@ public class Main implements ActionListener{
     public static int intSessionId;
     private int intServerSize = 0;
     private int intCurrentButton = -1, intPreviousButton = -1;
-    private int[] intCharacterSelections = new int[4];
+    private int[] intCharacterSelections = {-1, -1, -1, -1};
     private int intCharacterCheck = 0;
     private boolean[] availableIds = {true, true, true};
     
     public Main() {
-        for(int i = 0; i < 4; i++){
-            intCharacterSelections[i] = -1; 
-        }
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
         }
@@ -142,13 +139,10 @@ public class Main implements ActionListener{
         }
 
         for(int intCount = 0; intCount < netButtons.length; intCount++) {
-            netButtons[intCount].setSize(500, 70);
             netButtons[intCount].setLocation(390, 540);
-            netButtons[intCount].addActionListener(this);
+            netButtons[intCount].setEnabled(false);
             thePanels[intCount + 1].add(netButtons[intCount]);
         }
-        netButtons[0].setEnabled(false);
-        netButtons[1].setEnabled(false);
 
         for(int intCount = 0; intCount < netLabels.length; intCount++){
             netLabels[intCount].setFont(new Font("Dialog", Font.BOLD, 18));
@@ -157,44 +151,26 @@ public class Main implements ActionListener{
             thePanels[(intCount < 2) ? 1 : 2].add(netLabels[intCount]);
         }
 
-        // Will redo this
         netStartButton.setLocation(950, 175);
-        //netStartButton.setEnabled(false);
+        netStartButton.setEnabled(false);
         thePanels[1].add(netStartButton);
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
 
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
-            characterButtons[intCount].setSize(300,300);
-            characterButtons[intCount].setLocation((intCount < 2) ? 300 + 300 * intCount : 300 + 300 * (intCount - 2), (intCount < 2) ? 10 : 310);
-            characterButtons[intCount].setVerticalTextPosition(JButton.BOTTOM);
-            characterButtons[intCount].setHorizontalTextPosition(JButton.CENTER);
-            characterButtons[intCount].addActionListener(this);
+            characterButtons[intCount].setLocation((intCount < 2) ? 345 + 300 * intCount : 345 + 300 * (intCount - 2), (intCount < 2) ? 15 : 315);
             thePanels[5].add(characterButtons[intCount]);
         }
 
-        characterButtons[0].setIcon(ioSniper);
-        characterButtons[1].setIcon(ioBrute);
-        characterButtons[2].setIcon(ioKnight);
-        characterButtons[3].setIcon(ioWizard);
+        readyButton.setLocation(240, 620);
+        readyButton.setEnabled(false);
+        thePanels[5].add(readyButton);
 
-        //(ioWizard, BorderLayout.SOUTH);
-        
         // Back Buttons
-        for(int intCount = 0; intCount < 3; intCount++){
+        for(int intCount = 0; intCount < backButtons.length; intCount++) {
             backButtons[intCount].setLocation(20, 20);
             backButtons[intCount].addActionListener(this);
             thePanels[intCount + 1].add(backButtons[intCount]);
         }
-
-        // Will redo this
-        buttonReady.setSize(800, 80);
-        buttonReady.setLocation(200, 630);
-        buttonReady.addActionListener(this);
-        buttonReady.setEnabled(false);
-        thePanels[5].add(buttonReady);
-        ///////////////////////////////////////////////////////////////////////////////////////////
 
         theFrame.setContentPane(thePanels[0]);  
         theFrame.setIconImage(ioLogo.getImage());
@@ -473,7 +449,7 @@ public class Main implements ActionListener{
             netButtons[0].setEnabled(false);
             netTextAreas[0].append(" " + netTextFields[0].getText());
             strNameList[0] = netTextFields[0].getText().toString();
-            //netStartButton.setEnabled(true);
+            netStartButton.setEnabled(true);
         } else if(evt.getSource() == netButtons[1]) {
             if(netTextFields[2].getText().toString().isEmpty() == false){
                 netButtons[1].setEnabled(false);
@@ -511,7 +487,7 @@ public class Main implements ActionListener{
             }
             
             if(intCharacterCheck == intServerSize && intServerSize > 0){
-                buttonReady.setEnabled(true);
+                readyButton.setEnabled(true);
             }
         }
         intCharacterCheck = 0;
@@ -523,7 +499,7 @@ public class Main implements ActionListener{
             state = State.CHARACTER;
         }
 
-        if(evt.getSource() == buttonReady) {
+        if(evt.getSource() == readyButton) {
             startTime = System.nanoTime();
             chatPanel = new ChatPanel(ssm);
             chatPanel.setPreferredSize(new Dimension(400, 720));

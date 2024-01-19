@@ -1,6 +1,7 @@
 package components;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,10 @@ import objects.Wizard;
 public class CustomPanel extends JPanel {
 
     private ResourceLoader resLoader = new ResourceLoader();
-    private BufferedImage biTitle = resLoader.loadImage("/res\\Title.png");
+
+    private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
+    private Font font = resLoader.loadFont("/res\\bitwise.ttf", 100);
+
     public CustomPanel() {
         super();
     }
@@ -34,9 +38,11 @@ public class CustomPanel extends JPanel {
 
     public void paintComponent(Graphics g){
         if(Main.state == Main.State.MAIN_MENU) {
-            g.setColor(Color.black);
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.drawImage(biTitle, 0, 0, null);
+            g.drawImage(biTitleScreen, 0, 0, null);
+            g.setColor(Color.white);
+            g.setFont(font);
+            FontMetrics fm = g.getFontMetrics();
+            g.drawString("Annihilation Station", (getWidth() - fm.stringWidth("Annihilation Station"))/2, 130);
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());

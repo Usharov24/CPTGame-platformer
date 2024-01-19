@@ -22,30 +22,33 @@ public class CustomButton extends AbstractButton implements MouseListener {
     private Point location = new Point();
 
     private ActionListener listener;
-    private BufferedImage biImage;
+    private BufferedImage[] biImages;
     private Font font;
     private String strText;
 
-    private boolean blnMouseEntered = false;
+    private int intFrameCount = 0;
 
-    public CustomButton(int intWidth, int intHeight, BufferedImage biImage, ActionListener listener) {
-        this(intWidth, intHeight, null, biImage, listener);
+    private boolean blnMouseEntered = false;
+    private boolean blnEnabled = true;
+
+    public CustomButton(int intWidth, int intHeight, BufferedImage[] biImages, ActionListener listener) {
+        this(intWidth, intHeight, null, biImages, listener);
     }
 
-    public CustomButton(int intWidth, int intHeight, String strText, BufferedImage biImage, ActionListener listener) {
+    public CustomButton(float fltWidth, float fltHeight, String strText, BufferedImage[] biImages, ActionListener listener) {
         super();
-        size.setSize(intWidth, intHeight);
+        size.setSize((int)fltWidth, (int)fltHeight);
         this.strText = strText;
-        this.biImage = biImage;
+        this.biImages = biImages;
         this.listener = listener;
 
-        font = resLoader.loadFont("res\\bitwise.ttf", intHeight/2);
+        font = resLoader.loadFont("/res\\bitwise.ttf", (int)fltHeight/2);
 
         enableInputMethods(true);
         addActionListener(this.listener);
         addMouseListener(this);
         setSize(size);
-        setMaximumSize(new Dimension(intWidth + 10, intHeight + 10));
+        setMaximumSize(new Dimension((int)fltWidth + 10, (int)fltHeight + 10));
         setMinimumSize(size);
         setFocusable(true);
     }
@@ -53,32 +56,32 @@ public class CustomButton extends AbstractButton implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if(blnMouseEntered) {
-            if(getWidth() < getMaximumSize().width && getHeight() < getMaximumSize().height) {
+        if(blnEnabled && blnMouseEntered) {
+            if(blnEnabled && getWidth() < getMaximumSize().width && getHeight() < getMaximumSize().height) {
                 setSize(new Dimension(getWidth() + 2, getHeight() + 2));
                 setLocation(getX() - 1, getY() - 1);
+                intFrameCount++;
             }
-
-            g.setColor(Color.green);
-            g.fillRect(0, 0, getWidth(), getHeight());
+            
+            if(biImages != null) g.drawImage(biImages[intFrameCount], -biImages.length + intFrameCount, -biImages.length + intFrameCount, null);
 
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
-            g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
+            if(strText != null) g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
         } else {
             if(getWidth() > getMinimumSize().width && getHeight() > getMinimumSize().height) {
                 setSize(new Dimension(getWidth() - 2, getHeight() - 2));
                 setLocation(getX() + 1, getY() + 1);
+                intFrameCount--;
             }
 
-            g.setColor(Color.red);
-            g.fillRect(0, 0, getWidth(), getHeight());
+            if(biImages != null) g.drawImage(biImages[intFrameCount], -biImages.length + intFrameCount, -biImages.length + intFrameCount, null);
 
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
-            g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
+            if(strText != null) g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
         }
     }
 
@@ -91,11 +94,18 @@ public class CustomButton extends AbstractButton implements MouseListener {
         }
     }
 
+    public void setEnabled(boolean blnEnabled) {
+        this.blnEnabled = blnEnabled;
+    }
+
     public void mouseReleased(MouseEvent evt) {
-        if(listener != null) listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), evt.getWhen(), evt.getModifiersEx()));
-        setSize(size);
-        setLocation(location.x, location.y);
-        blnMouseEntered = false;
+        if(blnEnabled && listener != null) {
+            listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), evt.getWhen(), evt.getModifiersEx()));
+            setSize(size);
+            setLocation(location.x, location.y);
+            blnMouseEntered = false;
+            intFrameCount = 0;
+        }
     }
 
     public void mouseEntered(MouseEvent evt) {
