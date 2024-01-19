@@ -3,20 +3,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import components.*;
 import objects.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class Main implements ActionListener{
 
@@ -52,6 +48,7 @@ public class Main implements ActionListener{
     private CustomButton[] netButtons = {new CustomButton(500, 70, "Host Game", null, this), new CustomButton(500, 70, "Join Game", null, this)};
     private CustomButton netStartButton = new CustomButton(100, 100, "Start", null, this);
     private JLabel[] netLabels = {new JLabel("Enter Name"), new JLabel("Join Code"), new JLabel("Enter Name"), new JLabel("Enter Join Code")};
+    private String[] strNameList = {"", "", "", "",};
     
     // WIP
     private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this)};
@@ -69,8 +66,9 @@ public class Main implements ActionListener{
     private ImageIcon ioBrute = new ImageIcon(getClass().getResource("/res/ioBrute.png"));
     private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
     private ImageIcon ioLogo = new ImageIcon(getClass().getResource("/res/ioLogo.png"));
+
+    // Timer
     private Timer timer = new Timer(1000/60, this);
-    private String[] strNameList = {"", "", "", "",};
     public static long startTime = System.nanoTime();
 
     private SuperSocketMaster ssm;

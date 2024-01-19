@@ -8,7 +8,6 @@ import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.ResourceLoader;
 import framework.SuperSocketMaster;
-import java.awt.Color;
 
 public class Enemy extends GameObject {
     private int intEnemyType;

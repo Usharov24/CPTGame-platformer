@@ -53,7 +53,8 @@ public class CustomPanel extends JPanel {
             g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(new Color(187, 143, 19));
-            g.drawString("help", 400, 300);
+            g.drawString("Annihilation Station is a platformer game that focuses on combat. Players navigate through rooms to proceed in the game. Watch out for enemies that will be in your way. There are many types of enemies, some are more difficult than others.", 30, 300);
+            g.drawString("Defeat enemies by using your player's ability which may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players' abilities to make it easier to navigate through the rooms. ", 30, 320);
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -83,6 +84,7 @@ public class CustomPanel extends JPanel {
             float fltBruteMaxHP = 0;
             float fltKnightMaxHP = 0;
             float fltWizardMaxHP = 0;
+
             for(int i = 0; i < handler.objectList.size(); i++){
                 GameObject object = handler.getObject(i);
                 if(object.getId() == ObjectId.PLAYER){
@@ -98,7 +100,6 @@ public class CustomPanel extends JPanel {
                     if(object instanceof Wizard) fltWizardMaxHP = ((Wizard)object).getMaxHP();
                 }
             }
-
 
             g.setColor(Color.red);
             g.fillRect(100, 16, (int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
