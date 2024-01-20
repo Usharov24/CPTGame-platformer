@@ -362,7 +362,6 @@ public class Enemy extends GameObject {
                     
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
-                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));                        
                         }
                     } 
@@ -383,7 +382,6 @@ public class Enemy extends GameObject {
                     } 
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
-                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }      

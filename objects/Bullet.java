@@ -97,17 +97,6 @@ public class Bullet extends GameObject {
 
     private void collisions() {
         for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.ENEMY){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    handler.removeObject(this);
-                    if(fltExplosionRadius > 0){
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
-                    }        
-                }
-            }
             if(handler.getObject(i).getId() == ObjectId.BARRIER){
                 if(getBounds().intersects(handler.getObject(i).getBounds())){
                     //handler.getObject(i) -- player dmg
@@ -115,6 +104,8 @@ public class Bullet extends GameObject {
                     if(fltExplosionRadius > 0){
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
+                        if(Main.intSessionId == 0) ssm.sendText("h>a>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + ","+ fltDmg + "," + fltHeight + "," + fltHeight); 
+                        else ssm.sendText("c" + (Main.intSessionId + 1) + ">h>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + fltDmg + "," + fltHeight + "," + fltHeight);
                         //arbitary value to make sure bomb doesnt explode multiple times
                     }        
                 }
