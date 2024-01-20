@@ -43,7 +43,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
         this.biImages = biImages;
         this.listener = listener;
 
-        font = resLoader.loadFont("/res\\bitwise.ttf", (int)fltHeight/2);
+        font = resLoader.loadFont("/res\\bitwise.ttf", fltHeight/2);
 
         enableInputMethods(true);
         addActionListener(this.listener);
@@ -64,7 +64,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 intFrameCount++;
             }
             
-            if(biImages != null) g.drawImage(biImages[intFrameCount], -biImages.length + intFrameCount, -biImages.length + intFrameCount, null);
+            if(biImages != null) g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
 
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
@@ -76,9 +76,9 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 setLocation(getX() + 1, getY() + 1);
                 intFrameCount--;
             }
-
-            if(biImages != null) g.drawImage(biImages[intFrameCount], -biImages.length + intFrameCount, -biImages.length + intFrameCount, null);
-
+            g.setColor(Color.blue);
+            if(biImages != null) g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
+            else g.fillRect(0, 0, getWidth(), getHeight());
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);

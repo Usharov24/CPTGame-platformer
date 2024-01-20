@@ -5,6 +5,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 
 public class ResourceLoader {
@@ -81,6 +83,34 @@ public class ResourceLoader {
 
         for(int intCount = 0; intCount < biImages.length; intCount++) {
             biImages[intCount] = biSubimages[intCount];
+        }
+
+        return biImages;
+    }
+
+    public BufferedImage[][] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight, int intNumArrays, int intArrayLength) {
+        BufferedImage biSpriteSheet = null;
+        
+        try {
+            biSpriteSheet = ImageIO.read(getClass().getResourceAsStream(strPath));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        BufferedImage[][] biImages = new BufferedImage[intNumArrays][intArrayLength];
+
+        int intIndex1 = 0, intIndex2 = 0;
+        for(int intCount1 = 0; intCount1 < biSpriteSheet.getHeight()/intImgHeight; intCount1++) {
+            for(int intCount2 = 0; intCount2 < biSpriteSheet.getWidth()/intImgWidth; intCount2++) {
+
+                biImages[intIndex2][intIndex1] = biSpriteSheet.getSubimage(intImgWidth * intCount2, intImgHeight * intCount1, intImgWidth, intImgHeight);
+
+                intIndex1++;
+                if(intIndex1 == intArrayLength) {
+                    intIndex1 = 0;
+                    intIndex2++;
+                }
+            }
         }
 
         return biImages;

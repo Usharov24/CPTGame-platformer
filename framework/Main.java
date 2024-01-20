@@ -17,15 +17,12 @@ import java.awt.image.BufferedImage;
 public class Main implements ActionListener{
 
     // Frame
-    public static JFrame theFrame = new JFrame("CPT Game Proto");
+    public static JFrame theFrame = new JFrame("Annihilation Station");
 
-    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
 
     // Game Layered Pane
     private JLayeredPane gameLayeredPane = new JLayeredPane();
-
-    // Map
-    private MapPanel mapPanel = new MapPanel();
     
     // Chat
     private ChatPanel chatPanel;
@@ -34,40 +31,32 @@ public class Main implements ActionListener{
     private InputHandler input = new InputHandler();
     private ResourceLoader resLoader = new ResourceLoader();
 
-    private BufferedImage[] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300);
+    private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
+    private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
+    private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
     // Main Menu Components
-    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", null, this), new CustomButton(200, 100, "Join",null, this), 
-                                              new CustomButton(200, 100, "Help", null, this), new CustomButton(200, 100, "Quit",null, this)};
- 
-    // Back Buttons
-    private CustomButton[] backButtons = {new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this), new CustomButton(225, 100, "Back", null, this)};
+    private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
+                                              new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
+    private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
+                                          new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
-    private CustomButton[] netButtons = {new CustomButton(500, 70, "Host Game", null, this), new CustomButton(500, 70, "Join Game", null, this)};
-    private CustomButton netStartButton = new CustomButton(100, 100, "Start", null, this);
+    private CustomButton[] netButtons = {new CustomButton(800, 80, "Host Game", biNetButtons, this), new CustomButton(800, 80, "Join Game", biNetButtons, this)};
+    private CustomButton netStartButton = new CustomButton(200, 100, "Start", biMenuButtons, this);
     private JLabel[] netLabels = {new JLabel("Enter Name"), new JLabel("Join Code"), new JLabel("Enter Name"), new JLabel("Enter Join Code")};
     private String[] strNameList = {"", "", "", "",};
     
     // WIP
-    private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this), new CustomButton(290, 290, null, biCharacterButtons, this)};
-    private CustomButton readyButton = new CustomButton(800, 80, "Ready", null, this);
+    private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons[0], this), new CustomButton(290, 290, null, biCharacterButtons[1], this), 
+                                               new CustomButton(290, 290, null, biCharacterButtons[2], this), new CustomButton(290, 290, null, biCharacterButtons[3], this)};
+    private CustomButton readyButton = new CustomButton(800, 80, "Ready", biNetButtons, this);
 
     //All Sprites loaded
     private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
-    private BufferedImage BiWizard = null;
-    private BufferedImage BiSniper = null;
-    private BufferedImage BiBrute = null;
-    private BufferedImage BiKnight = null;
-    private BufferedImage BiVacGrenade = null;
-    private ImageIcon ioWizard = new ImageIcon(getClass().getResource("/res/ioWiz.png"));
-    private ImageIcon ioSniper = new ImageIcon(getClass().getResource("/res/ioSniper.png"));
-    private ImageIcon ioBrute = new ImageIcon(getClass().getResource("/res/ioBrute.png"));
-    private ImageIcon ioKnight = new ImageIcon(getClass().getResource("/res/ioKnight.png"));
     private ImageIcon ioLogo = new ImageIcon(getClass().getResource("/res/ioLogo.png"));
-
-    // Timer
+    
     private Timer timer = new Timer(1000/60, this);
     public static long startTime = System.nanoTime();
 
@@ -76,7 +65,7 @@ public class Main implements ActionListener{
     public static State state = State.MAIN_MENU;
 
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), GAME(4), CHARACTER(5);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5);
 
         private final int intPanelNumber;
 
@@ -102,14 +91,12 @@ public class Main implements ActionListener{
         }
 
         // Listeners
-        thePanels[4].addKeyListener(input);
-        thePanels[4].addMouseListener(input);
-        thePanels[4].addMouseMotionListener(input);
+        thePanels[5].addKeyListener(input);
+        thePanels[5].addMouseListener(input);
+        thePanels[5].addMouseMotionListener(input);
 
         gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
         gameLayeredPane.setLayout(null);
-        mapPanel.setPreferredSize(new Dimension(1280, 720));
-        thePanels[5].setPreferredSize(new Dimension(1280, 720));
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -137,7 +124,7 @@ public class Main implements ActionListener{
         }
 
         for(int intCount = 0; intCount < netButtons.length; intCount++) {
-            netButtons[intCount].setLocation(390, 540);
+            netButtons[intCount].setLocation(240, 540);
             netButtons[intCount].setEnabled(false);
             thePanels[intCount + 1].add(netButtons[intCount]);
         }
@@ -156,17 +143,15 @@ public class Main implements ActionListener{
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             characterButtons[intCount].setLocation((intCount < 2) ? 345 + 300 * intCount : 345 + 300 * (intCount - 2), (intCount < 2) ? 15 : 315);
-            thePanels[5].add(characterButtons[intCount]);
+            thePanels[4].add(characterButtons[intCount]);
         }
 
         readyButton.setLocation(240, 620);
         readyButton.setEnabled(false);
-        thePanels[5].add(readyButton);
+        thePanels[4].add(readyButton);
 
-        // Back Buttons
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             backButtons[intCount].setLocation(20, 20);
-            backButtons[intCount].addActionListener(this);
             thePanels[intCount + 1].add(backButtons[intCount]);
         }
 
@@ -181,10 +166,7 @@ public class Main implements ActionListener{
 
     // Override actionPerformed Method
     public void actionPerformed(ActionEvent evt) {
-        if(evt.getSource() == timer){
-            thePanels[state.getValue()].repaint();
-            mapPanel.repaint();
-        }
+        if(evt.getSource() == timer) thePanels[state.getValue()].repaint();
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
@@ -264,7 +246,7 @@ public class Main implements ActionListener{
                         ssm.sendText("h>c0>mSESSION_ID~" + (intServerSize - 2));
                     }
                     
-                } else if(strMessage.contains("mPLAYER_DISCONNECT")) {
+                } else if(strMessage.contains("mCLIENT_DISCONNECT")) {
                     intServerSize--;
                     System.out.println("Player Disconnected\nServer Size: " + intServerSize);
                     availableIds[Integer.parseInt(strMessage.substring(1, 2))] = true;
@@ -351,7 +333,7 @@ public class Main implements ActionListener{
                     characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
                     if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
                 } else if(strMessage.contains("mCHARACTER_PANEL")) {
-                    theFrame.setContentPane(thePanels[5]);
+                    theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
                     state = State.CHARACTER;
                 } else if(strMessage.contains("mGAME_PANEL")) {
@@ -364,27 +346,17 @@ public class Main implements ActionListener{
                     handler.addObject(new Barrier(-30, 0, 30, 1440, ObjectId.BARRIER, handler, null));
                     handler.addObject(new Barrier(1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
 
-                    thePanels[4].setVisible(true);
-                    thePanels[4].setOpaque(true);
-                    thePanels[4].setBounds(0, 0, 1280, 720);
-
-                    mapPanel.setVisible(true);
-                    mapPanel.setOpaque(true);
-                    mapPanel.setBounds(0, 0, 1280, 720);
-
                     chatPanel.setVisible(true);
                     chatPanel.setOpaque(true);
                     chatPanel.setBounds(880, 0, 400, 720);
 
-                    gameLayeredPane.add(thePanels[4], Integer.valueOf(100));
-                    gameLayeredPane.add(mapPanel, Integer.valueOf(101));
+                    gameLayeredPane.add(thePanels[5], Integer.valueOf(100));
+                    //gameLayeredPane.add(mapPanel, Integer.valueOf(101));
                     gameLayeredPane.add(chatPanel, Integer.valueOf(102));
                     gameLayeredPane.repaint();
 
-                    theFrame.setContentPane(thePanels[4]);
-                    gameLayeredPane.requestFocus(true);
-                    thePanels[4].requestFocus(true);
-                    chatPanel.requestFocus(true);
+                    theFrame.setContentPane(thePanels[5]);
+                    thePanels[5].requestFocusInWindow();
                     theFrame.pack();
                 }
             }
@@ -404,18 +376,27 @@ public class Main implements ActionListener{
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
-        } else if(evt.getSource() == backButtons[0]) {
-            state = State.MAIN_MENU;
-            theFrame.setContentPane(thePanels[0]);
-            theFrame.pack();
-        } else if(evt.getSource() == backButtons[1]) {
-            state = State.MAIN_MENU;
-            theFrame.setContentPane(thePanels[0]);
-            theFrame.pack();
-        } else if(evt.getSource() == backButtons[2]) {
-            state = State.MAIN_MENU;
-            theFrame.setContentPane(thePanels[0]);
-            theFrame.pack();
+        }
+
+        for(int intCount = 0; intCount < backButtons.length; intCount++) {
+            if(evt.getSource() == backButtons[intCount]) {
+                if(intCount < 3) {
+                    if(ssm != null) ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
+
+                    state = State.MAIN_MENU;
+
+                    theFrame.setContentPane(thePanels[0]);
+                    theFrame.pack();
+                } else if(intCount == 3) {
+                    ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
+                    ssm.disconnect();
+
+                    state = (intSessionId == 1) ? State.HOST_MENU : State.JOIN_MENU;
+
+                    theFrame.setContentPane((intSessionId == 1) ? thePanels[1] : thePanels[2]);
+                    theFrame.pack();
+                }
+            }
         }
 
         if(evt.getSource() == netTextFields[0]){
@@ -431,7 +412,6 @@ public class Main implements ActionListener{
         }
         
         if(evt.getSource() == netButtons[0]) {
-            backButtons[0].setVisible(false);
             ssm = new SuperSocketMaster(8080, this);
             ssm.connect();
             intSessionId = 1;
@@ -451,15 +431,16 @@ public class Main implements ActionListener{
         } else if(evt.getSource() == netButtons[1]) {
             if(netTextFields[2].getText().toString().isEmpty() == false){
                 netButtons[1].setEnabled(false);
-                backButtons[1].setVisible(false);
+
                 char[] chrJoinCode = netTextFields[3].getText().toCharArray();
+                
                 for(int intCount = 0; intCount < chrJoinCode.length; intCount++) {
                     chrJoinCode[intCount] -= 55;
                 }
 
                 ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
                 ssm.connect();
-                ssm.sendText("c0>h>mJOIN~"+netTextFields[2].getText().toString());
+                ssm.sendText("c0>h>mJOIN~" + netTextFields[2].getText());
                 netButtons[1].setEnabled(false);
             }
         }
@@ -492,7 +473,7 @@ public class Main implements ActionListener{
 
         if(evt.getSource() == netStartButton) {
             ssm.sendText("h>a>mCHARACTER_PANEL");
-            theFrame.setContentPane(thePanels[5]);
+            theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
             state = State.CHARACTER;
         }
@@ -522,7 +503,7 @@ public class Main implements ActionListener{
 
             for(int intCount = 0; intCount < 2; intCount++) {
                 handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -30, 1920, 30, ObjectId.BARRIER, handler, null));
-                handler.addObject(new ItemObject(200, 200, 20, 20, ObjectId.ITEM, handler,ssm));
+                handler.addObject(new ItemObject(200, 200, 20, 20, ObjectId.ITEM, handler, ssm));
                 handler.addObject(new Barrier((intCount == 0) ? -30 : 1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
             }
 
@@ -530,27 +511,17 @@ public class Main implements ActionListener{
             
             state = State.GAME;
 
-            thePanels[4].setVisible(true);
-            thePanels[4].setOpaque(true);
-            thePanels[4].setBounds(0, 0, 1280, 720);
-
-            mapPanel.setVisible(true);
-            mapPanel.setOpaque(true);
-            mapPanel.setBounds(0, 0, 1280, 720);
-
             chatPanel.setVisible(true);
             chatPanel.setOpaque(true);
             chatPanel.setBounds(880, 0, 400, 720);
 
-            gameLayeredPane.add(thePanels[4], Integer.valueOf(100));
-            gameLayeredPane.add(mapPanel, Integer.valueOf(101));
+            gameLayeredPane.add(thePanels[5], Integer.valueOf(100));
+            //gameLayeredPane.add(mapPanel, Integer.valueOf(101));
             gameLayeredPane.add(chatPanel, Integer.valueOf(102));
             gameLayeredPane.repaint();
 
-            theFrame.setContentPane(thePanels[4]);
-            gameLayeredPane.requestFocus(true);
-            thePanels[4].requestFocus(true);
-            chatPanel.requestFocus(true);
+            theFrame.setContentPane(thePanels[5]);
+            thePanels[5].requestFocusInWindow();
             theFrame.pack();
         }
     }
