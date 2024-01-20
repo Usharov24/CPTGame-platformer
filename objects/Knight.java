@@ -298,16 +298,13 @@ public class Knight extends GameObject {
                 }
                 lngTimer[5] = System.currentTimeMillis();
             } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
-                System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
             } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
-                System.out.println("you got shot");
-                EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG() / fltDef;
-                handler.removeObject(object);
+                EnemyExplosion enemy = (EnemyExplosion) object;
+                fltHP -= enemy.getDmg() / fltDef;
                 lngTimer[5] = System.currentTimeMillis();
             }else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));

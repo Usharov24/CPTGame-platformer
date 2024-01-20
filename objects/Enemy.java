@@ -240,6 +240,7 @@ public class Enemy extends GameObject {
             }
             //big homer
             if(intEnemyClass == 1){
+                blnFalling = false;
                 if(fltWorldX > fltTargetX){
                     fltVelX -= 3; 
                 }
