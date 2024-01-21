@@ -28,7 +28,7 @@ public class KnightSlashes extends GameObject {
         this.lngbirth = lngbirth;
         this.intBoomRad = intBoomRad;
         this.id = ObjectId.SLASH;
-
+        System.out.println("made");
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     

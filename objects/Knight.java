@@ -1,5 +1,4 @@
 package objects;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -390,12 +389,6 @@ public class Knight extends GameObject {
 
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.blue);
-        g2d.fill(getBounds());
-        g2d.setColor(Color.red);
-        g2d.fill(getBounds2());
-        g2d.setColor(Color.white);
-
         if(intPosition == Main.intSessionId - 1) {
             if(blnLeft){
                 g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
@@ -404,8 +397,12 @@ public class Knight extends GameObject {
                 g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
             }
         } else {
-            g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
-        }
+            if(blnLeft){
+                g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 32, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), -32, 64, null);
+            }
+            else{
+                g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+            }        }
     }
 
     public Rectangle getBounds() {
@@ -448,5 +445,9 @@ public class Knight extends GameObject {
 
     public int getChar(){
         return 2;
+    }
+
+    public void setLeft(boolean blnLeft){
+        this.blnLeft = blnLeft;
     }
 }

@@ -381,8 +381,12 @@ public class Sniper extends GameObject {
                 g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
             }
         } else {
-            g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
-        }
+            if(blnLeft){
+                g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 32, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), -32, 64, null);
+            }
+            else{
+                g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+            }        }
     }
 
     public Rectangle getBounds() {
@@ -425,5 +429,9 @@ public class Sniper extends GameObject {
 
     public int getChar(){
         return 0;
+    }
+
+    public void setLeft(boolean blnLeft){
+            this.blnLeft = blnLeft;
     }
 }
