@@ -559,7 +559,7 @@ public class Main implements ActionListener{
                 handler.addObject(new Barrier((intCount == 0) ? -30 : 1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
             }
 
-            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 3, 1, ObjectId.ENEMY,handler,ssm));
+            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 1, 1, ObjectId.ENEMY,handler,ssm));
             
             state = State.GAME;
 

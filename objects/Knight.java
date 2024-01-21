@@ -15,65 +15,71 @@ public class Knight extends GameObject {
 
     private InputHandler input;
     private ResourceLoader resLoader = new ResourceLoader();
+    private BufferedImage biBulletTexture;
+    private BufferedImage[] biSprite;
     private float fltAcc = 1f, fltDec = 0.5f;
     private float fltDispX, fltDispY;
     private float fltDashVelY;
     private float fltDashVelX;
-    private int intPosition;
-    private int intJumpCount;
-    private long[] lngTimer = {0,0,0,0,0,0};
-    private boolean blnFalling = true;
-    private boolean blnBoost = false;
-    private int intRecoilX = 0;
-    private int intRecoilY = 0;
-    private BufferedImage biBulletTexture;
-    private float fltHP = 1000;
-    private int intWungoosCount = 0;
-    private boolean blnMoving = false;
     private float fltDmgMult = 1;
     private float fltRegen = 4;
     private float fltBSpeedMult = 1;
     private float fltPSpeedMult = 1;
     private float fltReflectDmg = 0;
-    private int intPeirceCount = 0;
-    private float fltDef = 1;
-    private float fltFireRateMult = 1;
-    private int intExplodeRad = 0;
-    private int intShurikanCount = 0;
-    private int intBleedCount = 0;
+    private float fltMaxHP = 1000;
+    private float fltPastDmgMult = 1;
     private float fltBurnDmg = 0;  
     private float fltAirDmgMult = 1;
     private float fltLifeSteal = 0; 
+    private float fltHP = 1000;
+    private float fltDef = 1;
+    private float fltFireRateMult = 1;
+    private long[] lngTimer = {0,0,0,0,0,0};
+    private int intPosition;
+    private int intJumpCount;
+    private int intWungoosCount = 0;
+    private int intPeirceCount = 0;
+    private int intExplodeRad = 0;
+    private int intShurikanCount = 0;
+    private int intBleedCount = 0;
     private int intCelebShot = 0;
     private int intJumpCap = 2;
-    private float fltMaxHP = 1000;
-    private float fltPastDmgMult = 1;
-    private boolean blnHoming = false;
-    private BufferedImage[] biSprite;
     private boolean blnLeft = false;
+    private boolean blnFalling = true;
+    private boolean blnBoost = false;
+    private boolean blnHoming = false;
+    private boolean blnMoving = false;
+    //all variables used for items and player interactions
+
     public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
         this.intPosition = intPosition;
+        //informs the program how to handle this object
         biSprite = resLoader.loadImages("/res\\Knight.png");
         biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
         this.fltWidth = 32;
         this.fltHeight = 64;
+        //defines the sprites and hitboxes for the player,
+        
     }
 
     public void update() {
         if(intPosition == Main.intSessionId - 1) {
-            if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < intJumpCap) {
+            if(blnFalling){
+                fltPastDmgMult = fltDmgMult;
+                fltDmgMult *= fltAirDmgMult;
+            }
+            //used to multiply the damage from falling
+            if(intJumpCount < intJumpCap && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
                 input.buttonSet.remove(InputButtons.W);
-                fltVelY = -45;
-                intJumpCount++;
-                blnFalling = true;
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < intJumpCap) {
                 input.buttonSet.remove(InputButtons.SPACE);
                 fltVelY = -45;
                 intJumpCount++;
                 blnFalling = true;
             }
+            //used to allow players to jump
+            //jump count is used to make sure the player jumps a certain amount of times
 
             if(input.buttonSet.contains(InputHandler.InputButtons.A)) {
                 fltVelX -= fltAcc;
@@ -88,8 +94,9 @@ public class Knight extends GameObject {
                 if(fltVelX > 0) fltVelX -= fltDec;
                 else if(fltVelX < 0) fltVelX += fltDec;
             }
+            //general movement for the player, moves the player from left to right
 
-            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 800 * fltFireRateMult && blnBoost == false) {
+            if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 3000 * fltFireRateMult && blnBoost == false) {
                 //Moving variables
                 float fltDiffX = input.fltMouseX - 640;
                 float fltDiffY = input.fltMouseY - 360;
@@ -102,6 +109,7 @@ public class Knight extends GameObject {
                 fltDashVelY = Math.round(fltDiffY * 50);
                 lngTimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
+                //movement ability for the knight which just propels the knight in the direction where his cursor is
                 
             }
             else if(input.buttonSet.contains(InputHandler.InputButtons.SHIFT) && System.currentTimeMillis() - lngTimer[0] > 400 * fltFireRateMult && blnBoost) {
@@ -117,6 +125,7 @@ public class Knight extends GameObject {
                 fltDashVelY = Math.round(fltDiffY * 55);
                 lngTimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
+                //another movement statement in order to use the cooldown remover from the ultimate effectively
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.F) && System.currentTimeMillis() - lngTimer[1] > 1600 * fltFireRateMult) {
                 lngTimer[1] = System.currentTimeMillis();
@@ -125,11 +134,6 @@ public class Knight extends GameObject {
                 //The Ultimate abilty
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 200 * fltFireRateMult && blnBoost == false) {
-                
-                if(blnFalling){
-                    fltPastDmgMult = fltDmgMult;
-                    fltDmgMult *= fltAirDmgMult;
-                }
                 for(int intcount = 0; intcount < intShurikanCount; intcount++){
                     float fltDiffX = input.fltMouseX - 640;
                     float fltDiffY = input.fltMouseY - 360;
@@ -153,6 +157,7 @@ public class Knight extends GameObject {
                     handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, fltDiffX * 20 - intRand2, fltDiffY * 20 - intRand4, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad,2));
     
                 }
+                //the for statement above shoots out the shotgun pellets from the shotgun item.
                 lngTimer[2] = System.currentTimeMillis();
                 if(input.fltMouseX - 640 < 0){
                     handler.addObject(new KnightSlashes(fltWorldX + 25, fltWorldY+15, -20, System.currentTimeMillis(), 50, 50, 135, 50*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.BULLET, handler, ssm));
@@ -163,6 +168,7 @@ public class Knight extends GameObject {
                     handler.addObject(new KnightSlashes(fltWorldX, fltWorldY+15 , 20, System.currentTimeMillis(), 50, 50, 270, 50*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.BULLET, handler, ssm));
                     if(intPosition == 1) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270 + "," + 50*fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 20 +"," + (50) + "," + (50) + "," + 270 + "," + 50*fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
+                //shoots the slashes either left or right and then sends the slash over a network
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 100 * fltFireRateMult && blnBoost) {
                 lngTimer[2] = System.currentTimeMillis();
@@ -176,12 +182,9 @@ public class Knight extends GameObject {
                     if(intPosition == 1) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270 + "," + 50*fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
                     else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + 35 +"," + (50) + "," + (50) + "," + 270 + "," + 50*fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
                 }
-                fltDmgMult = fltPastDmgMult;
+                //used for the ultimaate to ensure the slashes last longer
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 3000 * fltFireRateMult) {
-                if(blnFalling){
-                    fltPastDmgMult = fltDmgMult;
-                    fltDmgMult *= fltAirDmgMult;
-                }
+                
                 lngTimer[3] = System.currentTimeMillis();
                 float fltDiffX = input.fltMouseX - 640;
                 float fltDiffY = input.fltMouseY - 360;
@@ -206,11 +209,11 @@ public class Knight extends GameObject {
                     handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand1) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad,2));
                     handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 3, fltWorldY + fltHeight/2 - 3, (fltDiffX * 20 - intRand2) * fltBSpeedMult, (fltDiffY * 20 + intRand3) * fltBSpeedMult, 6, 6, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTexture, blnHoming, intExplodeRad,2));
                 }
-                fltDmgMult = fltPastDmgMult;
             }
 
             if(System.currentTimeMillis() - lngTimer[1] > 8000 && blnBoost == true){
                 blnBoost = false;
+                //turns off the ultimate ability after a set duration
             }
 
             if(System.currentTimeMillis() - lngTimer[4] > 1000){
@@ -221,12 +224,13 @@ public class Knight extends GameObject {
                 else{
                     fltHP += fltRegen + (fltRegen*intWungoosCount*0.3);
                 }
+                //responsible for the regen per second
             }
 
             if(fltHP > fltMaxHP){
                 fltHP = fltMaxHP;
             }
-
+            //caps out player hp
             
 
             
@@ -245,25 +249,23 @@ public class Knight extends GameObject {
             if(fltDashVelX > 0) fltDashVelX -= 1;
             else if(fltDashVelX < 0) fltDashVelX += 1;
 
-            if(intRecoilX > 0) intRecoilX -= 1;
-            else if(intRecoilX < 0) intRecoilX += 1;
-
-            if(intRecoilY > 0) intRecoilY -= 1;
-            else if(intRecoilY < 0) intRecoilY += 1;
-
-            fltVelX += fltDashVelX + intRecoilX;
-            fltVelY += fltDashVelY + intRecoilY;
-
+            fltVelX += fltDashVelX;
+            fltVelY += fltDashVelY;
+            //determines the direction of the player after all calculations
             collisions();
+            //collisions are responsible for checking if a player has collided with an object
 
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             
-            
+            fltDmgMult = fltPastDmgMult;
+            //resets the damage mult back to standard
             if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
             else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
+            //sends player position and parameters over a network
         } else {
             camObject = handler.getObject(Main.intSessionId - 1);
+            //used to draw the player from a perspective
         }
     }
 
@@ -289,6 +291,7 @@ public class Knight extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
+                //if the player collides with a barrier, push the player back and stop him
             }else if( (object.getId() == ObjectId.ENEMY && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 Enemy enemy = (Enemy) object;
                 fltHP -= enemy.getDmg() / fltDef;
@@ -296,15 +299,18 @@ public class Knight extends GameObject {
                     enemy.setHP(enemy.getHP() - (float)(enemy.getDmg()*fltReflectDmg*0.1));
                 }
                 lngTimer[5] = System.currentTimeMillis();
+                //if the player collides with an enemy, reflect dmg if possible and then make sure the invincibility frames allow no other hits
             } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 EnemyBullet enemy = (EnemyBullet) object;
                 fltHP -= enemy.getDMG() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
+                //if the player collides with an enemy bullet, take dmg.
             } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 EnemyExplosion enemy = (EnemyExplosion) object;
                 fltHP -= enemy.getDmg() / fltDef;
                 lngTimer[5] = System.currentTimeMillis();
+                //if the player collides with an explosion, take damage
             }else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));
                 ItemObject item = (ItemObject) object;
@@ -383,6 +389,7 @@ public class Knight extends GameObject {
                         intCelebShot += 1;
                     }
                 }
+                //if the player collides with an item, pick up the item and change statistics for the player
             }
         }
     }
@@ -402,7 +409,9 @@ public class Knight extends GameObject {
             }
             else{
                 g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
-            }        }
+            }    
+            //responsible for drawing the player locally and over a network and also flips the sprite of the character   
+        }
     }
 
     public Rectangle getBounds() {
@@ -412,6 +421,7 @@ public class Knight extends GameObject {
         else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
 
         return new Rectangle((int)fltBoundsX, (int)(fltDispY - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+        //creates the hitboxes for the x of the player
     }
 
     public Rectangle getBounds2() {
@@ -421,6 +431,7 @@ public class Knight extends GameObject {
         else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
         return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+        //creates the hitboxes for the y of the player
     }
 
     public float getHP(){
@@ -439,10 +450,6 @@ public class Knight extends GameObject {
         return fltDef;
     }
 
-    public float getReflectDmg(){
-        return fltReflectDmg;
-    }
-
     public int getChar(){
         return 2;
     }
@@ -450,4 +457,6 @@ public class Knight extends GameObject {
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
+
+    //methods used over a network or locally to determine what happens.
 }

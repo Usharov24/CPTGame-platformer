@@ -28,7 +28,6 @@ public class KnightSlashes extends GameObject {
         this.lngbirth = lngbirth;
         this.intBoomRad = intBoomRad;
         this.id = ObjectId.SLASH;
-        System.out.println("made");
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
@@ -49,7 +48,7 @@ public class KnightSlashes extends GameObject {
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-
+        
         for(int intCount = -2; intCount < 3; intCount++) {
             g.drawArc((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) + intCount, (int) (fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45, -90);
         }

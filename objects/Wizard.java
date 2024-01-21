@@ -66,16 +66,12 @@ public class Wizard extends GameObject {
     public void update() {
         if(intPosition == Main.intSessionId - 1) {
             //checks if the player is the host
-            if(input.buttonSet.contains(InputHandler.InputButtons.W) && intJumpCount < intJumpCap) {
+            if(intJumpCount < intJumpCap && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
                 input.buttonSet.remove(InputButtons.W);
-                fltVelY = -45;
-                blnFalling = true;
-                intJumpCount++;
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.SPACE) && intJumpCount < intJumpCap) {
                 input.buttonSet.remove(InputButtons.SPACE);
                 fltVelY = -45;
-                blnFalling = true;
                 intJumpCount++;
+                blnFalling=true;
             }
             //jumping for the character
 
@@ -448,10 +444,6 @@ public class Wizard extends GameObject {
 
     public float getDef(){
         return fltDef;
-    }
-
-    public float getReflectDmg(){
-        return fltReflectDmg;
     }
 
     public int getChar(){

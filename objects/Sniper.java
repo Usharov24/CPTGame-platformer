@@ -432,6 +432,6 @@ public class Sniper extends GameObject {
     }
 
     public void setLeft(boolean blnLeft){
-            this.blnLeft = blnLeft;
+        this.blnLeft = blnLeft;
     }
 }
