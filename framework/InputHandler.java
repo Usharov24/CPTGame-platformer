@@ -41,7 +41,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mousePressed(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
-
         if(evt.getButton() == MouseEvent.BUTTON1) buttonSet.add(InputButtons.BUTTON1);
         if(evt.getButton() == MouseEvent.BUTTON2) buttonSet.add(InputButtons.BUTTON2);
         if(evt.getButton() == MouseEvent.BUTTON3) buttonSet.add(InputButtons.BUTTON3);

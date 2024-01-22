@@ -10,86 +10,137 @@ import framework.ResourceLoader;
 import framework.SuperSocketMaster;
 
 public class Enemy extends GameObject {
-
     private ResourceLoader resLoader = new ResourceLoader();
-
     private BufferedImage[] biSmallEnem = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
     private BufferedImage[] biMedEnem = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
     private BufferedImage[] biBigEnem = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
     private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
-    private BufferedImage biImg;
-
-    private double dblTimer = System.currentTimeMillis();
-
+    private BufferedImage biImg = null;
     private float fltDmg;
     private float fltHP;
     private float fltTargetX;
     private float fltTargetY;
     private float fltBurnDmg = 0;
-
+    private double dblTimer = System.currentTimeMillis();
     private int intBleedCount = 0;
     private int intEnemyType;
     private int intEnemyClass;
-
     private boolean blnFalling = true;
     private boolean blnLeft = true;
 
     
 
-    public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intEnemyType, int intEnemyClass, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.fltVelX = fltVelX; 
+        this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
+        this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
-        this.intEnemyClass = intEnemyClass;
+        this.fltDmg *= intEnemyFloor;
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
         //use the class to determine the size of the enemy
         if(intEnemyType == 1){
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
-                this.fltHeight = 60;
                 fltHP = 100;
+                this.fltHeight = 60;
                 fltDmg = 40;
                 biImg = biSmallEnem[0];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
+
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 30;
-                this.fltHeight = 60;
-                fltHP = 250;
+                this.fltHP = 250;
+                fltHeight = 60;
                 fltDmg = 100;
                 biImg = biSmallEnem[1];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
         if(intEnemyType == 2){
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
                 this.fltHeight = 60;
-                fltHP = 450;
                 fltDmg = 150;
+                fltHP = 450;
                 biImg = biMedEnem[0];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 40;
                 this.fltHeight = 60;
-                fltHP = 600;
                 fltDmg = 100;
+                fltHP = 600;
                 biImg = biMedEnem[1];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
         if(intEnemyType == 3){
             if(intEnemyClass == 1){
                 this.fltHeight = 100;
                 this.fltWidth = 100;
-                fltHP = 600;
                 fltDmg = 300;
+                fltHP = 600;
+
                 biImg = biBigEnem[0];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
             if(intEnemyClass == 2){
                 this.fltHeight = 70;
                 this.fltWidth = 50;
-                fltHP = 600;
                 fltDmg = 150;
+                fltHP = 600;
                 biImg = biBigEnem[1];
+                if(intEnemyFloor == 1){
+                    //load special img
+                }
+                if(intEnemyFloor == 2){
+                    //load special img
+                }
+                if(intEnemyFloor == 3){
+                    //load special img
+                }
             }
         }
 
@@ -103,18 +154,18 @@ public class Enemy extends GameObject {
         fltTargetY = findNearestObject(fltWorldX, fltWorldY).getWorldY();
         //finds which player the enemy should target
         //small enemies
-        if(intEnemyType == 1) {
+        if(intEnemyType == 1){
             //crawlers
-            if(intEnemyClass == 1) {
-                if(fltTargetX > fltWorldX) {
+            if(intEnemyClass == 1){
+                if(fltTargetX > fltWorldX){
                     fltVelX = 8;
-                } else {
+                }
+                else{
                     fltVelX = -8;
                 }
-
-                if(fltTargetY < fltWorldY && !blnFalling) {
-                    fltVelY = -30;
-                    blnFalling = true;
+                if(fltTargetY < fltWorldY ){
+                    //jump();
+                    //jumps :)
                 }
                 //makes the enemy follow the player
             }
@@ -130,6 +181,8 @@ public class Enemy extends GameObject {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
+                
+                
             }
         }
         //medium enemies
@@ -189,7 +242,6 @@ public class Enemy extends GameObject {
             }
             //big homer
             if(intEnemyClass == 1){
-                blnFalling = false;
                 if(fltWorldX > fltTargetX){
                     fltVelX -= 3; 
                 }
@@ -211,7 +263,8 @@ public class Enemy extends GameObject {
         if(fltVelX > 35) fltVelX = 35;
         else if(fltVelX < -35) fltVelX = -35; 
         //caps out the velocities
-        
+        collisions();
+        //checks what the enemy collides with
         if(blnFalling){
             fltVelY += 3;
         }
@@ -222,13 +275,8 @@ public class Enemy extends GameObject {
         if(fltVelX > 0){
             blnLeft = false;
         }
-
-        collisions();
-        //checks what the enemy collides with
-
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
-
         if(intBleedCount >= 5){
             fltHP *= 0.6;
         }
@@ -262,7 +310,13 @@ public class Enemy extends GameObject {
         //finds nearest player object
         return handler.getObject(intreturn);
     }
-    
+    private void jump(){
+        if(blnFalling == false){
+            fltVelY = -30;
+            blnFalling = true;
+        }
+    }
+    //makes the enemy jump
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
@@ -300,6 +354,7 @@ public class Enemy extends GameObject {
                     }    
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }     
@@ -322,6 +377,7 @@ public class Enemy extends GameObject {
                     
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));                        
                         }
                     } 
@@ -343,6 +399,7 @@ public class Enemy extends GameObject {
                     } 
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }      
