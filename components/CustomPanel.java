@@ -87,6 +87,8 @@ public class CustomPanel extends JPanel {
 
             g.translate(-getWidth()/2, -getHeight()/2);
             // CAMERA END ///////////////////////////////////////////////////////
+
+            // HUD CODE HERE ////////////////////////////////////////////////////
             
             // HUD Variables
             ObjectHandler handler = Main.handler;
