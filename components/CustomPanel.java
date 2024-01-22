@@ -28,6 +28,7 @@ public class CustomPanel extends JPanel {
     private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
 
     private BufferedImage[] biTileTextures = null;
+    private BufferedImage AbilityButtons = resLoader.loadImage("/res\\AbilityButtons.png");
     private String[][] strMap = resLoader.loadCSV("/res\\maptest.csv");
 
     // Methods
@@ -79,10 +80,19 @@ public class CustomPanel extends JPanel {
         } else if(Main.state == Main.State.HELP) {
             g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(new Color(187, 143, 19));
-            g.drawString("Annihilation Station is a platformer game that focuses on combat. Players navigate through rooms to proceed in the game. Watch out for enemies that will be in your way. There are many types of enemies, some are more difficult than others.", 30, 300);
-            g.drawString("Defeat enemies by using your player's ability which may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players' abilities to make it easier to navigate through the rooms. ", 30, 320);
+            g.setColor(new Color(255, 255, 255));
+            g.setFont(new Font("Dialog", Font.BOLD, 18));
+            g.drawImage(AbilityButtons, 30, 320, null);
+            g.drawString("Annihilation Station is a combat-focused platformer game. Players navigate through rooms to proceed in the game. Watch out for enemies", 30, 200);
+            g.drawString("in your way. There are many types of enemies, some are more difficult than others. Defeat enemies by using your player's ability which", 30, 220);
+            g.drawString("may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players'", 30, 240);
+            g.drawString("abilities to make it easier to navigate through the rooms. ", 30, 260);
 
+        // Demo
+        } else if(Main.state == Main.State.DEMO) {
+            g.setColor(new Color(36, 133, 151));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        
         // Character Selection
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);

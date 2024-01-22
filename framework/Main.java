@@ -23,7 +23,7 @@ public class Main implements ActionListener, WindowListener {
 
     // Frame
     public static JFrame theFrame = new JFrame("Annihilation Station");
-    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
 
     // Game Layered Pane
     private JLayeredPane gameLayeredPane = new JLayeredPane();
@@ -38,10 +38,11 @@ public class Main implements ActionListener, WindowListener {
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
-    
+
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
-                                              new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
+                                              new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this),
+                                              new CustomButton(200, 100, "Demo", biMenuButtons, this)};
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
                                           new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
 
@@ -72,7 +73,7 @@ public class Main implements ActionListener, WindowListener {
     public static State state = State.MAIN_MENU;
 
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5), DEMO(6);
 
         private final int intPanelNumber;
 
@@ -141,6 +142,10 @@ public class Main implements ActionListener, WindowListener {
         netStartButton.setEnabled(false);
         thePanels[1].add(netStartButton);
 
+        // Help Panel Components ///////////////////////////////////////////////////////////////
+        mainMenuButtons[4].setLocation(1060, 20);
+        thePanels[3].add(mainMenuButtons[4]);
+
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             characterButtons[intCount].setLocation((intCount < 2) ? 345 + 300 * intCount : 345 + 300 * (intCount - 2), (intCount < 2) ? 15 : 315);
@@ -155,6 +160,7 @@ public class Main implements ActionListener, WindowListener {
             backButtons[intCount].setLocation(20, 20);
             thePanels[intCount + 1].add(backButtons[intCount]);
         }
+
 
         theFrame.setContentPane(thePanels[0]);  
         theFrame.addWindowListener(this);
@@ -446,6 +452,10 @@ public class Main implements ActionListener, WindowListener {
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
+        } else if(evt.getSource() == mainMenuButtons[4]){
+            state = State.DEMO;
+            theFrame.setContentPane(thePanels[6]);
+            theFrame.pack();
         }
 
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
