@@ -142,4 +142,36 @@ public class CustomPanel extends JPanel {
             // HUD CODE END ////////////////////////////////////////////////////
         }
     }
+
+    private void decodeMap(Graphics g) {
+        GameObject camObject = Main.handler.getObject(Main.intSessionId - 1);
+
+        for(int intCount1 = 0; intCount1 < strMap.length; intCount1++) {
+            for(int intCount2 = 0; intCount2 < strMap[0].length; intCount2++) {
+                short shrtTile = Short.parseShort(strMap[intCount1][intCount2]);
+
+                byte bytTileType = (byte)(shrtTile & 15);
+                byte bytTileTexture = (byte)(shrtTile >> 4 & 15);
+                byte bytSpawnObject = (byte)(shrtTile >> 8 & 15);
+                byte bytSpawnInfo = (byte)(shrtTile >> 12 & 15);
+                //System.out.println(bytTileType + " " + bytTileTexture + " " + bytSpawnObject + " " + bytSpawnInfo);
+                
+                if(bytTileType == 0) {
+                    g.setColor(colors[bytTileTexture]);
+                    g.fillRect((int)(intCount2 * 40 - camObject.getWorldX() - camObject.getWidth()/2), (int)(intCount1 * 40 - camObject.getWorldY() - camObject.getHeight()/2), 40, 40);
+                    //g.drawImage(biTileTextures[bytTileTexture], intCount2 * 40, intCount1 * 40, null);
+                } else if(bytTileType == 1) {
+                    Main.handler.addObject(new Barrier(intCount2 * 40, intCount1 * 40, 40, 40, ObjectId.BARRIER, Main.handler, null));
+                } else if(bytTileType == 2) {
+                    // Add door object
+                }
+
+                if(bytSpawnObject == 1) {
+                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 32, 64, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
+                } else if(bytSpawnObject == 2) {
+                    // Add items
+                }
+            }
+        }
+    }
 }

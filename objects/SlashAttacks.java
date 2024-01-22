@@ -8,7 +8,7 @@ import framework.ObjectId;
 import framework.SuperSocketMaster;
 
 
-public class KnightSlashes extends GameObject {
+public class SlashAttacks extends GameObject {
 
     private float fltStartAngle;
     private long lngbirth;
@@ -21,13 +21,14 @@ public class KnightSlashes extends GameObject {
     private int intSender;
     private int intCelebShot;
     
-    public KnightSlashes(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public SlashAttacks(float fltWorldX, float fltWorldY, float fltVelX, long lngbirth, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
         this.lngbirth = lngbirth;
         this.intBoomRad = intBoomRad;
-        this.id = ObjectId.SLASH;
+        this.id = id;
+
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
@@ -43,6 +44,7 @@ public class KnightSlashes extends GameObject {
             }  
             handler.removeObject(this);
         }
+
         collisions();
     }
 
