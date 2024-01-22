@@ -88,8 +88,7 @@ public class CustomPanel extends JPanel {
             g.translate(-getWidth()/2, -getHeight()/2);
             // CAMERA END ///////////////////////////////////////////////////////
             
-            // HUD CODE HERE ////////////////////////////////////////////////////
-
+            // HUD Variables
             ObjectHandler handler = Main.handler;
             int intBarWidth = 400;
             int intBarHeight = 20;
@@ -102,34 +101,46 @@ public class CustomPanel extends JPanel {
             float fltKnightMaxHP = 0;
             float fltWizardMaxHP = 0;
 
+            // HP Getter
             for(int i = 0; i < handler.objectList.size(); i++){
                 GameObject object = handler.getObject(i);
                 if(object.getId() == ObjectId.PLAYER){
 
+                    // Current HP
                     if(object instanceof Sniper) fltSniperHP = ((Sniper)object).getHP();
                     if(object instanceof Brute) fltBruteHP = ((Brute)object).getHP();
                     if(object instanceof Knight) fltKnightHP = ((Knight)object).getHP();
                     if(object instanceof Wizard) fltWizardHP = ((Wizard)object).getHP();
 
+                    // Max HP
                     if(object instanceof Sniper) fltSniperMaxHP = ((Sniper)object).getMaxHP();
                     if(object instanceof Brute) fltBruteMaxHP = ((Brute)object).getMaxHP();
                     if(object instanceof Knight) fltKnightMaxHP = ((Knight)object).getMaxHP();
                     if(object instanceof Wizard) fltWizardMaxHP = ((Wizard)object).getMaxHP();
+
+                    // Set Lower Bound of HP to 0
+                    if(fltSniperHP <= 0) fltSniperHP = 0;
+                    if(fltBruteHP <= 0) fltBruteHP = 0;
+                    if(fltKnightHP <= 0) fltKnightHP = 0;
+                    if(fltWizardHP <= 0) fltWizardHP = 0;
                 }
             }
 
+            // Health Bar
             g.setColor(Color.red);
             g.fillRect(100, 16, (int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
             g.fillRect(100, 46, (int)(intBarWidth*fltBruteHP/fltBruteMaxHP), intBarHeight);
             g.fillRect(100, 76, (int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
             g.fillRect(100, 106, (int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
 
+            // Health Bar Background
             g.setColor(new Color(64, 64, 64));
             g.fillRect(100+(int)(intBarWidth*fltSniperHP/fltSniperMaxHP), 16, intBarWidth-(int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
             g.fillRect(100+(int)(intBarWidth*fltBruteHP/fltBruteMaxHP), 46, intBarWidth-(int)(intBarWidth*fltBruteHP/fltBruteMaxHP), intBarHeight);
             g.fillRect(100+(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), 76, intBarWidth-(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
             g.fillRect(100+(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), 106, intBarWidth-(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
 
+            // Health Bar Labels
             g.setColor(Color.white);
             g.setFont(new Font("Dialog", Font.BOLD, 18));
             g.drawString("Sniper", 20, 32);
@@ -137,6 +148,7 @@ public class CustomPanel extends JPanel {
             g.drawString("Knight", 20, 92);
             g.drawString("Wizard", 20, 122);
 
+            // Health Bar Borders
             for(int intBar = 0; intBar <= 3; intBar++){
                 g.setColor(Color.black);
                 g.drawRect(100, 16+30*intBar, intBarWidth, intBarHeight);
