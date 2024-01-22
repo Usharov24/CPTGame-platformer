@@ -3,10 +3,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -14,11 +12,10 @@ import javax.imageio.ImageIO;
 public class ResourceLoader {
     
     public BufferedImage loadImage(String strPath) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biImage = null;
 
-        try(inputStream) {
-            biImage = ImageIO.read(inputStream);
+        try {
+            biImage = ImageIO.read(getClass().getResourceAsStream(strPath));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -30,8 +27,8 @@ public class ResourceLoader {
         BufferedImage[] biImages = new BufferedImage[strPaths.length];
 
         for(int intCount = 0; intCount < biImages.length; intCount++) {
-            try(InputStream inputStream = getClass().getResourceAsStream(strPaths[intCount])) {
-                biImages[intCount] = ImageIO.read(inputStream);
+            try {
+                biImages[intCount] = ImageIO.read(getClass().getResourceAsStream(strPaths[intCount]));
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -41,11 +38,10 @@ public class ResourceLoader {
     }
 
     public BufferedImage[] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
 
-        try(inputStream) {
-            biSpriteSheet = ImageIO.read(inputStream);
+        try {
+            biSpriteSheet = ImageIO.read(getClass().getResourceAsStream(strPath));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -65,11 +61,10 @@ public class ResourceLoader {
     }
 
     public BufferedImage[] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight, int intRemove) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
 
-        try(inputStream) {
-            biSpriteSheet = ImageIO.read(inputStream);
+        try {
+            biSpriteSheet = ImageIO.read(getClass().getResourceAsStream(strPath));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -94,11 +89,10 @@ public class ResourceLoader {
     }
 
     public BufferedImage[][] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight, int intNumArrays, int intArrayLength) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
         
-        try(inputStream) {
-            biSpriteSheet = ImageIO.read(inputStream);
+        try {
+            biSpriteSheet = ImageIO.read(getClass().getResourceAsStream(strPath));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -122,35 +116,11 @@ public class ResourceLoader {
         return biImages;
     }
 
-    public String[][] loadCSV(String strPath) {
-        InputStreamReader inputReader = new InputStreamReader(getClass().getResourceAsStream(strPath));
-        BufferedReader br = new BufferedReader(inputReader);
-        ArrayList<String[]> strLines = new ArrayList<>();
-        String strLine = null;
-
-        try(inputReader; br) {
-            while((strLine = br.readLine()) != null) {
-                strLines.add(strLine.split(","));
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
-        String[][] strContents = new String[strLines.size()][strLines.get(0).length];
-
-        for(int intCount = 0; intCount < strContents.length; intCount++) {
-            strContents[intCount] = strLines.get(intCount);
-        }
-
-        return strContents;
-    }
-
     public Font loadFont(String strPath) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         Font font = null;
 
-        try(inputStream) {
-            font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(48f);
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new File(strPath)).deriveFont(48f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);
         } catch(IOException | FontFormatException e) {
@@ -161,11 +131,10 @@ public class ResourceLoader {
     }
 
     public Font loadFont(String strPath, float fltSize) {
-        InputStream inputStream = getClass().getResourceAsStream(strPath);
         Font font = null;
 
-        try(inputStream) {
-            font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(fltSize);
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream(strPath)).deriveFont(fltSize);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);
         } catch(IOException | FontFormatException e) {

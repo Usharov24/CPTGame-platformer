@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.time.chrono.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -64,7 +63,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 intFrameCount++;
             }
             
-            g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
+            if(biImages != null) g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
 
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
@@ -76,9 +75,9 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 setLocation(getX() + 1, getY() + 1);
                 intFrameCount--;
             }
-
-            g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
-
+            g.setColor(Color.blue);
+            if(biImages != null) g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
+            else g.fillRect(0, 0, getWidth(), getHeight());
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
