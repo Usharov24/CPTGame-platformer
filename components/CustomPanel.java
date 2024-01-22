@@ -158,8 +158,7 @@ Color[] colors = {Color.blue, Color.red, Color.cyan, Color.pink, Color.white, Co
                 byte bytSpawnObject = (byte)(shrtTile >> 8 & 15);
                 byte bytSpawnInfo = (byte)(shrtTile >> 12 & 15);
                 //System.out.println(bytTileType + " " + bytTileTexture + " " + bytSpawnObject + " " + bytSpawnInfo);
-//if(intCount1 == 0 && intCount2 == 0) System.out.println((intCount2 * 40 - camObject.getWorldX() - camObject.getWidth()/2) + " " + (intCount1 * 40 - camObject.getWorldY() - camObject.getHeight()/2));
-if(intCount1 == 0 && intCount2 == 0) System.out.println((camObject.getWorldX() + camObject.getWidth()/2) + " " + (camObject.getWorldY() + camObject.getHeight()/2));
+                
                 if(bytTileType == 0) {
                     g.setColor(colors[bytTileTexture]);
                     g.fillRect((int)(intCount2 * 40 - camObject.getWorldX() - camObject.getWidth()/2), (int)(intCount1 * 40 - camObject.getWorldY() - camObject.getHeight()/2), 40, 40);
@@ -171,7 +170,7 @@ if(intCount1 == 0 && intCount2 == 0) System.out.println((camObject.getWorldX() +
                 }
 
                 if(bytSpawnObject == 1) {
-                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 0, 0, 100, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
+                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 32, 64, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
                 } else if(bytSpawnObject == 2) {
                     // Add items
                 }
