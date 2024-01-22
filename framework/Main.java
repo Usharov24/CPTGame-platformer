@@ -34,6 +34,7 @@ public class Main implements ActionListener{
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
+    
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
@@ -61,7 +62,7 @@ public class Main implements ActionListener{
     private Timer timer = new Timer(1000/60, this);
     public static long startTime = System.nanoTime();
 
-    private SuperSocketMaster ssm;
+    public static SuperSocketMaster ssm;
 
     public static State state = State.MAIN_MENU;
 

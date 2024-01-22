@@ -32,22 +32,25 @@ public class ChatPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
         if(evt.getSource() == sendButton){
             try{
-                String strMessage = chatInput.getText();
+                String strOutMessage = chatInput.getText();
 
                 if(Main.intSessionId == 1){
-                    ssm.sendText("h>a>cCHAT~"+strMessage+", "+(Main.intSessionId-1));
-                    chatTextArea.append(strMessage+"\n");
+                    ssm.sendText("h>a>cCHAT~"+strOutMessage+", "+(Main.intSessionId-1));
+                    chatTextArea.append(strOutMessage+"\n");
+                    chatInput.setText("");
                 }else{
-                    ssm.sendText("c"+Main.intSessionId+">h>cCHAT~"+strMessage+", "+(Main.intSessionId-1));
-                    chatTextArea.append(strMessage+"\n");
+                    ssm.sendText("c"+Main.intSessionId+">h>cCHAT~"+strOutMessage+", "+(Main.intSessionId-1));
+                    chatTextArea.append(strOutMessage+"\n");
+                    chatInput.setText("");
                 }
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
         }
-        if(evt.getSource() == ssm){
-            String strMessage = ssm.readText();
-            chatTextArea.append(strMessage+"\n");
+        if(evt.getSource() == Main.ssm){
+            String strInMessage = Main.ssm.readText();
+            System.out.println(strInMessage);
+            chatTextArea.append(strInMessage+"\n");
         }
     }
 }
