@@ -60,7 +60,7 @@ public class Main implements ActionListener, WindowListener {
 
     //All Sprites loaded
     private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
-    private BufferedImage[] biVacTexture = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
+    private BufferedImage[] biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
     // Timer
@@ -178,7 +178,6 @@ public class Main implements ActionListener, WindowListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
-            //System.out.println(strMessage);
 
             if(intSessionId == 1) {
                 if(strMessage.substring(5, 6).equals("o")){
@@ -189,34 +188,27 @@ public class Main implements ActionListener, WindowListener {
                     if(strMessage.contains("SNIPER")) {
                         Sniper snip = (Sniper) object;
                         snip.setLeft(Boolean.parseBoolean(strPayload[3]));
-                        System.out.println("2nd " + object.getWorldX() + " " + object.getWorldY());
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
-                    }
 
-                    else if(strMessage.contains("BRUTE")) {
+                    }else if(strMessage.contains("BRUTE")) {
                         Brute brut = (Brute) object;
                         brut.setLeft(Boolean.parseBoolean(strPayload[3]));
-                        System.out.println("2nd " + object.getWorldX() + " " + object.getWorldY());
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
-                    }
 
-                    else if(strMessage.contains("KNIGHT")) {
+                    }else if(strMessage.contains("KNIGHT")) {
                         Knight knit = (Knight) object;
                         knit.setLeft(Boolean.parseBoolean(strPayload[3]));
-                        System.out.println("2nd " + object.getWorldX() + " " + object.getWorldY());
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
-                    }
 
-                    else if(strMessage.contains("WIZARD")) {
+                    }else if(strMessage.contains("WIZARD")) {
                         Wizard wiz = (Wizard) object;
                         wiz.setLeft(Boolean.parseBoolean(strPayload[3]));
-                        System.out.println("2nd " + object.getWorldX() + " " + object.getWorldY());
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
@@ -240,7 +232,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    //handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, handler, ssm));
+                    handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Float.parseFloat(strPayload[7]), Integer.parseInt(strPayload[8]), Float.parseFloat(strPayload[9]), Integer.parseInt(strPayload[10]), 0, 0, ObjectId.WAVE, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aWAVE~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
@@ -248,7 +240,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    //handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, handler, ssm));
+                    handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.SLASH, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSLASH~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSLASH~" + strMessage.split("~")[1]);
@@ -256,7 +248,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aBIGSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    //handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() + 300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, handler, ssm));
+                    handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() + 300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.BULLET, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBIGSLASH~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBIGSLASH~" + strMessage.split("~")[1]);
@@ -271,7 +263,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aVAC")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTexture));
+                    handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aVAC~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aVAC~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aVAC~" + strMessage.split("~")[1]);
@@ -282,11 +274,11 @@ public class Main implements ActionListener, WindowListener {
                     strNameList[intServerSize-1] = strMessage.split("~")[1];
                     netTextAreas[0].append("\n " + strNameList[intServerSize-1]);
                     
-                    for(int i = 0; i <= intServerSize; i++){
+                    for(int intCount = 0; intCount <= intServerSize; intCount++){
                         for(int intcount = 0; intcount <= intServerSize; intcount++){
-                            ssm.sendText("h>c"+intcount+ ">mNAME_LIST~" + (strNameList[i]) + "," + i);
+                            ssm.sendText("h>c"+intcount+ ">mNAME_LIST~" + (strNameList[intCount]) + "," + intCount);
                         }
-                        ssm.sendText("h>c0>mNAME_LIST~" + (strNameList[i]) + "," + i);
+                        ssm.sendText("h>c0>mNAME_LIST~" + (strNameList[intCount]) + "," + intCount);
                     }
                 } else if(strMessage.contains("mCLIENT_JOIN")) {
                     intServerSize++;
@@ -325,20 +317,17 @@ public class Main implements ActionListener, WindowListener {
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
                     if(strMessage.contains("KNIGHT")){
-                        Knight knit = (Knight) object;
-                        knit.setLeft(Boolean.parseBoolean(strPayload[3]));
-                    }
-                    else if(strMessage.contains("BRUTE")){
-                        Brute brut = (Brute) object;
-                        brut.setLeft(Boolean.parseBoolean(strPayload[3]));
-                    }
-                    else if(strMessage.contains("SNIPER")){
-                        Sniper snip = (Sniper) object;
-                        snip.setLeft(Boolean.parseBoolean(strPayload[3]));
-                    }
-                    else if(strMessage.contains("WIZARD")){
-                        Wizard wiz = (Wizard) object;
-                        wiz.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        Knight knight = (Knight) object;
+                        knight.setLeft(Boolean.parseBoolean(strPayload[3]));
+                    } else if(strMessage.contains("BRUTE")){
+                        Brute brute = (Brute) object;
+                        brute.setLeft(Boolean.parseBoolean(strPayload[3]));
+                    } else if(strMessage.contains("SNIPER")){
+                        Sniper sniper = (Sniper) object;
+                        sniper.setLeft(Boolean.parseBoolean(strPayload[3]));
+                    } else if(strMessage.contains("WIZARD")){
+                        Wizard wizard = (Wizard) object;
+                        wizard.setLeft(Boolean.parseBoolean(strPayload[3]));
                     }
 
                 } else if(strMessage.contains("aSNIPER")) {
@@ -362,16 +351,16 @@ public class Main implements ActionListener, WindowListener {
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    
-                    //handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, handler, ssm));
+    
+                    handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.SLASH, handler, ssm));
                 } else if(strMessage.contains("aBIGSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    //handler.addObject(new KnightSlashes(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() +300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), ObjectId.BULLET, handler, ssm));
+                    handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() + 300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.BULLET, handler, ssm));
                 } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    //handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.BULLET, handler, ssm));
+                    handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Float.parseFloat(strPayload[7]), Integer.parseInt(strPayload[8]), Float.parseFloat(strPayload[9]), Integer.parseInt(strPayload[10]), 0, 0, ObjectId.WAVE, handler, ssm));
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -379,7 +368,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aVAC")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm,biVacTexture));
+                    handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
                 }else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
@@ -603,17 +592,17 @@ public class Main implements ActionListener, WindowListener {
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 if(intCharacterSelections[intCount] == 0) {
-                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 1) {
-                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 2) {
-                    handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aKNIGHT~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                    handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aKNIGHT~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 3) {
-                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 32, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aWIZARD~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 32 + "," + intCount);
+                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aWIZARD~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
                 }
             }
 
@@ -625,7 +614,7 @@ public class Main implements ActionListener, WindowListener {
             }
             handler.addObject(new ItemObject(200, 200, 20, 20, ObjectId.ITEM, handler, ssm));
 
-            handler.addObject(new Enemy(100,300,0,0,50,59, 10, 1, 1, ObjectId.ENEMY,handler,ssm));
+            handler.addObject(new Enemy(100, 300, 0, 0, 32, 64, 1, 1, ObjectId.ENEMY, handler, ssm));
 
             theFrame.setContentPane(thePanels[5]);
             thePanels[5].requestFocusInWindow();

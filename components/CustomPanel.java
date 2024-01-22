@@ -211,7 +211,7 @@ public class CustomPanel extends JPanel {
                 }
 
                 if(bytSpawnObject == 1) {
-                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 0, 0, 100, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
+                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 32, 64, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
                 } else if(bytSpawnObject == 2) {
                     // Add items
                 }
