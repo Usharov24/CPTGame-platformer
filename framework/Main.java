@@ -23,7 +23,6 @@ public class Main implements ActionListener, WindowListener {
 
     // Frame
     public static JFrame theFrame = new JFrame("Annihilation Station");
-
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
 
     // Game Layered Pane
@@ -39,6 +38,7 @@ public class Main implements ActionListener, WindowListener {
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
+    
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
@@ -62,9 +62,11 @@ public class Main implements ActionListener, WindowListener {
     private BufferedImage[] biVacTexture = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
+    // Timer
     private Timer timer = new Timer(1000/60, this);
     public static long startTime = System.nanoTime();
 
+    // Networking
     public static SuperSocketMaster ssm;
 
     public static State state = State.MAIN_MENU;

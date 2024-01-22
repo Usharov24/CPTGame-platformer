@@ -11,7 +11,6 @@ public class ObjectHandler {
     public void update() {
         for(int intCount = 0; intCount < objectList.size(); intCount++) {
             GameObject object = objectList.get(intCount);
-            
             object.update();
         }
     }

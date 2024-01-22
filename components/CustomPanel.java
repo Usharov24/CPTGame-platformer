@@ -19,6 +19,8 @@ import objects.Sniper;
 import objects.Wizard;
 
 public class CustomPanel extends JPanel {
+
+    // Variables
     Color[] colors = {Color.blue, Color.red, Color.cyan, Color.pink, Color.white, Color.green, Color.magenta, Color.gray, Color.darkGray, Color.lightGray, Color.orange, new Color(34, 53, 122), new Color(65, 34, 255), new Color(87, 255, 245), new Color(255, 124, 64), new Color(98, 35, 123)};
     private ResourceLoader resLoader = new ResourceLoader();
 
@@ -28,6 +30,7 @@ public class CustomPanel extends JPanel {
     private BufferedImage[] biTileTextures = null;
     private String[][] strMap = resLoader.loadCSV("/res\\maptest.csv");
 
+    // Methods
     public CustomPanel() {
         super();
     }
@@ -41,13 +44,18 @@ public class CustomPanel extends JPanel {
         setFocusable(blnFocusable);
     }
 
+    // Draw Panel to Screen
     public void paintComponent(Graphics g) {
+
+        // Main Menu
         if(Main.state == Main.State.MAIN_MENU) {
             g.drawImage(biTitleScreen, 0, 0, null);
             g.setColor(Color.white);
             g.setFont(font.deriveFont(100f));
             FontMetrics fm = g.getFontMetrics();
             g.drawString("Annihilation Station", (getWidth() - fm.stringWidth("Annihilation Station"))/2, 130);
+
+        // Host Menu
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -56,6 +64,8 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
+
+        // Join Menu
         } else if(Main.state == Main.State.JOIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -64,15 +74,21 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
+
+        // Help Screen
         } else if(Main.state == Main.State.HELP) {
             g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(new Color(187, 143, 19));
             g.drawString("Annihilation Station is a platformer game that focuses on combat. Players navigate through rooms to proceed in the game. Watch out for enemies that will be in your way. There are many types of enemies, some are more difficult than others.", 30, 300);
             g.drawString("Defeat enemies by using your player's ability which may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players' abilities to make it easier to navigate through the rooms. ", 30, 320);
+
+        // Character Selection
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
+
+        // Main Game
         } else if(Main.state == Main.State.GAME) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
