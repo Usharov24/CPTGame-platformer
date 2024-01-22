@@ -133,9 +133,9 @@ public class SuperSocketMaster{
   private synchronized void addActionListener(ActionListener listener) {
     actionListener = AWTEventMulticaster.add(actionListener, listener);
   }
-  //private synchronized void removeActionListener(ActionListener listener) {
-  //  actionListener = AWTEventMulticaster.remove(actionListener, listener);
-  //}
+  private synchronized void removeActionListener(ActionListener listener) {
+    actionListener = AWTEventMulticaster.remove(actionListener, listener);
+  }
   private void postActionEvent() {
     // when event occurs which causes "action" semantic
     ActionListener listener = actionListener;
@@ -185,8 +185,8 @@ public class SuperSocketMaster{
     Socket socketObject = null;
     PrintWriter outBuffer = null;
     BufferedReader inBuffer = null;
-    //String strMyIP;
-    //String strMyHostname;
+    String strMyIP;
+    String strMyHostname;
     Vector<ClientConnection> clientconnections = new Vector<ClientConnection>();
     boolean blnListenForClients = true;
     

@@ -32,7 +32,7 @@ public class Enemy extends GameObject {
 
     public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltHealth, int intEnemyType, int intEnemyFloor, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.fltVelX = fltVelX; 
+        this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
         this.intEnemyClass = (int)Math.floor(Math.random() * 2 + 1);
         this.intEnemyType = intEnemyType;
@@ -242,7 +242,6 @@ public class Enemy extends GameObject {
             }
             //big homer
             if(intEnemyClass == 1){
-                blnFalling = false;
                 if(fltWorldX > fltTargetX){
                     fltVelX -= 3; 
                 }
@@ -378,6 +377,7 @@ public class Enemy extends GameObject {
                     
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));                        
                         }
                     } 
@@ -399,6 +399,7 @@ public class Enemy extends GameObject {
                     } 
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                            ssm.sendText("h>a>aSHRAPNEL~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (bullet.getVelX()) + "," + (bullet.getVelY()) + "," + 6 + "," + 6 + "," + 4);
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }      

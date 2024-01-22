@@ -64,7 +64,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 intFrameCount++;
             }
             
-            if(biImages != null) g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
+            g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
 
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
@@ -76,9 +76,9 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 setLocation(getX() + 1, getY() + 1);
                 intFrameCount--;
             }
-            g.setColor(Color.blue);
-            if(biImages != null) g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
-            else g.fillRect(0, 0, getWidth(), getHeight());
+
+            g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
+
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
