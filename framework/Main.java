@@ -21,20 +21,20 @@ import java.awt.image.BufferedImage;
 
 public class Main implements ActionListener, WindowListener {
 
-    // Frame
+    // Frame & Main Panels
     public static JFrame theFrame = new JFrame("Annihilation Station");
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), new CustomPanel(null, true)};
-
-    // Game Layered Pane
     private JLayeredPane gameLayeredPane = new JLayeredPane();
     
-    // Chat
+    // Chat Panel
     private ChatPanel chatPanel;
 
+    // Handlers
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
     private ResourceLoader resLoader = new ResourceLoader();
 
+    // Button Images
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
@@ -71,6 +71,7 @@ public class Main implements ActionListener, WindowListener {
     // Networking
     public static SuperSocketMaster ssm;
 
+    // Game States
     public static State state = State.MAIN_MENU;
 
     public enum State {
@@ -87,6 +88,7 @@ public class Main implements ActionListener, WindowListener {
         }
     }
 
+    // Network Details
     public static int intSessionId;
     private int intServerSize = 0;
     private int intCurrentButton = -1, intPreviousButton = -1;
@@ -94,6 +96,7 @@ public class Main implements ActionListener, WindowListener {
     private int[] intCharacterSelections = {-1, -1, -1, -1};
     private boolean[] blnAvailableIds = {true, true, true};
     
+    // Constructor
     public Main() {
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
@@ -310,6 +313,10 @@ public class Main implements ActionListener, WindowListener {
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("mREADY")) {
                     intReady++;
+                } else if(strMessage.contains("cCHAT")){
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    components.ChatPanel.setTextArea(strPayload[1]);
+                    System.out.println(strPayload[1]);
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
                 if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")){
