@@ -70,7 +70,7 @@ public class SlashAttacks extends GameObject {
     public int getBoom(){
         return (int)fltExplosionRadius;
     }
-    public float getDMG(){
+    public float getDmg(){
         return fltDmg;
     }
 

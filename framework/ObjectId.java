@@ -9,7 +9,9 @@ public enum ObjectId {
     VAC_GREN,
     HOMING_BULLET,
     BOOM,
+    PERM_BARRIER,
     BARRIER,
+    DOOR,
     WAVE,
     SLASH,
     ITEM;

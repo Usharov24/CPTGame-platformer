@@ -37,12 +37,14 @@ public class Bullet extends GameObject {
     }
     
     public void update() {
-        if(blnHoming == false){
+        if(fltWorldX < 0 || fltWorldX > 1920 || fltWorldY < 0 || fltWorldY > 1440) handler.removeObject(this);
+
+        if(blnHoming == false) {
+            collisions();
+
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
-            collisions();
-        }   
-        else{
+        } else {
             float fltTargetX = findNearestObject(fltWorldX, fltWorldY).getWorldX();
             float fltTargetY = findNearestObject(fltWorldX, fltWorldY).getWorldY();
             if(fltWorldX > fltTargetX){
@@ -57,13 +59,12 @@ public class Bullet extends GameObject {
             if(fltWorldY < fltTargetY){
                 fltVelY += 5; 
             }
+
+            collisions();
+
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
-            collisions();
         }
-
-
-        
     }
 
     public void draw(Graphics g) {
@@ -95,9 +96,11 @@ public class Bullet extends GameObject {
     }
 
     private void collisions() {
-        for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.BARRIER){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
+        for(int intCount = 0; intCount < handler.objectList.size(); intCount++){
+            GameObject object = handler.getObject(intCount);
+
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER) {
+                if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
@@ -115,7 +118,7 @@ public class Bullet extends GameObject {
     public int getBoom(){
         return (int)fltExplosionRadius;
     }
-    public float getDMG(){
+    public float getDmg(){
         return fltDmg;
     }
 

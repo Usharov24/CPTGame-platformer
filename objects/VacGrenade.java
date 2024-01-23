@@ -49,17 +49,16 @@ public class VacGrenade extends GameObject {
                 handler.removeObject(this);
             }
         }
-        collisions();
         
         fltVelY += 3;
 
-        if(fltVelX > 30) fltVelX = 30;
-        else if(fltVelX < -30) fltVelX = -30;
+        if(fltVelX > 25) fltVelX = 25;
+        else if(fltVelX < -25) fltVelX = -25;
 
-        if(fltVelY > 30) fltVelY = 30;
-        else if(fltVelY < -30) fltVelY = -30;
+        if(fltVelY > 25) fltVelY = 25;
+        else if(fltVelY < -25) fltVelY = -25;
 
-        
+        collisions();
 
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
@@ -67,9 +66,9 @@ public class VacGrenade extends GameObject {
 
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
-            GameObject object;
+            GameObject object = handler.getObject(intCount);
             
-            if((object = handler.getObject(intCount)).getId() == ObjectId.BARRIER) {
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER) {
                 if(getBounds().intersects(object.getBounds()) && fltVelX > 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
@@ -98,8 +97,8 @@ public class VacGrenade extends GameObject {
     public Rectangle getBounds() {
         float fltBoundsX = fltWorldX + fltVelX - camObject.getWorldX() - camObject.getWidth()/2;
 
-        if(fltBoundsX > fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2;
-        else if(fltBoundsX < fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2;
+        if(fltBoundsX > fltWorldX + fltWidth - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX + fltWidth - camObject.getWorldX() - camObject.getWidth()/2;
+        else if(fltBoundsX < fltWorldX - fltWidth * 2f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 2f - camObject.getWorldX() - camObject.getWidth()/2;
 
         return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
     }
@@ -107,8 +106,8 @@ public class VacGrenade extends GameObject {
     public Rectangle getBounds2() {
         float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
 
-        if(fltBoundsY > fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2;
-        else if(fltBoundsY < fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2;
+        if(fltBoundsY > fltWorldY + fltHeight - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY + fltHeight - camObject.getWorldY() - camObject.getHeight()/2;
+        else if(fltBoundsY < fltWorldY - fltHeight * 2f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 2f - camObject.getWorldY() - camObject.getHeight()/2;
 
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
     }

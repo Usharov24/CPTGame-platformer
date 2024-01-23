@@ -20,7 +20,24 @@ public class ObjectHandler {
         for(int intCount = 0; intCount < objectList.size(); intCount++) {
             GameObject object = objectList.get(intCount);
 
-            object.draw(g);
+            if(object.getId() != ObjectId.PLAYER) object.draw(g);
+        }
+
+        for(int intCount = 0; intCount < 4; intCount++) {
+            GameObject object = objectList.get(intCount);
+
+            if(object.getId() == ObjectId.PLAYER) object.draw(g);
+        }
+    }
+
+    public void clearEntities() {
+        for(int intCount = 0; intCount < objectList.size(); intCount++) {
+            GameObject object = objectList.get(intCount);
+
+            if(object.getId() != ObjectId.PLAYER && object.getId() != ObjectId.PERM_BARRIER) {
+                objectList.remove(intCount);
+                intCount = 0;
+            }
         }
     }
 

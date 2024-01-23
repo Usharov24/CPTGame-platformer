@@ -19,6 +19,7 @@ public class WaveAttacks extends GameObject {
     private float fltLifeSteal;
     private int intSender;
     private int intCelebShot;
+
     public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
@@ -32,12 +33,12 @@ public class WaveAttacks extends GameObject {
     }
     
     public void update() {
-        
         fltSpread += 15;
-        fltWorldX+= fltVelX;
-        fltWorldY += fltVelY;
+
         collisions();
 
+        fltWorldX+= fltVelX;
+        fltWorldY += fltVelY;
     }
 
     public void draw(Graphics g) {
@@ -67,7 +68,7 @@ public class WaveAttacks extends GameObject {
     public int getBoom(){
         return intBoomRad;
     }
-    public float getDMG(){
+    public float getDmg(){
         return fltDmg;
     }
 

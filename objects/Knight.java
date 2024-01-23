@@ -20,7 +20,6 @@ public class Knight extends GameObject {
     private BufferedImage[] biSprite;
 
     private float fltAcc = 1f, fltDec = 0.5f;
-    private float fltDispX, fltDispY;
 
     private float fltDashVelY;
     private float fltDashVelX;
@@ -45,7 +44,7 @@ public class Knight extends GameObject {
     private int intWungoosCount;
     private int intPeirceCount;
     private int intExplodeRad;
-    private int intShurikanCount;
+    private int intShurikenCount;
     private int intBleedCount;
     private int intCelebShot;
     private int intJumpCap = 2;
@@ -111,8 +110,8 @@ public class Knight extends GameObject {
             
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                fltDashVelX = Math.round(fltDiffX * 50);
-                fltDashVelY = Math.round(fltDiffY * 50);
+                fltDashVelX = Math.round(fltDiffX * 20);
+                fltDashVelY = Math.round(fltDiffY * 20);
                 lngTimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
                 //movement ability for the knight which just propels the knight in the direction where his cursor is
@@ -124,11 +123,11 @@ public class Knight extends GameObject {
                 float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 
-            
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                fltDashVelX = Math.round(fltDiffX * 55);
-                fltDashVelY = Math.round(fltDiffY * 55);
+
+                fltDashVelX = Math.round(fltDiffX * 20);
+                fltDashVelY = Math.round(fltDiffY * 20);
                 lngTimer[0] = System.currentTimeMillis();
                 input.buttonSet.remove(InputButtons.SHIFT);
                 //another movement statement in order to use the cooldown remover from the ultimate effectively
@@ -140,7 +139,7 @@ public class Knight extends GameObject {
                 //The Ultimate abilty
             }
             if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 200 * fltFireRateMult && blnBoost == false) {
-                for(int intcount = 0; intcount < intShurikanCount; intcount++){
+                for(int intcount = 0; intcount < intShurikenCount; intcount++){
                     float fltDiffX = input.fltMouseX - 640;
                     float fltDiffY = input.fltMouseY - 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
@@ -276,7 +275,7 @@ public class Knight extends GameObject {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
 
-            if(object.getId() == ObjectId.BARRIER) {
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER) {
                 if(getBounds().intersects(object.getBounds()) && fltVelX > 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
@@ -306,20 +305,20 @@ public class Knight extends GameObject {
             } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG() / fltDef;
+                fltHP -= enemy.getDmg() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
                 //if the player collides with an enemy bullet, take dmg.
             } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 System.out.println("you got shot");
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG() / fltDef;
+                fltHP -= enemy.getDmg() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
                 //if the player collides with an explosion, take damage
             }else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));
-                ItemObject item = (ItemObject) object;
+                Item item = (Item) object;
                 if(item.getRarity() == 1){ 
                     if(item.getPlacement() == 1){
                         fltDmgMult += 0.2;
@@ -371,7 +370,7 @@ public class Knight extends GameObject {
                         intBleedCount += 1;
                     }
                     else if(item.getPlacement() == 6){
-                        intShurikanCount += 1;
+                        intShurikenCount += 1;
                     }
                     else if(item.getPlacement() == 7){
                         fltBurnDmg += 10;
@@ -404,9 +403,9 @@ public class Knight extends GameObject {
         Graphics2D g2d = (Graphics2D)g;
         if(intPosition == Main.intSessionId - 1) {
             if(blnLeft) {
-                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
+                g2d.drawImage(biSprite[0], (int)-fltWidth/2 + 32, (int)-fltHeight/2, -32, 64, null);
             } else {
-                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
+                g2d.drawImage(biSprite[0], (int)-fltWidth/2, (int)-fltHeight/2, null);
             }
         } else {
             if(blnLeft) {
@@ -419,23 +418,29 @@ public class Knight extends GameObject {
     }
 
     public Rectangle getBounds() {
-        float fltBoundsX = fltDispX + fltVelX - fltWidth/2;
+        if(intPosition == Main.intSessionId - 1) {
+            float fltBoundsX = fltVelX - fltWidth/2;
 
-        if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
-        else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
+            if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
+            else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
 
-        return new Rectangle((int)fltBoundsX, (int)(fltDispY - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
-        //creates the hitboxes for the x of the player
+            return new Rectangle((int)fltBoundsX, (int)-fltHeight/2 + 4, (int)fltWidth, (int)fltHeight - 8);
+        } else {
+            return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
     }
 
     public Rectangle getBounds2() {
-        float fltBoundsY = fltDispY + fltVelY - fltHeight/2;
+        if(intPosition == Main.intSessionId - 1) {
+            float fltBoundsY = fltVelY - fltHeight/2;
 
-        if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
-        else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
+            if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
+            else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
-        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
-        //creates the hitboxes for the y of the player
+            return new Rectangle((int)-fltWidth/2 + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+        } else {
+            return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
     }
 
     public float getHP(){
