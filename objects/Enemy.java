@@ -28,6 +28,7 @@ public class Enemy extends GameObject {
     private float fltBurnDmg = 0;
 
     private int intBleedCount = 0;
+    private int intPosition;
     private int intEnemyType;
     private int intEnemyClass;
 
@@ -36,10 +37,11 @@ public class Enemy extends GameObject {
 
     
 
-    public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intEnemyType, int intEnemyClass, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+    public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intEnemyType, int intEnemyClass, int intPosition, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
+        this.intPosition = intPosition;
         this.intEnemyType = intEnemyType;
         this.intEnemyClass = intEnemyClass;
         //determine sprites off of intenemyclass and enemy type later on and enemy floor 18 total sprites
@@ -99,8 +101,14 @@ public class Enemy extends GameObject {
     }
 
     public void update() {
+        if(Main.intSessionId != 1) return;
+        if(fltHP <= 0) return;
+
+        if(fltWorldX < 0 || fltWorldX > 1919 || fltWorldY < 0 || fltWorldY > 1439) fltHP = 0;
+
         fltTargetX = findNearestObject(fltWorldX, fltWorldY).getWorldX();
         fltTargetY = findNearestObject(fltWorldX, fltWorldY).getWorldY();
+
         //finds which player the enemy should target
         //small enemies
         if(intEnemyType == 1) {
@@ -126,7 +134,7 @@ public class Enemy extends GameObject {
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 300) {
+                if (System.currentTimeMillis() - dblTimer > 1000) {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
@@ -181,7 +189,7 @@ public class Enemy extends GameObject {
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 300) {
+                if (System.currentTimeMillis() - dblTimer > 1000) {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 100));
                 }
@@ -211,16 +219,11 @@ public class Enemy extends GameObject {
         else if(fltVelX < -35) fltVelX = -35; 
         //caps out the velocities
         
-        if(blnFalling){
-            fltVelY += 3;
-        }
+        fltVelY += 3;
+
         //gravity!
-        if(fltVelX < 0){
-            blnLeft = true;
-        }
-        if(fltVelX > 0){
-            blnLeft = false;
-        }
+        if(fltVelX < 0) blnLeft = true;
+        else if(fltVelX > 0) blnLeft = false;
 
         collisions();
         //checks what the enemy collides with
@@ -234,11 +237,9 @@ public class Enemy extends GameObject {
         if(fltBurnDmg > 0){
             fltHP -= fltBurnDmg;
         }
-        if(fltHP <= 0){
-            handler.removeObject(this);
-        }
         //damage interaction
 
+        ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
     }
 
     public GameObject findNearestObject(float fltWorldX, float fltWorldY){
@@ -266,7 +267,7 @@ public class Enemy extends GameObject {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
 
-            if(object.getId() == ObjectId.BARRIER) {
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER) {
                 if(getBounds().intersects(object.getBounds()) && fltVelX > 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
@@ -288,18 +289,18 @@ public class Enemy extends GameObject {
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(object);
                     Bullet bullet = (Bullet) object;
-                    fltHP -= bullet.getDMG();
+                    fltHP -= bullet.getDmg();
 
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        //handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = bullet.getBleed();
                         intBleedCount = (int) bullet.getBleed();
                     }    
                     if(bullet.getCelebShot() > 0){
                         for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
-                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }     
                 }
@@ -308,20 +309,20 @@ public class Enemy extends GameObject {
             else if(object.getId() == ObjectId.WAVE) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
-                    WaveAttacks bullet = (WaveAttacks) object;
-                    fltHP -= bullet.getDMG();
+                    WaveAttacks wave = (WaveAttacks) object;
+                    fltHP -= wave.getDmg();
 
-                    if(bullet.getBoom()> 0){
-                        float fltExplosionRadius = bullet.getBoom();
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
-                        fltBurnDmg = bullet.getBleed();
-                        intBleedCount = (int) bullet.getBleed();
+                    if(wave.getBoom() > 0){
+                        float fltExplosionRadius = wave.getBoom();
+                        //handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, wave.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        fltBurnDmg = wave.getBleed();
+                        intBleedCount = (int) wave.getBleed();
                     }
                     
-                    if(bullet.getCelebShot() > 0){
-                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
-                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));                        
+                    if(wave.getCelebShot() > 0) {
+                        for(int intcount = 0; intcount < wave.getCelebShot(); intcount++){
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, wave.getVelX(), wave.getVelY(), 6, 6, 0, 0, 0, 0, wave.getCelebShot(), wave.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, wave.getBoom(), wave.getChar()));                        
                         }
                     } 
                 }
@@ -330,19 +331,19 @@ public class Enemy extends GameObject {
             else if(object.getId() == ObjectId.SLASH) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
-                    SlashAttacks bullet = (SlashAttacks) object;
-                    fltHP -= bullet.getDMG();
+                    SlashAttacks slash = (SlashAttacks) object;
+                    fltHP -= slash.getDmg();
 
-                    if(bullet.getBoom()> 0){
-                        float fltExplosionRadius = bullet.getBoom();
-                        handler.removeObject(this);
-                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDMG(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
-                        fltBurnDmg = bullet.getBleed();
-                        intBleedCount = (int) bullet.getBleed();
+                    if(slash.getBoom()> 0){
+                        float fltExplosionRadius = slash.getBoom();
+                        //handler.removeObject(this);
+                        handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, slash.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
+                        fltBurnDmg = slash.getBleed();
+                        intBleedCount = (int) slash.getBleed();
                     } 
-                    if(bullet.getCelebShot() > 0){
-                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
-                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDMG(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
+                    if(slash.getCelebShot() > 0){
+                        for(int intcount = 0; intcount < slash.getCelebShot(); intcount++){
+                            handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, slash.getVelX(), slash.getVelY(), 6, 6, 0, 0, 0, 0, slash.getCelebShot(), slash.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, slash.getBoom(), slash.getChar()));
                         }
                     }      
                 }
@@ -351,7 +352,7 @@ public class Enemy extends GameObject {
             else if(object.getId() == ObjectId.BOOM) {
                 if(getBounds().intersects(object.getBounds())){
                     Explosion boom = (Explosion) object;
-                    fltHP -= boom.getDMG();
+                    fltHP -= boom.getDmg();
                 }
             }
             //hurt by booms
@@ -359,7 +360,10 @@ public class Enemy extends GameObject {
     }
 
     public void draw(Graphics g) {
+        if(fltHP <= 0) return;
+
         Graphics2D g2d = (Graphics2D)g;
+
         if(blnLeft){
             g2d.drawImage(biImg, (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2 + fltWidth),(int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), -(int)fltWidth, (int)fltHeight, null);
         }
@@ -370,22 +374,30 @@ public class Enemy extends GameObject {
     //draws the sprite
 
     public Rectangle getBounds() {
-        float fltBoundsX = fltWorldX + fltVelX - camObject.getWorldX() - camObject.getWidth()/2;
+        if(fltHP > 0) {
+            float fltBoundsX = fltWorldX + fltVelX - camObject.getWorldX() - camObject.getWidth()/2;
 
-        if(fltBoundsX > fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2;
-        else if(fltBoundsX < fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2;
+            if(fltBoundsX > fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX + fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2;
+            else if(fltBoundsX < fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 1.5f - camObject.getWorldX() - camObject.getWidth()/2;
 
-        return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+            return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+        } else {
+            return new Rectangle();
+        }
     }
     //x bounds
 
     public Rectangle getBounds2() {
-        float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
+        if(fltHP > 0) {
+            float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
 
-        if(fltBoundsY > fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2;
-        else if(fltBoundsY < fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2;
+            if(fltBoundsY > fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY + fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2;
+            else if(fltBoundsY < fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 1.5f - camObject.getWorldY() - camObject.getHeight()/2;
 
-        return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+            return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+        } else {
+            return new Rectangle();
+        }
     }
     //y bounds
 

@@ -30,6 +30,8 @@ public class EnemyBullet extends GameObject {
     }
     
     public void update() {
+        if(fltWorldX < 0 || fltWorldX > 1920 || fltWorldY < 0 || fltWorldY > 1440) handler.removeObject(this);
+
         if(blnHoming == false){
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
@@ -54,8 +56,6 @@ public class EnemyBullet extends GameObject {
             fltWorldY += fltVelY;
             collisions();
         }
-
-        
     }
 
     public void draw(Graphics g) {
@@ -92,9 +92,11 @@ public class EnemyBullet extends GameObject {
     }
 
     private void collisions() {
-        for(int i = 0; i < handler.objectList.size(); i++){
-            if(handler.getObject(i).getId() == ObjectId.BARRIER){
-                if(getBounds().intersects(handler.getObject(i).getBounds())){
+        for(int intCount = 0; intCount < handler.objectList.size(); intCount++){
+            GameObject object = handler.getObject(intCount);
+
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER){
+                if(getBounds().intersects(object.getBounds())){
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.addObject(new EnemyExplosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.ENEMY_BOOM, handler, ssm));
@@ -105,7 +107,7 @@ public class EnemyBullet extends GameObject {
         }
     }
 
-    public float getDMG(){
+    public float getDmg(){
         return fltDmg;
     }
 }

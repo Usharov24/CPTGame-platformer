@@ -13,7 +13,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public float fltMouseX, fltMouseY;
 
     public enum InputButtons {
-        W, A, S, D, F, SHIFT, SPACE, ENTER, BUTTON1, BUTTON2, BUTTON3
+        W, A, S, D, F, SHIFT, SPACE, ENTER, BUTTON1, BUTTON2, BUTTON3;
     }
 
     public void keyPressed(KeyEvent evt) {
@@ -41,6 +41,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mousePressed(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
+
         if(evt.getButton() == MouseEvent.BUTTON1) buttonSet.add(InputButtons.BUTTON1);
         if(evt.getButton() == MouseEvent.BUTTON2) buttonSet.add(InputButtons.BUTTON2);
         if(evt.getButton() == MouseEvent.BUTTON3) buttonSet.add(InputButtons.BUTTON3);
@@ -68,6 +69,5 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
-        
     }
 }

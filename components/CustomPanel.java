@@ -6,32 +6,24 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+
 import framework.Main;
 import framework.ObjectHandler;
 import framework.ObjectId;
 import framework.ResourceLoader;
-import objects.Barrier;
-import objects.Brute;
-import objects.Enemy;
-import objects.GameObject;
-import objects.Knight;
-import objects.Sniper;
-import objects.Wizard;
+import objects.*;
 
 public class CustomPanel extends JPanel {
 
-    // Variables
-    Color[] colors = {Color.blue, Color.red, Color.cyan, Color.pink, Color.white, Color.green, Color.magenta, Color.gray, Color.darkGray, Color.lightGray, Color.orange, new Color(34, 53, 122), new Color(65, 34, 255), new Color(87, 255, 245), new Color(255, 124, 64), new Color(98, 35, 123)};
     private ResourceLoader resLoader = new ResourceLoader();
 
+    private BufferedImage AbilityButtons = resLoader.loadImage("/res\\AbilityButtons.png");
+    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
     private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
     private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
 
-    private BufferedImage[] biTileTextures = null;
-    private BufferedImage AbilityButtons = resLoader.loadImage("/res\\AbilityButtons.png");
-    private String[][] strMap = resLoader.loadCSV("/res\\maptest.csv");
+    private String[][][] strMap = {resLoader.loadCSV("/res\\room1.csv"), resLoader.loadCSV("/res\\room2.csv")};
 
-    // Methods
     public CustomPanel() {
         super();
     }
@@ -45,18 +37,13 @@ public class CustomPanel extends JPanel {
         setFocusable(blnFocusable);
     }
 
-    // Draw Panel to Screen
     public void paintComponent(Graphics g) {
-
-        // Main Menu
         if(Main.state == Main.State.MAIN_MENU) {
             g.drawImage(biTitleScreen, 0, 0, null);
             g.setColor(Color.white);
             g.setFont(font.deriveFont(100f));
             FontMetrics fm = g.getFontMetrics();
             g.drawString("Annihilation Station", (getWidth() - fm.stringWidth("Annihilation Station"))/2, 130);
-
-        // Host Menu
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -65,8 +52,6 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
-
-        // Join Menu
         } else if(Main.state == Main.State.JOIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -75,8 +60,6 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
-
-        // Help Screen
         } else if(Main.state == Main.State.HELP) {
             g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -87,33 +70,27 @@ public class CustomPanel extends JPanel {
             g.drawString("in your way. There are many types of enemies, some are more difficult than others. Defeat enemies by using your player's ability which", 30, 220);
             g.drawString("may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players'", 30, 240);
             g.drawString("abilities to make it easier to navigate through the rooms. ", 30, 260);
-
-        // Demo
         } else if(Main.state == Main.State.DEMO) {
             g.setColor(new Color(36, 133, 151));
             g.fillRect(0, 0, getWidth(), getHeight());
-        
-        // Character Selection
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
-
-        // Main Game
         } else if(Main.state == Main.State.GAME) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
+
+            Main.handler.update();
 
             // CAMERA START /////////////////////////////////////////////////////
             g.translate(getWidth()/2, getHeight()/2);
 
             decodeMap(g);
-
-            Main.handler.update();
             Main.handler.draw(g);
 
             g.translate(-getWidth()/2, -getHeight()/2);
             // CAMERA END ///////////////////////////////////////////////////////
-
+            
             // HUD CODE HERE ////////////////////////////////////////////////////
             
             // HUD Variables
@@ -189,31 +166,33 @@ public class CustomPanel extends JPanel {
     private void decodeMap(Graphics g) {
         GameObject camObject = Main.handler.getObject(Main.intSessionId - 1);
 
-        for(int intCount1 = 0; intCount1 < strMap.length; intCount1++) {
-            for(int intCount2 = 0; intCount2 < strMap[0].length; intCount2++) {
-                short shrtTile = Short.parseShort(strMap[intCount1][intCount2]);
+        for(int intCount1 = 0; intCount1 < strMap[0].length; intCount1++) {
+            for(int intCount2 = 0; intCount2 < strMap[0][0].length; intCount2++) {
+                short shrtTile = Short.parseShort(strMap[Main.intRoomCount][intCount1][intCount2]);
 
                 byte bytTileType = (byte)(shrtTile & 15);
                 byte bytTileTexture = (byte)(shrtTile >> 4 & 15);
                 byte bytSpawnObject = (byte)(shrtTile >> 8 & 15);
                 byte bytSpawnInfo = (byte)(shrtTile >> 12 & 15);
                 //System.out.println(bytTileType + " " + bytTileTexture + " " + bytSpawnObject + " " + bytSpawnInfo);
-                //if(intCount1 == 0 && intCount2 == 0) System.out.println((intCount2 * 40 - camObject.getWorldX() - camObject.getWidth()/2) + " " + (intCount1 * 40 - camObject.getWorldY() - camObject.getHeight()/2));
-                if(intCount1 == 0 && intCount2 == 0) System.out.println((camObject.getWorldX() + camObject.getWidth()/2) + " " + (camObject.getWorldY() + camObject.getHeight()/2));
+
                 if(bytTileType == 0) {
-                    g.setColor(colors[bytTileTexture]);
-                    g.fillRect((int)(intCount2 * 40 - camObject.getWorldX() - camObject.getWidth()/2), (int)(intCount1 * 40 - camObject.getWorldY() - camObject.getHeight()/2), 40, 40);
-                    //g.drawImage(biTileTextures[bytTileTexture], intCount2 * 40, intCount1 * 40, null);
+                    g.drawImage(biTileTextures[bytTileTexture], intCount2 * 40 - (int)(camObject.getWorldX() + camObject.getWidth()/2), intCount1 * 40 - (int)(camObject.getWorldY() + camObject.getHeight()/2), null);
                 } else if(bytTileType == 1) {
-                    Main.handler.addObject(new Barrier(intCount2 * 40, intCount1 * 40, 40, 40, ObjectId.BARRIER, Main.handler, null));
-                } else if(bytTileType == 2) {
-                    // Add door object
+                    Main.handler.addObject(new Barrier(intCount2 * 40, intCount1 * 40, 40, 40, biTileTextures[bytTileTexture], ObjectId.BARRIER, Main.handler, null));
+                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile - 1);
+                } else if(Main.intSessionId == 1 && bytTileType == 2) {
+                    Main.handler.addObject(new Door(intCount2 * 40, intCount1 * 40, 40, 40, new BufferedImage[]{biTileTextures[bytTileTexture], biTileTextures[bytTileTexture + 6]}, ObjectId.DOOR, Main.handler, Main.ssm));
+                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile - 2);
                 }
 
-                if(bytSpawnObject == 1) {
-                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 32, 64, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, ObjectId.ENEMY, Main.handler, Main.ssm));
-                } else if(bytSpawnObject == 2) {
-                    // Add items
+                if(Main.intSessionId == 1 && bytSpawnObject == 1) {
+                    Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 0, 0, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, Main.handler.objectList.size(), ObjectId.ENEMY, Main.handler, Main.ssm));
+                    Main.ssm.sendText("h>a>aENEMY~" + (intCount2 * 40) + "," + (intCount1 * 40) + "," + (bytSpawnInfo & 3) + "," + (bytSpawnInfo >> 2 & 3));
+                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile & 255);
+                } else if(Door.blnRoomCleared && bytSpawnObject == 2) {
+                    Main.handler.addObject(new Item(intCount2 * 40, intCount1 * 40, 20, 20, ObjectId.ITEM, Main.handler, null));
+                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile & 255);
                 }
             }
         }

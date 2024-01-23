@@ -1,7 +1,6 @@
 package framework;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -37,8 +36,9 @@ public class Main implements ActionListener, WindowListener {
     // Button Images
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
+    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
-
+   
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this),
@@ -66,12 +66,11 @@ public class Main implements ActionListener, WindowListener {
     
     // Timer
     private Timer timer = new Timer(1000/60, this);
-    public static long startTime = System.nanoTime();
 
-    // Networking
+    // Network
     public static SuperSocketMaster ssm;
 
-    // Game States
+    // Display States
     public static State state = State.MAIN_MENU;
 
     public enum State {
@@ -88,11 +87,12 @@ public class Main implements ActionListener, WindowListener {
         }
     }
 
-    // Network Details
+    // Networking Variables
     public static int intSessionId;
-    private int intServerSize = 0;
+    public static int intRoomCount;
+    public static int intServerSize;
     private int intCurrentButton = -1, intPreviousButton = -1;
-    private int intReady = 0;
+    private int intReady;
     private int[] intCharacterSelections = {-1, -1, -1, -1};
     private boolean[] blnAvailableIds = {true, true, true};
     
@@ -166,7 +166,6 @@ public class Main implements ActionListener, WindowListener {
         }
         thePanels[6].add(backButtons[4]);
 
-
         theFrame.setContentPane(thePanels[0]);  
         theFrame.addWindowListener(this);
         theFrame.setIconImage(ioLogo.getImage());
@@ -183,42 +182,49 @@ public class Main implements ActionListener, WindowListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
+            //System.out.println(strMessage);
 
             if(intSessionId == 1) {
                 if(strMessage.substring(5, 6).equals("o")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
+
                     if(strMessage.contains("SNIPER")) {
                         Sniper snip = (Sniper) object;
+
                         snip.setLeft(Boolean.parseBoolean(strPayload[3]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
-
-                    }else if(strMessage.contains("BRUTE")) {
+                    } else if(strMessage.contains("BRUTE")) {
                         Brute brut = (Brute) object;
+
                         brut.setLeft(Boolean.parseBoolean(strPayload[3]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
-
-                    }else if(strMessage.contains("KNIGHT")) {
+                    } else if(strMessage.contains("KNIGHT")) {
                         Knight knit = (Knight) object;
+
                         knit.setLeft(Boolean.parseBoolean(strPayload[3]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
-
-                    }else if(strMessage.contains("WIZARD")) {
+                    } else if(strMessage.contains("WIZARD")) {
                         Wizard wiz = (Wizard) object;
+
                         wiz.setLeft(Boolean.parseBoolean(strPayload[3]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                         if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                         if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
                     }
-                    
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");    
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
@@ -269,6 +275,7 @@ public class Main implements ActionListener, WindowListener {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
+
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aVAC~" + strMessage.split("~")[1]);
                     if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aVAC~" + strMessage.split("~")[1]);
                     if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aVAC~" + strMessage.split("~")[1]);
@@ -321,10 +328,11 @@ public class Main implements ActionListener, WindowListener {
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
                 if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
-
                     GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
+                    
                     if(strMessage.contains("KNIGHT")){
                         Knight knight = (Knight) object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[3]));
@@ -338,7 +346,6 @@ public class Main implements ActionListener, WindowListener {
                         Wizard wizard = (Wizard) object;
                         wizard.setLeft(Boolean.parseBoolean(strPayload[3]));
                     }
-
                 } else if(strMessage.contains("aSNIPER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -357,10 +364,11 @@ public class Main implements ActionListener, WindowListener {
                     handler.addObject(new Brute(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, handler, ssm, input, Integer.parseInt(strPayload[4])));
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
+
                     handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-    
+
                     handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.SLASH, handler, ssm));
                 } else if(strMessage.contains("aBIGSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -415,10 +423,10 @@ public class Main implements ActionListener, WindowListener {
 
                     chatPanel = new ChatPanel(ssm);
 
-                    handler.addObject(new Barrier(0, 1440, 1920, 30, ObjectId.BARRIER, handler, null));
-                    handler.addObject(new Barrier(0, -30, 1920, 30, ObjectId.BARRIER, handler, null));
-                    handler.addObject(new Barrier(-30, 0, 30, 1440, ObjectId.BARRIER, handler, null));
-                    handler.addObject(new Barrier(1920, 0, 30, 1440, ObjectId.BARRIER, handler, null));
+                    for(int intCount = 0; intCount < 2; intCount++) {
+                        handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
+                        handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
+                    }
 
                     chatPanel.setVisible(true);
                     chatPanel.setOpaque(true);
@@ -515,7 +523,6 @@ public class Main implements ActionListener, WindowListener {
                     state = (intSessionId == 1) ? State.HOST_MENU : State.JOIN_MENU;
 
                     theFrame.setContentPane((intSessionId == 1) ? thePanels[1] : thePanels[2]);
-                    theFrame.pack();
                 } else if(intCount == 4){
                     state = State.HELP;
                     theFrame.setContentPane(thePanels[3]);
@@ -606,29 +613,26 @@ public class Main implements ActionListener, WindowListener {
 
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 if(intCharacterSelections[intCount] == 0) {
-                    handler.addObject(new Sniper(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aSNIPER~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
+                    handler.addObject(new Sniper(150 + 40 * intCount, 1400, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aSNIPER~" + (150 + 40 * intCount) + "," + 1400 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 1) {
-                    handler.addObject(new Brute(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aBRUTE~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
+                    handler.addObject(new Brute(150 + 40 * intCount, 1400, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aBRUTE~" + (150 + 40 * intCount) + "," + 1400 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 2) {
-                    handler.addObject(new Knight(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aKNIGHT~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
+                    handler.addObject(new Knight(150 + 40 * intCount, 1400, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aKNIGHT~" + (150 + 40 * intCount) + "," + 1400 + "," + 32 + "," + 64 + "," + intCount);
                 } else if(intCharacterSelections[intCount] == 3) {
-                    handler.addObject(new Wizard(0 + 75 * intCount, 300, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
-                    ssm.sendText("h>a>aWIZARD~" + (0 + 75 * intCount) + "," + 300 + "," + 32 + "," + 64 + "," + intCount);
+                    handler.addObject(new Wizard(150 + 40 * intCount, 1400, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
+                    ssm.sendText("h>a>aWIZARD~" + (150 + 40 * intCount) + "," + 1400 + "," + 32 + "," + 64 + "," + intCount);
                 }
             }
 
             ssm.sendText("h>a>mGAME_PANEL");
 
             for(int intCount = 0; intCount < 2; intCount++) {
-                handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, ObjectId.BARRIER, handler, null));
-                handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, ObjectId.BARRIER, handler, null));
+                handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
+                handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
             }
-            handler.addObject(new ItemObject(200, 200, 20, 20, ObjectId.ITEM, handler, ssm));
-
-            handler.addObject(new Enemy(100, 300, 0, 0, 32, 64, 1, 1, ObjectId.ENEMY, handler, ssm));
 
             theFrame.setContentPane(thePanels[5]);
             thePanels[5].requestFocusInWindow();

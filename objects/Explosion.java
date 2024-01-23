@@ -33,7 +33,7 @@ public class Explosion extends GameObject {
         return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY -fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
 
-    public float getDMG(){
+    public float getDmg(){
         return this.fltDmg;
     }
 }

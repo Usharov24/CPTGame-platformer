@@ -21,8 +21,6 @@ public class Wizard extends GameObject {
     private BufferedImage[] biBulletTextures;
 
     private float fltAcc = 1f, fltDec = 0.5f;
-    private float fltDispX, fltDispY;
-    private float fltDashVel;
 
     private float fltDmgMult = 1;
     private float fltRegen = 4;
@@ -45,7 +43,7 @@ public class Wizard extends GameObject {
     private int intWungoosCount = 0;
     private int intPeirceCount = 0;
     private int intExplodeRad = 0;
-    private int intShurikanCount = 0;
+    private int intShurikenCount = 0;
     private int intBleedCount = 0;
     private int intCelebShot = 0;
     private int intJumpCap = 2;
@@ -114,52 +112,20 @@ public class Wizard extends GameObject {
                     fltDmgMult *= fltAirDmgMult;
                 }
 
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad,3));
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                for(int intCount = 0; intCount < 7; intCount++) {
+                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                
+                    if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                }
+                
                 fltDmgMult = fltPastDmgMult;
             }   
             //sends the velocites and characteristics of each bullet while also adding them to the personal game
 
-            if(blnFalling) fltVelY += 3;
-
-            if(fltVelX > 10 * fltPSpeedMult) fltVelX = 10 * fltPSpeedMult;
-            else if(fltVelX < -10 * fltPSpeedMult) fltVelX = -10 * fltPSpeedMult;
-
-            if(fltVelY > 35) fltVelY = 35;
-            else if(fltVelY < -35) fltVelY = -35;
-            //physics source for the game to create movement
-            fltWorldX += fltVelX + fltDashVel;
-            fltWorldY += fltVelY;
-
-            collisions();
-            //used to detemrine whether the player is colliding with anything
-            if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
-            else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
-            //sends the position fo the player and the state to other players
             if(blnTeleporting && input.buttonSet.contains(InputHandler.InputButtons.BUTTON1)){
                 if(fltWorldY + input.fltMouseY - 360 > 0 && fltWorldY + input.fltMouseY - 360 < 1376 && fltWorldX + input.fltMouseX - 640 > 0 && fltWorldX + input.fltMouseX - 640 < 1886){
+                    input.buttonSet.remove(InputButtons.BUTTON1);
                     blnFalling = true;
                     blnTeleporting = false;
                     fltWorldX += input.fltMouseX - 640;
@@ -182,7 +148,7 @@ public class Wizard extends GameObject {
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
                 
-                for(int intcount = 0; intcount < intShurikanCount; intcount++){
+                for(int intcount = 0; intcount < intShurikenCount; intcount++){
                     float intRand1 = (float)Math.random() * 3, intRand2 = (float)Math.random() * 3;
                     float intRand3 = (float)Math.random() * 3, intRand4 = (float)Math.random() * 3;
 
@@ -261,6 +227,22 @@ public class Wizard extends GameObject {
                 }
                 //the regen timer to make sure players can heal normally
             }
+
+            fltVelY += 3;
+
+            if(fltVelX > 10 * fltPSpeedMult) fltVelX = 10 * fltPSpeedMult;
+            else if(fltVelX < -10 * fltPSpeedMult) fltVelX = -10 * fltPSpeedMult;
+
+            if(fltVelY > 35) fltVelY = 35;
+            else if(fltVelY < -35) fltVelY = -35;
+            
+            collisions();
+
+            fltWorldX += fltVelX;
+            fltWorldY += fltVelY;
+            
+            if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
         }
     }
 
@@ -268,7 +250,7 @@ public class Wizard extends GameObject {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
             //for statement that checks every object and checks if it reacts to the player upon collision
-            if(object.getId() == ObjectId.BARRIER) {
+            if(object.getId() == ObjectId.BARRIER || object.getId() == ObjectId.PERM_BARRIER) {
                 if(getBounds().intersects(object.getBounds()) && fltVelX > 0) {
                     fltVelX = 0;
                     fltWorldX = object.getWorldX() - fltWidth;
@@ -297,18 +279,18 @@ public class Wizard extends GameObject {
                 //invincibilty frames to ensure the player doesnt die instantly upon collision
             } else if((object.getId() == ObjectId.ENEMY_BULLET && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG() / fltDef;
+                fltHP -= enemy.getDmg() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
                 //if the player collides with an enemy bullet, remove the bullet from existence
             } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
                 EnemyBullet enemy = (EnemyBullet) object;
-                fltHP -= enemy.getDMG() / fltDef;
+                fltHP -= enemy.getDmg() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
             } else if(object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) {  
                 handler.removeObject(handler.getObject(intCount));
-                ItemObject item = (ItemObject) object;
+                Item item = (Item) object;
                 if(item.getRarity() == 1){ 
                     if(item.getPlacement() == 1){
                         fltDmgMult += 0.2;
@@ -360,7 +342,7 @@ public class Wizard extends GameObject {
                         intBleedCount += 1;
                     }
                     else if(item.getPlacement() == 6){
-                        intShurikanCount += 1;
+                        intShurikenCount += 1;
                     }
                     else if(item.getPlacement() == 7){
                         fltBurnDmg += 10;
@@ -394,9 +376,9 @@ public class Wizard extends GameObject {
 
         if(intPosition == Main.intSessionId - 1) {
             if(blnLeft) {
-                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2 + 32), (int)(fltDispY- fltHeight/2), -32, 64, null);
+                g2d.drawImage(biSprite[0], (int)-fltWidth/2 + 32, (int)-fltHeight/2, -32, 64, null);
             } else {
-                g2d.drawImage(biSprite[0], (int)(fltDispX - fltWidth/2), (int)(fltDispY- fltHeight/2), null);
+                g2d.drawImage(biSprite[0], (int)-fltWidth/2, (int)-fltHeight/2, null);
             }
             //flips the sprite around determined off of the direction of the player
              
@@ -417,22 +399,30 @@ public class Wizard extends GameObject {
     }
 
     public Rectangle getBounds() {
-        float fltBoundsX = fltDispX + fltVelX - fltWidth/2;
+        if(intPosition == Main.intSessionId - 1) {
+            float fltBoundsX = fltVelX - fltWidth/2;
 
-        if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
-        else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
+            if(fltBoundsX > fltWidth/2) fltBoundsX = fltWidth/2;
+            else if(fltBoundsX < -fltWidth * 1.5f) fltBoundsX = -fltWidth * 1.5f;
 
-        return new Rectangle((int)fltBoundsX, (int)(fltDispY - fltHeight/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+            return new Rectangle((int)fltBoundsX, (int)-fltHeight/2 + 4, (int)fltWidth, (int)fltHeight - 8);
+        } else {
+            return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
     }
     //bounds for the player to use upon collisions
 
     public Rectangle getBounds2() {
-        float fltBoundsY = fltDispY + fltVelY - fltHeight/2;
+        if(intPosition == Main.intSessionId - 1) {
+            float fltBoundsY = fltVelY - fltHeight/2;
 
-        if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
-        else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
+            if(fltBoundsY > fltHeight/2) fltBoundsY = fltHeight/2;
+            else if(fltBoundsY < -fltHeight * 1.5f) fltBoundsY = -fltHeight * 1.5f;
 
-        return new Rectangle((int)(fltDispX - fltWidth/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+            return new Rectangle((int)-fltWidth/2 + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+        } else {
+            return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        }
     }
 
     public float getHP(){
