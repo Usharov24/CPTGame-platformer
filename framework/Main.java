@@ -44,7 +44,8 @@ public class Main implements ActionListener, WindowListener {
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this),
                                               new CustomButton(200, 100, "Demo", biMenuButtons, this)};
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
-                                          new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
+                                          new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this),
+                                          new CustomButton(200, 100, "Back", biMenuButtons, this)};
 
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
@@ -160,6 +161,7 @@ public class Main implements ActionListener, WindowListener {
             backButtons[intCount].setLocation(20, 20);
             thePanels[intCount + 1].add(backButtons[intCount]);
         }
+        thePanels[6].add(backButtons[4]);
 
 
         theFrame.setContentPane(thePanels[0]);  
@@ -506,6 +508,11 @@ public class Main implements ActionListener, WindowListener {
                     state = (intSessionId == 1) ? State.HOST_MENU : State.JOIN_MENU;
 
                     theFrame.setContentPane((intSessionId == 1) ? thePanels[1] : thePanels[2]);
+                    theFrame.pack();
+                } else if(intCount == 4){
+                    state = State.HELP;
+                    theFrame.setContentPane(thePanels[3]);
+                    mainMenuButtons[4].setLocation(1060, 20);
                     theFrame.pack();
                 }
             }
