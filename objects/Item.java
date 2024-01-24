@@ -93,12 +93,4 @@ public class Item extends GameObject {
     public int getPlacement(){
      return this.intItem;
     }
-
-    public boolean isActive() {
-        return blnActive;
-    }
-
-    public void setInactive() {
-        blnActive = false;
-    }
 }

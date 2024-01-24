@@ -70,6 +70,11 @@ public class Wizard extends GameObject {
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
+        if(fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480) {
+            fltWorldX = 200;
+            fltWorldY = 1400;
+        }
+
         if(intPosition == Main.intSessionId - 1) {
             //checks if the player is the host
             if(intJumpCount < intJumpCap && (input.buttonSet.contains(InputHandler.InputButtons.W) || input.buttonSet.contains(InputHandler.InputButtons.SPACE))) {
@@ -241,8 +246,8 @@ public class Wizard extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             
-            if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
-            else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
+            if(intPosition == 0) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
         }
     }
 

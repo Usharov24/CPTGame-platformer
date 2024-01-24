@@ -16,7 +16,7 @@ public class EnemyBullet extends GameObject {
     private float fltExplosionRadius;
     private boolean blnHoming;
     private float fltDmg;
-    
+
     public EnemyBullet(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltDmg, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage biTexture, Boolean blnHoming, float fltExplosionRadius) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;

@@ -70,6 +70,11 @@ public class Knight extends GameObject {
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
+        if(fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480) {
+            fltWorldX = 200;
+            fltWorldY = 1400;
+        }
+
         if(intPosition == Main.intSessionId - 1) {
             if(blnFalling){
                 fltPastDmgMult = fltDmgMult;
@@ -240,7 +245,7 @@ public class Knight extends GameObject {
             }
             //caps out player hp
             
-            if(blnFalling) fltVelY += 3;
+            fltVelY += 3;
 
             if(fltVelX > 10 * fltPSpeedMult) fltVelX = 10 * fltPSpeedMult;
             else if(fltVelX < -10 * fltPSpeedMult) fltVelX = -10 * fltPSpeedMult;
@@ -265,8 +270,8 @@ public class Knight extends GameObject {
             
             fltDmgMult = fltPastDmgMult;
             //resets the damage mult back to standard
-            if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
-            else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
+            if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
             //sends player position and parameters over a network
         }
     }
@@ -401,6 +406,7 @@ public class Knight extends GameObject {
 
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
+        
         if(intPosition == Main.intSessionId - 1) {
             if(blnLeft) {
                 g2d.drawImage(biSprite[0], (int)-fltWidth/2 + 32, (int)-fltHeight/2, -32, 64, null);

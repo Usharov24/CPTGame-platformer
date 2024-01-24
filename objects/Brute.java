@@ -1,5 +1,4 @@
 package objects;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -71,6 +70,11 @@ public class Brute extends GameObject {
 
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
+
+        if(fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480) {
+            fltWorldX = 200;
+            fltWorldY = 1400;
+        }
 
         if(intPosition == Main.intSessionId - 1) {
             if(blnFalling){
@@ -222,8 +226,8 @@ public class Brute extends GameObject {
             fltWorldY += fltVelY;
             //adds the velocity ot the current player position
             
-            if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
-            else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + intPosition + "," + blnLeft);
+            if(intPosition == 0) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            else ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
             fltDmgMult = fltPastDmgMult;
             //sends player stats and sets dmg back to normal if changeg
         }
@@ -326,63 +330,59 @@ public class Brute extends GameObject {
             if((object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds())) || (object.getId() == ObjectId.ITEM && getBounds2().intersects(object.getBounds()))) {  
                 Item item = (Item) object;
 
-                if(item.isActive()) {
-                    if(item.getRarity() == 1) { 
-                        if(item.getPlacement() == 1) {
-                            fltDmgMult += 0.2;
-                        } else if(item.getPlacement() == 2) {
-                            fltMaxHP += 20;
-                            fltHP += 20;
-                        } else if(item.getPlacement() == 3) {
-                            //add statement later using bln movement
-                            intWungoosCount += 1;                       
-                        } else if(item.getPlacement() == 4) {
-                            fltBSpeedMult *= 1.2;
-                        } else if(item.getPlacement() == 5) {
-                            fltPSpeedMult *= 1.2;
-                        } else if(item.getPlacement() == 6) {
-                            fltReflectDmg += 1;
-                            //reflect 10% of the dmg and then mult by this
-                        } else if(item.getPlacement() == 7) {
-                            intPeirceCount += 1;
-                        } else if(item.getPlacement() == 8) {
-                            fltDef += 0.2;
-                        } else if(item.getPlacement() == 9) {
-                            fltFireRateMult *= 0.9;
-                        }
-                    } else if(item.getRarity() == 2) { 
-                        if(item.getPlacement() == 1) {
-                            fltAirDmgMult += 0.2;
-                        } else if(item.getPlacement() == 2) {
-                            fltMaxHP *= 0.2;
-                            fltHP *= 0.2;
-                        } else if(item.getPlacement() == 3) {
-                            intExplodeRad += 25;
-                        } else if(item.getPlacement() == 4) {
-                            intJumpCap++;
-                        } else if(item.getPlacement() == 5) {
-                            intBleedCount += 1;
-                        } else if(item.getPlacement() == 6) {
-                            intShurikenCount += 1;
-                        } else if(item.getPlacement() == 7) {
-                            fltBurnDmg += 10;
-                        }
-                    } else if(item.getRarity() == 3) { 
-                        if(item.getPlacement() == 1) {
-                            fltLifeSteal += 0.2;
-                        } else if(item.getPlacement() == 2) {
-                            //wont do anything for brute
-                            blnHoming = true;
-                        } else if(item.getPlacement() == 3) {
-                            fltRegen *= 2;
-                        } else if(item.getPlacement() == 4) {
-                            fltFireRateMult *= 0.75;
-                        } else if(item.getPlacement() == 5) {
-                            intCelebShot += 1;
-                        }
+                if(item.getRarity() == 1) { 
+                    if(item.getPlacement() == 1) {
+                        fltDmgMult += 0.2;
+                    } else if(item.getPlacement() == 2) {
+                        fltMaxHP += 20;
+                        fltHP += 20;
+                    } else if(item.getPlacement() == 3) {
+                        //add statement later using bln movement
+                        intWungoosCount += 1;                       
+                    } else if(item.getPlacement() == 4) {
+                        fltBSpeedMult *= 1.2;
+                    } else if(item.getPlacement() == 5) {
+                        fltPSpeedMult *= 1.2;
+                    } else if(item.getPlacement() == 6) {
+                        fltReflectDmg += 1;
+                        //reflect 10% of the dmg and then mult by this
+                    } else if(item.getPlacement() == 7) {
+                        intPeirceCount += 1;
+                    } else if(item.getPlacement() == 8) {
+                        fltDef += 0.2;
+                    } else if(item.getPlacement() == 9) {
+                        fltFireRateMult *= 0.9;
                     }
-
-                    item.setInactive();
+                } else if(item.getRarity() == 2) { 
+                    if(item.getPlacement() == 1) {
+                        fltAirDmgMult += 0.2;
+                    } else if(item.getPlacement() == 2) {
+                        fltMaxHP *= 0.2;
+                        fltHP *= 0.2;
+                    } else if(item.getPlacement() == 3) {
+                        intExplodeRad += 25;
+                    } else if(item.getPlacement() == 4) {
+                        intJumpCap++;
+                    } else if(item.getPlacement() == 5) {
+                        intBleedCount += 1;
+                    } else if(item.getPlacement() == 6) {
+                        intShurikenCount += 1;
+                    } else if(item.getPlacement() == 7) {
+                        fltBurnDmg += 10;
+                    }
+                } else if(item.getRarity() == 3) { 
+                    if(item.getPlacement() == 1) {
+                        fltLifeSteal += 0.2;
+                    } else if(item.getPlacement() == 2) {
+                        //wont do anything for brute
+                        blnHoming = true;
+                    } else if(item.getPlacement() == 3) {
+                        fltRegen *= 2;
+                    } else if(item.getPlacement() == 4) {
+                        fltFireRateMult *= 0.75;
+                    } else if(item.getPlacement() == 5) {
+                        intCelebShot += 1;
+                    }
                 }
             }
             //when an item gets picked up, change player stats to match it
@@ -391,10 +391,6 @@ public class Brute extends GameObject {
 
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.red);
-        g2d.fill(getBounds());
-        g2d.setColor(Color.blue);
-        g2d.fill(getBounds2());
 
         if(intPosition == Main.intSessionId - 1) {
             if(blnLeft) {

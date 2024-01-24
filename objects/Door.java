@@ -53,7 +53,7 @@ public class Door extends GameObject {
             }
         }
               
-        if(intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize) {
+        if(Main.intSessionId == 1 && intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize) {
             // Remove any remaining object from the list
             // Ex. Enemies, barriers, items, bullets, doors, etc.
             handler.clearEntities();
@@ -62,9 +62,8 @@ public class Door extends GameObject {
                 intPlayersEntered[intCount] = 0;
             }
 
-            // This is incremented multiple times when a player moves into the door's hitbox
-            // Need to find a solution where it is only incremented one time
             Main.intRoomCount++;
+            ssm.sendText("h>a>mNEXT_ROOM");
         }
     }
 

@@ -8,7 +8,6 @@ import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -20,20 +19,15 @@ import java.awt.image.BufferedImage;
 
 public class Main implements ActionListener, WindowListener {
 
+    public static ObjectHandler handler = new ObjectHandler();
+    public static SuperSocketMaster ssm;
+    private InputHandler input = new InputHandler();
+    private ResourceLoader resLoader = new ResourceLoader();
+
     // Frame
     public static JFrame theFrame = new JFrame("Annihilation Station");
 
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
-
-    // Game Layered Pane
-    private JLayeredPane gameLayeredPane = new JLayeredPane();
-    
-    // Chat
-    private ChatPanel chatPanel;
-
-    public static ObjectHandler handler = new ObjectHandler();
-    private InputHandler input = new InputHandler();
-    private ResourceLoader resLoader = new ResourceLoader();
 
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
@@ -50,9 +44,7 @@ public class Main implements ActionListener, WindowListener {
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
     private CustomButton[] netButtons = {new CustomButton(800, 80, "Host Game", biNetButtons, this), new CustomButton(800, 80, "Join Game", biNetButtons, this)};
     private CustomButton netStartButton = new CustomButton(200, 100, "Start", biMenuButtons, this);
-    private String[] strNameList = {"", "", "", "",};
     
-    // WIP
     private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons[0], this), new CustomButton(290, 290, null, biCharacterButtons[1], this), 
                                                new CustomButton(290, 290, null, biCharacterButtons[2], this), new CustomButton(290, 290, null, biCharacterButtons[3], this)};
     private CustomButton readyButton = new CustomButton(800, 80, "Ready", biNetButtons, this);
@@ -63,8 +55,6 @@ public class Main implements ActionListener, WindowListener {
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
     private Timer timer = new Timer(1000/60, this);
-
-    public static SuperSocketMaster ssm;
 
     public static State state = State.MAIN_MENU;
 
@@ -81,6 +71,8 @@ public class Main implements ActionListener, WindowListener {
             return intPanelNumber;
         }
     }
+
+    public static String[] strNameList = new String[4];
 
     public static int intSessionId;
     public static int intRoomCount;
@@ -99,9 +91,6 @@ public class Main implements ActionListener, WindowListener {
         thePanels[5].addKeyListener(input);
         thePanels[5].addMouseListener(input);
         thePanels[5].addMouseMotionListener(input);
-
-        gameLayeredPane.setPreferredSize(new Dimension(1280, 720));
-        gameLayeredPane.setLayout(null);
 
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
@@ -170,116 +159,102 @@ public class Main implements ActionListener, WindowListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
-            //System.out.println(strMessage);
 
             if(intSessionId == 1) {
                 if(strMessage.substring(5, 6).equals("o")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[strPayload.length - 1]));
 
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
 
                     if(strMessage.contains("SNIPER")) {
-                        Sniper snip = (Sniper) object;
+                        Sniper sniper = (Sniper) object;
 
-                        snip.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
 
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
-                        if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
-                        if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("BRUTE")) {
-                        Brute brut = (Brute) object;
+                        Brute brute = (Brute) object;
 
-                        brut.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        brute.setLeft(Boolean.parseBoolean(strPayload[2]));
 
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
-                        if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
-                        if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("KNIGHT")) {
-                        Knight knit = (Knight) object;
+                        Knight knight = (Knight) object;
 
-                        knit.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        knight.setLeft(Boolean.parseBoolean(strPayload[2]));
 
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
-                        if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
-                        if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("WIZARD")) {
-                        Wizard wiz = (Wizard) object;
+                        Wizard wizard = (Wizard) object;
 
-                        wiz.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
 
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
-                        if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
-                        if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
+                        if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
                     }
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");    
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Integer.parseInt(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), 0, 0, Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
                  
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aHOMING_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Float.parseFloat(strPayload[6]),Float.parseFloat(strPayload[7]),Integer.parseInt(strPayload[8]),Float.parseFloat(strPayload[9]),Integer.parseInt(strPayload[10]),0,0, ObjectId.WAVE, handler, ssm));
                     
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aHOMING_BULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aHOMING_BULLET~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aHOMING_BULLET~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Float.parseFloat(strPayload[7]), Integer.parseInt(strPayload[8]), Float.parseFloat(strPayload[9]), Integer.parseInt(strPayload[10]), 0, 0, ObjectId.WAVE, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aWAVE~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aWAVE~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aWAVE~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.SLASH, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSLASH~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSLASH~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSLASH~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSLASH~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSLASH~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aBIGSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() + 300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.BULLET, handler, ssm));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBIGSLASH~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBIGSLASH~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBIGSLASH~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBIGSLASH~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBIGSLASH~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aBOOM")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), ObjectId.BOOM, handler, ssm));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBOOM~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOOM~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOOM~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOOM~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOOM~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("aVAC")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aVAC~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aVAC~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aVAC~" + strMessage.split("~")[1]);
-                }else if(strMessage.contains("mJOIN")) {
-                    intServerSize++;
-                    System.out.println("Player Joined\nServer Size: " + intServerSize);
-
-                    strNameList[intServerSize-1] = strMessage.split("~")[1];
-                    netTextAreas[0].append("\n " + strNameList[intServerSize-1]);
-                    
-                    for(int intCount = 0; intCount <= intServerSize; intCount++){
-                        for(int intcount = 0; intcount <= intServerSize; intcount++){
-                            ssm.sendText("h>c"+intcount+ ">mNAME_LIST~" + (strNameList[intCount]) + "," + intCount);
-                        }
-                        ssm.sendText("h>c0>mNAME_LIST~" + (strNameList[intCount]) + "," + intCount);
-                    }
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aVAC~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aVAC~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("mCLIENT_JOIN")) {
                     intServerSize++;
                     System.out.println("Player Joined\nServer Size: " + intServerSize);
@@ -288,9 +263,14 @@ public class Main implements ActionListener, WindowListener {
                         if(blnAvailableIds[intCount]) {
                             blnAvailableIds[intCount] = false;
                             ssm.sendText("h>c0>mSESSION_ID~" + (intCount + 2));
+
+                            strNameList[intCount + 1] = strMessage.split("~")[1];
+                            netTextAreas[0].append("\n " + strNameList[intCount + 1] + " joined");
                             break;
                         }
                     }
+
+                    ssm.sendText("h>a>mPLAYER_NAMES~" + strNameList[0] + "," + strNameList[1] + "," + strNameList[2] + "," + strNameList[3]);
                 } else if(strMessage.contains("mCLIENT_DISCONNECT")) {
                     intServerSize--;
                     System.out.println("Player Disconnected\nServer Size: " + intServerSize);
@@ -304,31 +284,35 @@ public class Main implements ActionListener, WindowListener {
                     intCharacterSelections[Integer.parseInt(strMessage.substring(1, 2)) - 1] = Integer.parseInt(strPayload[0]);
 
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
-                    if(intServerSize > 2 && !strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
-                    if(intServerSize > 3 && !strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
+                    if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                 } else if(strMessage.contains("mREADY")) {
                     intReady++;
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
-                if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")){
+                if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    GameObject object = handler.getObject(Integer.parseInt(strPayload[2]));
+                    GameObject object = handler.getObject(Integer.parseInt(strPayload[strPayload.length - 1]));
 
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
                     
                     if(strMessage.contains("KNIGHT")){
-                        Knight knight = (Knight) object;
-                        knight.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        Knight knight = (Knight)object;
+                        knight.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("BRUTE")){
-                        Brute brute = (Brute) object;
-                        brute.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        Brute brute = (Brute)object;
+                        brute.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("SNIPER")){
-                        Sniper sniper = (Sniper) object;
-                        sniper.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        Sniper sniper = (Sniper)object;
+                        sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("WIZARD")){
-                        Wizard wizard = (Wizard) object;
-                        wizard.setLeft(Boolean.parseBoolean(strPayload[3]));
+                        Wizard wizard = (Wizard)object;
+                        wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
+                    } else if(strMessage.contains("ENEMY")) {
+                        Enemy enemy = (Enemy)object;
+                        enemy.setHP(Float.parseFloat(strPayload[2]));
+                        enemy.setLeft(Boolean.parseBoolean(strPayload[3]));
                     }
                 } else if(strMessage.contains("aSNIPER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -346,10 +330,18 @@ public class Main implements ActionListener, WindowListener {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     
                     handler.addObject(new Brute(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, handler, ssm, input, Integer.parseInt(strPayload[4])));
+                } else if(strMessage.contains("aENEMY_BULLET")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new EnemyBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.ENEMY_BULLET, handler, ssm, null, Boolean.parseBoolean(strPayload[7]), Float.parseFloat(strPayload[8])));
+                } else if(strMessage.contains("aENEMY")) {
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    handler.addObject(new Enemy(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), 0, 0, 0, 0, Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), Integer.parseInt(strPayload[4]), ObjectId.ENEMY, handler, ssm), Integer.parseInt(strPayload[4]));
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
-                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));
+                    handler.addObject(new Bullet(Float.parseFloat(strPayload[0]),Float.parseFloat(strPayload[1]),Float.parseFloat(strPayload[2]),Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]),Float.parseFloat(strPayload[5]),Integer.parseInt(strPayload[6]),Integer.parseInt(strPayload[7]),Float.parseFloat(strPayload[8]),0,0,Float.parseFloat(strPayload[9]), ObjectId.BULLET, handler, ssm, biBulletTextures[Integer.parseInt(strPayload[10])], Boolean.parseBoolean(strPayload[11]), Float.parseFloat(strPayload[12]), -1));  
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
@@ -370,7 +362,19 @@ public class Main implements ActionListener, WindowListener {
                     String[] strPayload = strMessage.split("~")[1].split(",");
 
                     handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
-                }else if(strMessage.contains("mSESSION_ID")) {
+                } else if(strMessage.contains("mNEXT_ROOM")) {
+                    handler.clearEntities();
+                    intRoomCount++;
+                } else if(strMessage.contains("mPLAYER_NAMES")) { 
+                    String[] strPayload = strMessage.split("~")[1].split(",");
+
+                    netTextAreas[1].setText("");
+
+                    for(int intCount = 0; intCount < strNameList.length; intCount++) {
+                        strNameList[intCount] = strPayload[intCount];
+                        if(!strNameList[intCount].equals("null")) netTextAreas[1].append(" " + strNameList[intCount] + " joined\n");
+                    }
+                } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
                     System.out.println("Session Id: " + intSessionId);
                 } else if(strMessage.contains("mHOST_DISCONNECT")) {
@@ -405,21 +409,10 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
 
-                    chatPanel = new ChatPanel(ssm);
-
                     for(int intCount = 0; intCount < 2; intCount++) {
                         handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
                         handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
                     }
-
-                    chatPanel.setVisible(true);
-                    chatPanel.setOpaque(true);
-                    chatPanel.setBounds(880, 0, 400, 720);
-
-                    gameLayeredPane.add(thePanels[5], Integer.valueOf(100));
-                    //gameLayeredPane.add(mapPanel, Integer.valueOf(101));
-                    gameLayeredPane.add(chatPanel, Integer.valueOf(102));
-                    gameLayeredPane.repaint();
 
                     theFrame.setContentPane(thePanels[5]);
                     thePanels[5].requestFocusInWindow();
@@ -526,11 +519,12 @@ public class Main implements ActionListener, WindowListener {
                 chrCharacters[intCount] += 55;
             }
 
+            netTextAreas[0].append(" " + netTextFields[0].getText() + " joined");
+            strNameList[0] = netTextFields[0].getText();
+
             netTextFields[1].setText(new String(chrCharacters));
             netButtons[0].setEnabled(false);
             netStartButton.setEnabled(true);
-            netTextAreas[0].append(" " + netTextFields[0].getText());
-            strNameList[0] = netTextFields[0].getText();
         } else if(evt.getSource() == netButtons[1]) {
             if(netTextFields[2].getText().toString().isEmpty() == false){
                 netButtons[1].setEnabled(false);
@@ -544,6 +538,7 @@ public class Main implements ActionListener, WindowListener {
                 ssm = new SuperSocketMaster(new String(chrJoinCode), 8080, this);
                 ssm.connect();
                 ssm.sendText("c0>h>mCLIENT_JOIN~" + netTextFields[2].getText());
+
                 netButtons[1].setEnabled(false);
             }
         }
