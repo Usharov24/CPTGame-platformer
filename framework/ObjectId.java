@@ -1,4 +1,4 @@
-package framework;
+package Framework;
 
 public enum ObjectId {
     PLAYER,

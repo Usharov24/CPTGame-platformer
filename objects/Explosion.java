@@ -1,11 +1,12 @@
-package objects;
+package Objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.SuperSocketMaster;
+
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.SuperSocketMaster;
 
 public class Explosion extends GameObject {
     private float fltDmg;

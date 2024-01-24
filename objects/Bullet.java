@@ -1,11 +1,12 @@
-package objects;
+package Objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.SuperSocketMaster;
+
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.SuperSocketMaster;
 
 public class Bullet extends GameObject {
 
@@ -33,6 +34,7 @@ public class Bullet extends GameObject {
         this.fltBurnDmg = fltBurnDmg;
         this.intPeirceCount = intPeirceCount;
         this.intSender = intSender;
+        this.intCelebShot = intCelebShot;
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     

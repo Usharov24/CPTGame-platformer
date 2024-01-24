@@ -1,4 +1,4 @@
-package components;
+package Components;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -6,11 +6,10 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-
-import framework.Main;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import objects.*;
+import Framework.Main;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Objects.*;
 
 public class CustomPanel extends JPanel {
 

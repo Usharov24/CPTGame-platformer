@@ -1,13 +1,15 @@
-package objects;
+package Objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Framework.SuperSocketMaster;
+
 import java.awt.Graphics2D;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import framework.SuperSocketMaster;
 
 public class Enemy extends GameObject {
 
@@ -26,7 +28,7 @@ public class Enemy extends GameObject {
     private float fltTargetX;
     private float fltTargetY;
     private float fltBurnDmg = 0;
-
+    private long lngHitTimer = 0;
     private int intBleedCount = 0;
     private int intPosition;
     private int intEnemyType;
@@ -50,15 +52,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
                 this.fltHeight = 60;
-                fltHP = 100;
+                fltHP = 250;
                 fltDmg = 40;
                 biImg = biSmallEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 30;
                 this.fltHeight = 60;
-                fltHP = 250;
-                fltDmg = 100;
+                fltHP = 150;
+                fltDmg = 20;
                 biImg = biSmallEnem[1];
             }
         }
@@ -66,15 +68,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
                 this.fltHeight = 60;
-                fltHP = 450;
-                fltDmg = 150;
+                fltHP = 350;
+                fltDmg = 60;
                 biImg = biMedEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 40;
                 this.fltHeight = 60;
-                fltHP = 600;
-                fltDmg = 100;
+                fltHP = 225;
+                fltDmg = 170;
                 biImg = biMedEnem[1];
             }
         }
@@ -82,15 +84,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltHeight = 100;
                 this.fltWidth = 100;
-                fltHP = 600;
-                fltDmg = 300;
+                fltHP = 500;
+                fltDmg = 80;
                 biImg = biBigEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltHeight = 70;
                 this.fltWidth = 50;
-                fltHP = 600;
-                fltDmg = 150;
+                fltHP = 300;
+                fltDmg = 100;
                 biImg = biBigEnem[1];
             }
         }
@@ -121,7 +123,7 @@ public class Enemy extends GameObject {
                 }
 
                 if(fltTargetY < fltWorldY && !blnFalling) {
-                    fltVelY = -30;
+                    fltVelY = -40;
                     blnFalling = true;
                 }
                 //makes the enemy follow the player
@@ -134,10 +136,10 @@ public class Enemy extends GameObject {
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 1500) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                     ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10 + "," + fltDmg + "," + false + "," + 0);
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg*5, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
             }
         }
@@ -157,7 +159,6 @@ public class Enemy extends GameObject {
                 if(fltWorldY < fltTargetY){
                     fltVelY += 1; 
                 }
-
                 //homes slowly onto the player
             }
             //shooters
@@ -168,7 +169,7 @@ public class Enemy extends GameObject {
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 2000) {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 15, fltWorldY + fltHeight/2 - 15, fltDiffX * 20 , fltDiffY * 20 , 30, 30,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 150));
                     ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 15) + "," + (fltWorldY + fltHeight/2 - 15) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 30 + "," + 30 + "," + fltDmg + "," + false + "," + 150);
@@ -191,7 +192,7 @@ public class Enemy extends GameObject {
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 500) {
                     dblTimer = System.currentTimeMillis();
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 50));
                     ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 30) + "," + (fltDiffY * 30) + "," + 10 + "," + 10 + "," + fltDmg + "," + true + "," + 50);
@@ -212,6 +213,7 @@ public class Enemy extends GameObject {
                 if(fltWorldY < fltTargetY){
                     fltVelY += 3; 
                 }
+
                 //homes the enemy on a player
             }
         }
@@ -284,32 +286,38 @@ public class Enemy extends GameObject {
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
-                    blnFalling = false;
                 }
                 //if the enemy collides witha  barrier, stop it
-            } else if(object.getId() == ObjectId.BULLET) {
+            } else if(object.getId() == ObjectId.BULLET && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(object);
                     Bullet bullet = (Bullet) object;
+                    if(bullet.getPeirce() == 0){
+                        handler.removeObject(object);
+                    }
+                    else{
+                        bullet.setPeirce(bullet.getPeirce()-1);
+                    }
                     fltHP -= bullet.getDmg();
 
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         //handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
-                        fltBurnDmg = bullet.getBleed();
+                        fltBurnDmg = bullet.getBurn();
                         intBleedCount = (int) bullet.getBleed();
                     }    
                     if(bullet.getCelebShot() > 0){
-                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                        for(int intcount = 0; intcount < bullet.getCelebShot()*3; intcount++){
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }     
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //determine what to do with a bullet upon collision depending on its parameters
             }
-            else if(object.getId() == ObjectId.WAVE) {
+            else if(object.getId() == ObjectId.WAVE && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     WaveAttacks wave = (WaveAttacks) object;
@@ -328,10 +336,11 @@ public class Enemy extends GameObject {
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, wave.getVelX(), wave.getVelY(), 6, 6, 0, 0, 0, 0, wave.getCelebShot(), wave.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, wave.getBoom(), wave.getChar()));                        
                         }
                     } 
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //takes damage from waves
             }
-            else if(object.getId() == ObjectId.SLASH) {
+            else if(object.getId() == ObjectId.SLASH && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     SlashAttacks slash = (SlashAttacks) object;
@@ -349,13 +358,15 @@ public class Enemy extends GameObject {
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, slash.getVelX(), slash.getVelY(), 6, 6, 0, 0, 0, 0, slash.getCelebShot(), slash.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, slash.getBoom(), slash.getChar()));
                         }
                     }      
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //takes damage from slashes
             }
-            else if(object.getId() == ObjectId.BOOM) {
+            else if(object.getId() == ObjectId.BOOM && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     Explosion boom = (Explosion) object;
                     fltHP -= boom.getDmg();
+                    lngHitTimer = System.currentTimeMillis();
                 }
             }
             //hurt by booms

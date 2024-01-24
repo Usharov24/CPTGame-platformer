@@ -1,14 +1,14 @@
-package objects;
+package Objects;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.SuperSocketMaster;
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.SuperSocketMaster;
 
 public class Door extends GameObject {
 

@@ -1,16 +1,17 @@
-package objects;
+package Objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import framework.InputHandler;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import framework.SuperSocketMaster;
-import framework.InputHandler.InputButtons;
+
+import Framework.InputHandler;
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Framework.SuperSocketMaster;
+import Framework.InputHandler.InputButtons;
 
 public class Wizard extends GameObject {
 
@@ -19,6 +20,7 @@ public class Wizard extends GameObject {
 
     private BufferedImage[] biSprite;
     private BufferedImage[] biBulletTextures;
+    private BufferedImage[] biCountDown;
 
     private float fltAcc = 1f, fltDec = 0.5f;
 
@@ -64,6 +66,7 @@ public class Wizard extends GameObject {
         //tells the other folders how to handle this object and when
         biSprite = resLoader.loadImages("/res\\Wizard.png"); 
         biBulletTextures = resLoader.loadImages("/res\\FireBall.png", "/res\\ElectricBall.png" , "/res\\Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
         //setting the texture and height and width for the player
     }
     
@@ -117,12 +120,35 @@ public class Wizard extends GameObject {
                     fltDmgMult *= fltAirDmgMult;
                 }
 
-                for(int intCount = 0; intCount < 7; intCount++) {
-                    handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + -20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + -20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 0 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 1) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 20 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, -20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 0, -20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, -20, -20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, -20, 0, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, -20, 20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 0, 20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, 20, 20, 30, 30, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100 * fltDmgMult, ObjectId.HOMING_BULLET, handler, ssm, biBulletTextures[1], true, intExplodeRad, 3));
                 
-                    if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
-                }
+                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + 20 + "," + 0 + "," + 100 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 3 +","+ blnHoming +","+ intExplodeRad);
+            
                 
                 fltDmgMult = fltPastDmgMult;
             }   
@@ -170,15 +196,15 @@ public class Wizard extends GameObject {
                     //used for a specific item which adds projectiles to every primary attack
                 }
 
-                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 * fltBSpeedMult, fltDiffY * 20 * fltBSpeedMult, 40, 40, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 100*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[0], blnHoming, intExplodeRad,0));
+                handler.addObject(new Bullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 * fltBSpeedMult, fltDiffY * 20 * fltBSpeedMult, 40, 40, intPeirceCount, intBleedCount, fltBurnDmg, fltLifeSteal, intCelebShot, 150*fltDmgMult, ObjectId.BULLET, handler, ssm, biBulletTextures[0], blnHoming, intExplodeRad,0));
                 fltDmgMult = fltPastDmgMult;
                 //this is used for the air damagemultiplier
                 //primary attack which shoots one big bullet
 
-                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20 * fltBSpeedMult) + "," + (fltDiffY * 20) + "," + 40 + "," + 40 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 2 +","+ blnHoming +","+ intExplodeRad);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20 * fltBSpeedMult) + "," + (fltDiffY * 20) + "," + 40 + "," + 40 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 100*fltDmgMult +","+ 2 +","+ blnHoming +","+ intExplodeRad);
+                if(intPosition == 0) ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20 * fltBSpeedMult) + "," + (fltDiffY * 20) + "," + 40 + "," + 40 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 150*fltDmgMult +","+ 2 +","+ blnHoming +","+ intExplodeRad);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20 * fltBSpeedMult) + "," + (fltDiffY * 20) + "," + 40 + "," + 40 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 150*fltDmgMult +","+ 2 +","+ blnHoming +","+ intExplodeRad);
                 //sends the bullet parameters to other players
-            } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 3000) {
+            } else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 4000) {
                 lngTimer[3] = System.currentTimeMillis();
                 if(blnFalling){
                     fltPastDmgMult = fltDmgMult;
@@ -210,27 +236,27 @@ public class Wizard extends GameObject {
                 }
                 //used to determine the necessary angle
 
-                handler.addObject(new WaveAttacks(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, 50*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.BULLET, handler, ssm));
+                handler.addObject(new WaveAttacks(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20, fltDiffY * 20 * -1, 10, 10, fltStartAngle, 200*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.BULLET, handler, ssm));
                 fltDmgMult = fltPastDmgMult;
                 //created a wave attack that spreads as it goes, makes sure to aim where the player is aiming
 
-                if(intPosition == 0) ssm.sendText("h>a>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle+ "," + 50*fltDmgMult + "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount);
-                else ssm.sendText("c" + (intPosition + 1) + ">h>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle+ "," + 50*fltDmgMult + "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount);
+                if(intPosition == 0) ssm.sendText("h>a>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle+ "," + 200*fltDmgMult + "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount);
+                else ssm.sendText("c" + (intPosition + 1) + ">h>aWAVE~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * -20) + "," + 10 + "," + 10 + "," + fltStartAngle+ "," + 200*fltDmgMult + "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount);
             }  
 
-            if(System.currentTimeMillis() - lngTimer[4] > 1000){
+            if(System.currentTimeMillis() - lngTimer[4] > 200){
                 lngTimer[4] = System.currentTimeMillis();
-                if(fltVelX == 0 && fltVelY == 0){
-                    fltHP += fltRegen;
+                if(fltVelX == 0 && fltVelY == 0 && intWungoosCount > 0){
+                    fltHP += (fltRegen + (fltRegen*intWungoosCount*0.3));
                 }
                 else{
-                    fltHP += fltRegen + (fltRegen*intWungoosCount*0.3);
+                    fltHP += fltRegen;
                 }
+                //regenerates the player health -
+            }
 
-                if(fltHP > fltMaxHP){
-                    fltHP = fltMaxHP;
-                }
-                //the regen timer to make sure players can heal normally
+            if(fltHP > fltMaxHP){
+                fltHP = fltMaxHP;
             }
 
             fltVelY += 3;
@@ -288,8 +314,8 @@ public class Wizard extends GameObject {
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
                 //if the player collides with an enemy bullet, remove the bullet from existence
-            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BULLET && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
-                EnemyBullet enemy = (EnemyBullet) object;
+            } else if((object.getId() == ObjectId.ENEMY_BOOM) && getBounds().intersects(object.getBounds()) || (object.getId() == ObjectId.ENEMY_BOOM && getBounds2().intersects(object.getBounds())) && System.currentTimeMillis() - lngTimer[5] > 500){
+                EnemyExplosion enemy = (EnemyExplosion) object;
                 fltHP -= enemy.getDmg() / fltDef;
                 handler.removeObject(object);
                 lngTimer[5] = System.currentTimeMillis();
@@ -386,6 +412,31 @@ public class Wizard extends GameObject {
                 g2d.drawImage(biSprite[0], (int)-fltWidth/2, (int)-fltHeight/2, null);
             }
             //flips the sprite around determined off of the direction of the player
+            if(System.currentTimeMillis() - lngTimer[0] > 5000){
+                g2d.drawImage(biCountDown[1], 450, -325, null);
+
+            }else{
+                g2d.setColor(Color.gray);
+                g2d.fillRect(450, -325, 40, 40);
+                g2d.setColor(Color.white);
+                g2d.drawString(Integer.toString(Math.round(((5000-(System.currentTimeMillis()-lngTimer[0]))/1000))), 467, -302);
+            }
+            if(System.currentTimeMillis() - lngTimer[1] > 8000){
+                g2d.drawImage(biCountDown[2], 500, -325, null);
+            }else{
+                g2d.setColor(Color.gray);
+                g2d.fillRect(500, -325, 40, 40);
+                g2d.setColor(Color.white);
+                g2d.drawString(Integer.toString(Math.round(((8000-(System.currentTimeMillis()-lngTimer[1]))/1000))), 517, -302);
+            }
+            if(System.currentTimeMillis() - lngTimer[3] > 4000){
+                g2d.drawImage(biCountDown[0], 400, -325, null);
+            }else{
+                g2d.setColor(Color.gray);
+                g2d.fillRect(400, -325, 40, 40);
+                g2d.setColor(Color.white);
+                g2d.drawString(Integer.toString(Math.round(((4000-(System.currentTimeMillis()-lngTimer[3]))/1000))), 417, -302);
+            }
              
         } else {
             if(blnLeft){
@@ -452,6 +503,10 @@ public class Wizard extends GameObject {
 
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
+    }
+
+    public long[] getTimer(){
+        return this.lngTimer;
     }
     //all these methods are used in either the enemy class or the main class to determine dmg health etc.
 }

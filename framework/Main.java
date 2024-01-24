@@ -1,4 +1,4 @@
-package framework;
+package Framework;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,8 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import components.*;
-import objects.*;
+import Components.*;
+import Objects.*;
+
 import java.awt.image.BufferedImage;
 
 public class Main implements ActionListener, WindowListener {

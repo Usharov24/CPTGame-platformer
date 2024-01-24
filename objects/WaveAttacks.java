@@ -1,11 +1,12 @@
-package objects;
+package Objects;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.SuperSocketMaster;
+
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.SuperSocketMaster;
 
 
 public class WaveAttacks extends GameObject {
@@ -28,6 +29,10 @@ public class WaveAttacks extends GameObject {
         this.handler = handler;
         this.intBoomRad = intBoomRad;
         this.id = ObjectId.WAVE;
+        this.fltDmg = fltDmg;
+        this.intBleedCount = intBleedCount;
+        this.fltBurnDmg = fltBurnDmg;
+        this.intCelebShot = intCelebShot;
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
