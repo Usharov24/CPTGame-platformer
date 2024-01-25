@@ -233,8 +233,8 @@ public class Brute extends GameObject {
             fltWorldY += fltVelY;
             //adds the velocity ot the current player position
             
-            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
-            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + ","  + fltHP + ","+ fltMaxHP + "," + intPosition);
+            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oBRUTE~" + fltWorldX + "," + fltWorldY + "," + blnLeft + ","  + fltHP + ","+ fltMaxHP + "," + intPosition);
             fltDmgMult = fltPastDmgMult;
             //sends player stats and sets dmg back to normal if changeg
         }
@@ -481,6 +481,10 @@ public class Brute extends GameObject {
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
+    }
+
+    public void setMaxHP(float fltMaxHP){
+        this.fltMaxHP = fltMaxHP;
     }
 
     public void setLeft(boolean blnLeft){

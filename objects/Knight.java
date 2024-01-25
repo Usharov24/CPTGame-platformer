@@ -277,8 +277,8 @@ public class Knight extends GameObject {
             
             fltDmgMult = fltPastDmgMult;
             //resets the damage mult back to standard
-            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
-            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
+            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + ","  + fltHP + ","+ fltMaxHP + "," + intPosition);
             //sends player position and parameters over a network
         }
     }
@@ -474,6 +474,10 @@ public class Knight extends GameObject {
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
+    }
+
+    public void setMaxHP(float fltMaxHP){
+        this.fltMaxHP = fltMaxHP;
     }
 
     public float getDef(){

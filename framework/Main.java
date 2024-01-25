@@ -59,7 +59,7 @@ public class Main implements ActionListener, WindowListener {
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
     // Timer
-    private Timer timer = new Timer(1000/60, this);
+    private Timer timer = new Timer(1000/30, this);
     
     public static State state = State.MAIN_MENU;
 
@@ -179,24 +179,32 @@ public class Main implements ActionListener, WindowListener {
                     if(strMessage.contains("SNIPER")) {
                         Sniper sniper = (Sniper) object;
                         sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        sniper.setHP(Float.parseFloat(strPayload[3]));
+                        sniper.setMaxHP(Float.parseFloat(strPayload[4]));
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("BRUTE")) {
                         Brute brute = (Brute) object;
                         brute.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        brute.setHP(Float.parseFloat(strPayload[3]));
+                        brute.setMaxHP(Float.parseFloat(strPayload[4]));
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("KNIGHT")) {
                         Knight knight = (Knight) object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        knight.setHP(Float.parseFloat(strPayload[3]));
+                        knight.setMaxHP(Float.parseFloat(strPayload[4]));
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("WIZARD")) {
                         Wizard wizard = (Wizard) object;
                         wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        wizard.setHP(Float.parseFloat(strPayload[3]));
+                        wizard.setMaxHP(Float.parseFloat(strPayload[4]));
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
@@ -279,14 +287,26 @@ public class Main implements ActionListener, WindowListener {
                     if(strMessage.contains("KNIGHT")){
                         Knight knight = (Knight)object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        knight.setHP(Float.parseFloat(strPayload[3]));
+                        knight.setMaxHP(Float.parseFloat(strPayload[4]));
+                        knight.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("BRUTE")){
                         Brute brute = (Brute)object;
+                        brute.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        brute.setHP(Float.parseFloat(strPayload[3]));
+                        brute.setMaxHP(Float.parseFloat(strPayload[4]));
                         brute.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("SNIPER")){
                         Sniper sniper = (Sniper)object;
                         sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        sniper.setHP(Float.parseFloat(strPayload[3]));
+                        sniper.setMaxHP(Float.parseFloat(strPayload[4]));
+                        sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("WIZARD")){
                         Wizard wizard = (Wizard)object;
+                        wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
+                        wizard.setHP(Float.parseFloat(strPayload[3]));
+                        wizard.setMaxHP(Float.parseFloat(strPayload[4]));
                         wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("ENEMY")) {
                         Enemy enemy = (Enemy)object;

@@ -266,8 +266,8 @@ public class Sniper extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
 
-            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
-            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + blnLeft + ","  + fltHP + ","+ fltMaxHP + "," + intPosition);
+            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
         }
     }
 
@@ -449,6 +449,10 @@ public class Sniper extends GameObject {
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
+    }
+
+    public void setMaxHP(float fltMaxHP){
+        this.fltMaxHP = fltMaxHP;
     }
 
     public float getDef(){

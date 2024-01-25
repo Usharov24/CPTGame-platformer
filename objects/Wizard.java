@@ -271,8 +271,8 @@ public class Wizard extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             
-            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
-            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
+            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
         }
     }
 
@@ -469,6 +469,10 @@ public class Wizard extends GameObject {
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
+    }
+
+    public void setMaxHP(float fltMaxHP){
+        this.fltMaxHP = fltMaxHP;
     }
 
     public float getDef(){
