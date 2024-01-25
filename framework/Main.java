@@ -182,7 +182,6 @@ public class Main implements ActionListener, WindowListener {
         
         if(evt.getSource() == ssm) {
             String strMessage = ssm.readText();
-            //System.out.println(strMessage);
 
             if(intSessionId == 1) {
                 if(strMessage.substring(5, 6).equals("o")){
