@@ -91,7 +91,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
         this.biImages = biImages;
         this.listener = listener;
 
-        font = resLoader.loadFont("/res\\bitwise.ttf", fltHeight/2);
+        font = resLoader.loadFont("/res/bitwise.ttf", fltHeight/2);
 
         enableInputMethods(true);
         addActionListener(this.listener);

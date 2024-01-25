@@ -161,9 +161,9 @@ public class Wizard extends GameObject {
         this.intPosition = intPosition;
 
         //tells the other folders how to handle this object and when
-        biSprite = resLoader.loadImages("/res\\Wizard.png"); 
-        biBulletTextures = resLoader.loadImages("/res\\FireBall.png", "/res\\ElectricBall.png" , "/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
+        biSprite = resLoader.loadImages("/res/Wizard.png"); 
+        biBulletTextures = resLoader.loadImages("/res/FireBall.png", "/res/ElectricBall.png" , "/res/Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res/M2.png","/res/Shift.png","/res/FKey.png");;
         //setting the texture and height and width for the player
     }
 

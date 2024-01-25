@@ -42,15 +42,15 @@ public class Item extends GameObject {
     /**
     The BufferedImage which stores the common textures
      **/
-    private BufferedImage[] biCommonItems = resLoader.loadImages("/res\\AGoo.png", "/res\\Cow.png", "/res\\Wungoos.png", "/res\\GunPowder.png", "/res\\AlienLeg.png", "/res\\PointBrush.png", "/res\\chalk.png", "/res\\ACream.png", "/res\\MoonDust.png");
+    private BufferedImage[] biCommonItems = resLoader.loadImages("/res/AGoo.png", "/res/Cow.png", "/res/Wungoos.png", "/res/GunPowder.png", "/res/AlienLeg.png", "/res/PointBrush.png", "/res/chalk.png", "/res/ACream.png", "/res/MoonDust.png");
     /**
     The BufferedImage which stores the rare textures
      **/
-    private BufferedImage[] biRareItems = resLoader.loadImages("/res\\ConGrav.png", "/res\\Bornana.png", "/res\\Milk.png", "/res\\KneeCap.png", "/res\\ShotGun.png", "/res\\Slashes.png", "/res\\Fire.png");
+    private BufferedImage[] biRareItems = resLoader.loadImages("/res/ConGrav.png", "/res/Bornana.png", "/res/Milk.png", "/res/KneeCap.png", "/res/ShotGun.png", "/res/Slashes.png", "/res/Fire.png");
     /**
     The BufferedImage which stores the legy texturex
      **/
-    private BufferedImage[] biLegyItems = resLoader.loadImages("/res\\VampToes.png", "/res\\Magnet.png", "/res\\GGoo.png", "/res\\MHeart.png", "/res\\Celeb.png");
+    private BufferedImage[] biLegyItems = resLoader.loadImages("/res/VampToes.png", "/res/Magnet.png", "/res/GGoo.png", "/res/MHeart.png", "/res/Celeb.png");
     /**
      * Constructor for the Knight
      * @param fltWorldX - float value for the X position of the knight

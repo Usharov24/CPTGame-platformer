@@ -178,9 +178,9 @@ public class Knight extends GameObject {
         this.fltHeight = fltHeight;
         this.intPosition = intPosition;
         //informs the program how to handle this object
-        biSprite = resLoader.loadImages("/res\\Knight.png");
-        biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
+        biSprite = resLoader.loadImages("/res/Knight.png");
+        biBulletTexture = resLoader.loadImage("/res/Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res/M2.png","/res/Shift.png","/res/FKey.png");;
         //defines the sprites and hitboxes for the player,
     }
 

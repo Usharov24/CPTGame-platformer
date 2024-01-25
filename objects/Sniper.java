@@ -189,9 +189,9 @@ public class Sniper extends GameObject {
         this.fltHeight = fltHeight;
         this.intPosition = intPosition;
 
-        biSprite = resLoader.loadImages("/res\\Sniper.png");
-        biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
+        biSprite = resLoader.loadImages("/res/Sniper.png");
+        biBulletTextures = resLoader.loadImages("/res/SniperBullet.png", "/res/Rocket.png", "/res/Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res/M2.png","/res/Shift.png","/res/FKey.png");;
     }
 
     public void update() {

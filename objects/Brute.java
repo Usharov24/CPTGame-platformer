@@ -184,10 +184,10 @@ public class Brute extends GameObject {
         this.fltHeight = fltHeight;
         this.intPosition = intPosition;
 
-        biSprite = resLoader.loadImages("/res\\Brute.png");
-        biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
-        biBulletTexture = resLoader.loadImages("/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");
+        biSprite = resLoader.loadImages("/res/Brute.png");
+        biVacTextures = resLoader.loadSpriteSheet("/res/VacGrenade.png", 20, 20);
+        biBulletTexture = resLoader.loadImages("/res/Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res/M2.png","/res/Shift.png","/res/FKey.png");
     }
 
     /**

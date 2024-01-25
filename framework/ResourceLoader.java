@@ -23,6 +23,7 @@ public class ResourceLoader {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biImage = null;
 
+        
         try(inputStream) {
             biImage = ImageIO.read(inputStream);
         } catch(IOException e) {

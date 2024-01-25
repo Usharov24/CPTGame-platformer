@@ -20,19 +20,19 @@ public class Enemy extends GameObject {
     /**
     The BufferedImage which stores the small enemies
      **/
-    private BufferedImage[] biSmallEnem = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
+    private BufferedImage[] biSmallEnem = resLoader.loadImages("/res/SmallChase.png", "/res/SmallShoot.png");
     /**
     The BufferedImage which stores the medium enemies
      **/
-    private BufferedImage[] biMedEnem = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
+    private BufferedImage[] biMedEnem = resLoader.loadImages("/res/MedChase.png", "/res/MedShoot.png");
     /**
     The BufferedImage which stores the big enemies
      **/
-    private BufferedImage[] biBigEnem = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
+    private BufferedImage[] biBigEnem = resLoader.loadImages("/res/BigChase.png", "/res/BigShoot.png");
     /**
     The BufferedImage which bullets
      **/
-    private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
+    private BufferedImage[] biBullets = resLoader.loadImages("/res/SniperBullet.png");
     /**
     The BufferedImage which stores the eenemy texture
      **/
@@ -40,7 +40,7 @@ public class Enemy extends GameObject {
     /**
     The BufferedImage which stores the common textures
      **/
-    private String[][] strEnemValues = resLoader.loadCSV("/res\\EnemValues.csv");
+    private String[][] strEnemValues = resLoader.loadCSV("/res/EnemValues.csv");
     //holds the values for all the enemies
 
     /**

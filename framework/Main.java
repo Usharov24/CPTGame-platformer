@@ -48,23 +48,23 @@ public class Main implements ActionListener, WindowListener {
     /**
      * The BufferedImages for menu buttons
      */
-    private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
+    private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res/MenuButtons.png", 210, 110);
     /**
      * The BufferedImages for net buttons
      */
-    private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
+    private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res/NetButtons.png", 810, 90);
     /**
      * The BufferedImages for arrow buttons
      */
-    private BufferedImage[][] biArrowButtons = resLoader.loadSpriteSheet("/res\\ArrowButtons.png", 110, 210, 2, 7);
+    private BufferedImage[][] biArrowButtons = resLoader.loadSpriteSheet("/res/ArrowButtons.png", 110, 210, 2, 7);
     /**
      * The BufferedImages for character buttons
      */
-    private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
+    private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res/CharacterButtons.png", 300, 300, 4, 7);
     /**
      * The BufferedImages for tile textures
      */
-    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
+    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res/TileTextures.png", 40, 40);
 
     // Frame
     /**
@@ -143,15 +143,15 @@ public class Main implements ActionListener, WindowListener {
     /**
      * Sprites for bullets
      */
-    private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
+    private BufferedImage[] biBulletTextures = resLoader.loadImages("/res/SniperBullet.png", "/res/Rocket.png", "/res/FireBall.png", "/res/ElectricBall.png", "/res/Shrapnel.png");
     /**
      * Sprites for the vac grenade
      */
-    private BufferedImage[] biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
+    private BufferedImage[] biVacTextures = resLoader.loadSpriteSheet("/res/VacGrenade.png", 20, 20);
     /**
      * Image for the icon of the frame
      */
-    private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
+    private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res/ioLogo.png"));
     
     // Timer
     /**

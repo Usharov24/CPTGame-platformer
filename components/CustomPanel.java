@@ -31,25 +31,25 @@ public class CustomPanel extends JPanel {
     /**
      * The images used as the help menu screens
      */
-    private BufferedImage[] biHelpMenuScreens = resLoader.loadSpriteSheet("/res\\HelpMenuScreens.png", 860, 720);
+    private BufferedImage[] biHelpMenuScreens = resLoader.loadSpriteSheet("/res/HelpMenuScreens.png", 860, 720);
     /**
      * The images used as tile textures
      */
-    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
+    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res/TileTextures.png", 40, 40);
     /**
      * The image used for the title screen
      */
-    private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
+    private BufferedImage biTitleScreen = resLoader.loadImage("/res/Title.png");
     /**
      * The image used for the background of levels
      */
-    private BufferedImage biRoomBackground = resLoader.loadImage("/res\\RoomBackground.png");
+    private BufferedImage biRoomBackground = resLoader.loadImage("/res/RoomBackground.png");
 
     // Load Font
     /**
      * The Font object used for drawing text
      */
-    private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
+    private Font font = resLoader.loadFont("/res/bitwise.ttf", 28);
 
     // Maps
     /**
@@ -134,7 +134,7 @@ public class CustomPanel extends JPanel {
             if(Main.intRoomCount != 8 && Main.intAlivePlayers[0] + Main.intAlivePlayers[1] + Main.intAlivePlayers[2] + Main.intAlivePlayers[3] != Main.intServerSize) {
                 if(Main.intRoomCount == 0) {
                     for(int intCount = 0; intCount < strMaps.length; intCount++) {
-                        strMaps[intCount] = resLoader.loadCSV("/res\\Room1.csv,/res\\Room2.csv,/res\\Room3.csv,/res\\Room4.csv,/res\\Room5.csv,/res\\Room6.csv,/res\\Room7.csv".split(",")[intCount]);
+                        strMaps[intCount] = resLoader.loadCSV("/res/Room1.csv,/res/Room2.csv,/res/Room3.csv,/res/Room4.csv,/res/Room5.csv,/res/Room6.csv,/res/Room7.csv".split(",")[intCount]);
                     }
                     Main.intRoomCount++;
                 }
@@ -311,7 +311,7 @@ public class CustomPanel extends JPanel {
             // HUD CODE END ////////////////////////////////////////////////////
         } else if(Main.state == Main.State.DEMO) {
             if(Main.intRoomCount == 0) {
-                strDemoMap = resLoader.loadCSV("/res\\DemoRoom.csv");
+                strDemoMap = resLoader.loadCSV("/res/DemoRoom.csv");
                 Main.intRoomCount++;
             }
 
