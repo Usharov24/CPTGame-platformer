@@ -15,47 +15,149 @@ import Framework.InputHandler.InputButtons;
 public class Knight extends GameObject {
 
     private InputHandler input;
+    /**
+    The inputhandler which holds key values
+     **/
     private ResourceLoader resLoader = new ResourceLoader();
-
+    /**
+    The resource loader which helps load files
+     **/
     private BufferedImage biBulletTexture;
+    /**
+    The BufferedImage which stores the bullet texture
+     **/
     private BufferedImage[] biSprite;
+    /**
+    The BufferedImage which stores the player texturex
+     **/
     private BufferedImage[] biCountDown;
+    /**
+    The BufferedImage which stores the ability cooldowntextures
+     **/
 
 
     private float fltAcc = 1f, fltDec = 0.5f;
-
+    /**
+    The float fltDec and atAcc which stores the values for acceleration and deceleration
+     **/
     private float fltDashVelY;
+    /**
+    The float which will store the value for the speed of dashing up
+     **/
     private float fltDashVelX;
+    /**
+    The float which will store the value for the speed of dashing sideways
+     **/
     private float fltDmgMult = 1;
+    /**
+    The float which will store the value for the damage multiplied which is at 1 at the start
+     **/
     private float fltRegen = 4;
+    /**
+    The float which will store the value for the regeneration values which is at 4 at the start
+     **/
     private float fltBSpeedMult = 1;
+    /**
+    The float which will store the value for the bullet speed multiplier value which is at 1 at the start
+     **/
     private float fltPSpeedMult = 1;
+    /**
+    The float which will store the value for the player speed multiplier value which is at 1 at the start
+     **/
     private float fltReflectDmg = 0;
+    /**
+    The float which will store the value for the reflection damage value which is at 0 at the start
+     **/
     private float fltMaxHP = 1500;
+    /**
+    The float which will store the value for the MaxHP values which is at 1500 at the start
+     **/
     private float fltPastDmgMult = 1;
-    private float fltBurnDmg = 0;  
+    /**
+    The float which will store the value for the past damage multiplier values which is at 1 at the start
+     **/
+    private float fltBurnDmg = 0; 
+    /**
+    The float which will store the value for the burning damage values which is at 0 at the start
+     **/ 
     private float fltAirDmgMult = 1;
+     /**
+    The float which will store the value for the air damage multiplier values which is at 1 at the start
+     **/ 
     private float fltLifeSteal = 0; 
+     /**
+    The float which will store the value for the lifesteal values which is at 0 at the start
+     **/ 
     private float fltHP = 1500;
+     /**
+    The float which will store the value for the HP values which is at 1500 at the start
+     **/ 
     private float fltDef = 1;
+     /**
+    The float which will store the value for the defense values which is at 1 at the start
+     **/ 
     private float fltFireRateMult = 1;
-
+     /**
+    The float which will store the value for the fire rate multiplier values which is at 1 at the start
+     **/ 
     private long[] lngTimer = {0, 0, 0, 0, 0, 0};
+     /**
+    The long which will store the value for the time between abilities which is at 0 at the start
+     **/ 
 
     private int intPosition;
+     /**
+    The int value for the position in handlers list
+     **/
     private int intJumpCount;
+    /**
+    The int value for the number of jumps made
+    **/
     private int intWungoosCount;
+    /**
+    The int value for the number of Wungoos picked up
+    **/
     private int intPeirceCount;
+    /**
+    The int value for the peirce a bullet has
+    **/
     private int intExplodeRad;
+    /**
+    The int value for the explosion radius for a projectile
+    **/
     private int intShurikenCount;
+    /**
+    The int value for the number of bonus projectiles
+    **/
     private int intBleedCount;
+    /**
+    The int value for the number of procs each projectile has
+    **/
     private int intCelebShot;
+    /**
+    The int value for the number of bonus shots upon a bullets collisions
+    **/
     private int intJumpCap = 3;
+    /**
+    The int value for the max number of jumps which is 3 in this character
+    **/
 
     private boolean blnLeft = false;
+    /**
+    The boolean value direction the character is facing which starts off as false
+    **/
     private boolean blnFalling = true;
+     /**
+    The boolean value for falling which starts off as true
+    **/
     private boolean blnBoost = false;
+    /**
+    The boolean value for boosting which starts off as false
+    **/
     private boolean blnHoming = false;
+    /**
+    The boolean value for homing which starts off as false
+    **/
     //all variables used for items and player interactions
 
     public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
@@ -70,6 +172,18 @@ public class Knight extends GameObject {
         biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
         //defines the sprites and hitboxes for the player,
     }
+    /**
+     * Constructor for the Knight
+     * @param fltWorldX - float value for the X position of the knight
+     * @param fltWorldY - float value for the Y position of the knight
+     * @param fltWidth - float value for the width of the knight
+     * @param fltHeight - float value for the height of the knight
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param input - the input list of keys
+     * @param intPosition - float value for the width of the knight
+     **/
 
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
@@ -398,6 +512,10 @@ public class Knight extends GameObject {
             }
         }
     }
+    /**
+     this method checks all the player collisons and
+     @return void
+     */
 
     public void draw(Graphics g) {
         if(fltHP <= 0) return;
@@ -460,6 +578,7 @@ public class Knight extends GameObject {
         }
     }
 
+
     public Rectangle getBounds2() {
         if(intPosition == Main.intSessionId - 1) {
             float fltBoundsY = fltVelY - fltHeight/2;
@@ -472,30 +591,62 @@ public class Knight extends GameObject {
             return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
     }
+    /**
+     * 
+     * @return Rectange of the y bounds for a player
+     *
+     */
 
     public float getHP(){
         return fltHP;
     }
+    /**
+     * 
+     * @return float hp value
+     */
 
     public float getMaxHP(){
         return fltMaxHP;
     }
+     /**
+     * 
+     * @return float Maxhp value
+     */
+
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
     }
 
+     /**
+     * @param fltHP which is the health being set
+     * @return void
+     */
+
+
     public void setMaxHP(float fltMaxHP){
         this.fltMaxHP = fltMaxHP;
     }
+    /**
+     * @param fltMaxHP which is the health being set
+     * @return void
+     */
 
     public float getDef(){
         return fltDef;
     }
 
+    /**
+     * @return float fltDef which is the defense of the player
+     */
+
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
+
+    /**
+     * @return boolean blnLeft which determines which direction the player is pointing
+     */
 
     //methods used over a network or locally to determine what happens.
 }

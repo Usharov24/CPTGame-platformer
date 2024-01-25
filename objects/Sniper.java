@@ -15,48 +15,161 @@ import Framework.InputHandler.InputButtons;
 public class Sniper extends GameObject {
 
     private InputHandler input;
+    /**
+    The inputhandler which holds key values
+     **/
     private ResourceLoader resLoader = new ResourceLoader();
+    /**
+    The resource loader which helps load files
+     **/
+    private BufferedImage[] biBulletTextures;
+    /**
+    The BufferedImage which stores the bullet textures
+     **/
+    private BufferedImage[] biSprite;
+    /**
+    The BufferedImage which stores the player texturex
+     **/
+    private BufferedImage[] biCountDown;
+    /**
+    The BufferedImage which stores the ability cooldowntextures
+     **/
+
 
     private float fltAcc = 1f, fltDec = 0.5f;
-    private float fltDashVel;
-    private float fltRecoilX, fltRecoilY;
-
-    private BufferedImage[] biSprite;
-    private BufferedImage[] biBulletTextures;
-    private BufferedImage[] biCountDown;
-
-    private long[] lngTimer = {0, 0, 0, 0, 0, 0};
-
-    private float fltHP = 1000;
-    private float fltMaxHP = 1000;
+    /**
+    The float fltDec and atAcc which stores the values for acceleration and deceleration
+     **/
     private float fltDmgMult = 1;
+    /**
+    The float which will store the value for the damage multiplied which is at 1 at the start
+     **/
+    private float fltRecoilX;
+    /**
+    The float which will store the value for the horizontal recoil
+     **/
+    private float fltRecoilY;
+    /**
+    The float which will store the value for the vertical recoil
+     **/
+    private float fltDashVel;
+    /**
+    The float which will store the value for the dash velocity
+     **/
     private float fltRegen = 4;
+    /**
+    The float which will store the value for the regeneration values which is at 4 at the start
+     **/
     private float fltBSpeedMult = 1;
+    /**
+    The float which will store the value for the bullet speed multiplier value which is at 1 at the start
+     **/
     private float fltPSpeedMult = 1;
+    /**
+    The float which will store the value for the player speed multiplier value which is at 1 at the start
+     **/
     private float fltReflectDmg = 0;
-    private float fltDef = 1;
-    private float fltBurnDmg = 0;  
-    private float fltAirDmgMult = 1;
-    private float fltLifeSteal = 0;
-    private float fltFireRateMult = 1;
+    /**
+    The float which will store the value for the reflection damage value which is at 0 at the start
+     **/
+    private float fltMaxHP = 1000;
+    /**
+    The float which will store the value for the MaxHP values which is at 1000 at the start
+     **/
     private float fltPastDmgMult = 1;
+    /**
+    The float which will store the value for the past damage multiplier values which is at 1 at the start
+     **/
+    private float fltBurnDmg = 0; 
+    /**
+    The float which will store the value for the burning damage values which is at 0 at the start
+     **/ 
+    private float fltAirDmgMult = 1;
+     /**
+    The float which will store the value for the air damage multiplier values which is at 1 at the start
+     **/ 
+    private float fltLifeSteal = 0; 
+     /**
+    The float which will store the value for the lifesteal values which is at 0 at the start
+     **/ 
+    private float fltHP = 1000;
+     /**
+    The float which will store the value for the HP values which is at 1000 at the start
+     **/ 
+    private float fltDef = 1;
+     /**
+    The float which will store the value for the defense values which is at 1 at the start
+     **/ 
+    private float fltFireRateMult = 1;
+     /**
+    The float which will store the value for the fire rate multiplier values which is at 1 at the start
+     **/ 
+    private long[] lngTimer = {0, 0, 0, 0, 0, 0};
+     /**
+    The long which will store the value for the time between abilities which is at 0 at the start
+     **/ 
 
-    private int intExplodeRad = 0;
-    private int intShurikenCount = 0;
-    private int intBleedCount = 0; 
-    private int intCelebShot = 0;
-    private int intJumpCap = 2;
-    private int intPeirceCount = 0;
-    private int intWungoosCount = 0;
-    private int intPosition;    
+    private int intPosition;
+     /**
+    The int value for the position in handlers list
+     **/
+    private int intDirection;
+     /**
+    The int value for dashing direction
+     **/
     private int intJumpCount;
-    private int intDirection = 1;
+    /**
+    The int value for the number of jumps made
+    **/
+    private int intWungoosCount;
+    /**
+    The int value for the number of Wungoos picked up
+    **/
+    private int intPeirceCount;
+    /**
+    The int value for the peirce a bullet has
+    **/
+    private int intExplodeRad;
+    /**
+    The int value for the explosion radius for a projectile
+    **/
+    private int intShurikenCount;
+    /**
+    The int value for the number of bonus projectiles
+    **/
+    private int intBleedCount;
+    /**
+    The int value for the number of procs each projectile has
+    **/
+    private int intCelebShot;
+    /**
+    The int value for the number of bonus shots upon a bullets collisions
+    **/
+    private int intJumpCap = 2;
+    /**
+    The int value for the max number of jumps which is 2 in this character
+    **/
 
-    private boolean blnHoming = false;
     private boolean blnLeft = false;
+    /**
+    The boolean value direction the character is facing which starts off as false
+    **/
     private boolean blnFalling = true;
+     /**
+    The boolean value for falling which starts off as true
+    **/
     private boolean blnBazooka = false;
+    /**
+    The boolean value for Bazooka which starts off as false
+    **/
     private boolean blnRapidFire = false;
+    /**
+    The boolean value for RapidFire which starts off as false
+    **/
+    private boolean blnHoming = false;
+    /**
+    The boolean value for homing which starts off as false
+    **/
     
     public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
@@ -69,6 +182,19 @@ public class Sniper extends GameObject {
         biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\Shrapnel.png");
         biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
     }
+
+    /**
+     * Constructor for the Sniper
+     * @param fltWorldX - float value for the X position of the Sniper
+     * @param fltWorldY - float value for the Y position of the Sniper
+     * @param fltWidth - float value for the width of the Sniper
+     * @param fltHeight - float value for the height of the Sniper
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param input - the input list of keys
+     * @param intPosition - float value for the width of the Sniper
+     **/
 
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
@@ -378,7 +504,7 @@ public class Sniper extends GameObject {
                     if(item.getPlacement() == 1) {
                         fltLifeSteal += 0.2;
                     } else if(item.getPlacement() == 2) {
-                        //wont do anything for brute
+                        //wont do anything for Sniper
                         blnHoming = true;
                     } else if(item.getPlacement() == 3) {
                         fltRegen *= 2;
@@ -466,34 +592,61 @@ public class Sniper extends GameObject {
             return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
     }
-    //returns the y hitboxes
+    /**
+     * 
+     * @return Rectange of the y bounds for a player
+     *
+     */
 
     public float getHP(){
         return fltHP;
     }
+    /**
+     * 
+     * @return float hp value
+     */
 
     public float getMaxHP(){
         return fltMaxHP;
     }
+     /**
+     * 
+     * @return float Maxhp value
+     */
+
 
     public void setHP(float fltHP){
         this.fltHP = fltHP;
     }
 
+     /**
+     * @param fltHP which is the health being set
+     * @return void
+     */
+
+
     public void setMaxHP(float fltMaxHP){
         this.fltMaxHP = fltMaxHP;
     }
+    /**
+     * @param fltMaxHP which is the health being set
+     * @return void
+     */
 
     public float getDef(){
         return fltDef;
     }
 
-    public float getReflectDmg(){
-        return fltReflectDmg;
-    }
+    /**
+     * @return float fltDef which is the defense of the player
+     */
 
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
+
+    /**
+     * @return boolean blnLeft which determines which direction the player is pointing
+     */
     //all used in netwokring
 }
