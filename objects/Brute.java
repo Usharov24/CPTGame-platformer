@@ -147,7 +147,7 @@ public class Brute extends GameObject {
 
                         fltDiffX /= fltLength;
                         fltDiffY /= fltLength;
-                    
+                        //used to find direction of mouse
                         if(intPosition == 0 && ssm != null) {
                             ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," +  (fltDiffX * 20 - intRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + intRand3) * fltBSpeedMult + "," + 6 + "," + 6  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                             ssm.sendText("h>a>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," +  (fltDiffX * 20 + intRand2) * fltBSpeedMult + "," + (fltDiffY * 20 + intRand4) * fltBSpeedMult + "," + 6 + "," + 6  + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
@@ -179,6 +179,7 @@ public class Brute extends GameObject {
                     float fltDiffX = input.fltMouseX - 640;
                     float fltDiffY = input.fltMouseY - 360;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
+                    //used to find direction of mouse
 
                     fltDiffX /= fltLength;
                     fltDiffY /= fltLength;
@@ -302,6 +303,7 @@ public class Brute extends GameObject {
                         if(intPosition == 0 && ssm != null) ssm.sendText("h>a>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + ","+ fltDmgMult*100 + "," + 300 + "," + 300); 
                         else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>aBOOM~" + (fltWorldX + fltWidth/2) + "," + (fltWorldY + fltHeight) + "," + fltDmgMult*100 + "," + 300 + "," + 300);
                     }
+                    //if the brutes ult or slam is happening, upon collision, make explosions
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
@@ -496,10 +498,6 @@ public class Brute extends GameObject {
 
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
-    }
-
-    public long[] getTimer(){
-        return this.lngTimer;
     }
 
     //methods used to change and grab values from the player when needed

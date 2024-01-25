@@ -27,6 +27,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         if(evt.getKeyCode() == KeyEvent.VK_F) buttonSet.add(InputButtons.F);
         if(evt.getKeyCode() == KeyEvent.VK_SHIFT) buttonSet.add(InputButtons.SHIFT);
         if(evt.getKeyCode() == KeyEvent.VK_SPACE) buttonSet.add(InputButtons.SPACE);
+        //adds keys to the list if they are pressed
     }
 
     // Key Release
@@ -42,6 +43,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
             if(buttonSet.contains(InputButtons.ENTER)) buttonSet.remove(InputButtons.ENTER);
             else buttonSet.add(InputButtons.ENTER);
         }
+        //removes certain keys from the list if they are released
     }
 
     // Mouse Press
@@ -52,6 +54,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         if(evt.getButton() == MouseEvent.BUTTON1) buttonSet.add(InputButtons.BUTTON1);
         if(evt.getButton() == MouseEvent.BUTTON2) buttonSet.add(InputButtons.BUTTON2);
         if(evt.getButton() == MouseEvent.BUTTON3) buttonSet.add(InputButtons.BUTTON3);
+        //adds mouse presses to the list if pressed
     }
 
     // Mouse Release
@@ -59,18 +62,21 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         if(evt.getButton() == MouseEvent.BUTTON1) buttonSet.remove(InputButtons.BUTTON1);
         if(evt.getButton() == MouseEvent.BUTTON2) buttonSet.remove(InputButtons.BUTTON2);
         if(evt.getButton() == MouseEvent.BUTTON3) buttonSet.remove(InputButtons.BUTTON3);
+        //removes mouse presses when the button is released
     }
 
     // Mouse Drag
     public void mouseDragged(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
+        //gets the x and y of the mouse
     }
 
     // Mouse Move
     public void mouseMoved(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
+        //gets the x and y of the mouse
     }
 
     // Unused Methods

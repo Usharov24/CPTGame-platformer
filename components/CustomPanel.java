@@ -59,6 +59,7 @@ public class CustomPanel extends JPanel {
             g.setFont(font.deriveFont(100f));
             FontMetrics fm = g.getFontMetrics();
             g.drawString("Annihilation Station", (getWidth() - fm.stringWidth("Annihilation Station"))/2, 130);
+            //draws out the main menu background and draws the strings
         } else if(Main.state == Main.State.HOST_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -67,6 +68,7 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
+            //draws more strings while also switching the panel to the host menu
         } else if(Main.state == Main.State.JOIN_MENU) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -75,14 +77,17 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.white);
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
+            //switches the panel to the join menu and draws more strings
         } else if(Main.state == Main.State.HELP) {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
             
             g.drawImage(biHelpMenuScreens[Main.intHelpScreenCount], 210, 0, null);
+            //switches the panel to the help panel and draws the correct background
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
+            //ensures that the game is in the character selection screen
         } else if(Main.state == Main.State.GAME) {
             if(Main.intRoomCount != 8 && Main.intAlivePlayers[0] + Main.intAlivePlayers[1] + Main.intAlivePlayers[2] + Main.intAlivePlayers[3] != Main.intServerSize) {
                 if(Main.intRoomCount == 0) {
@@ -184,6 +189,7 @@ public class CustomPanel extends JPanel {
                         e.printStackTrace();
                     }
                 }
+                //determines the health of each player
 
                 g.setColor(Color.black);
                 g.fillRect(0, 0, getWidth(), getHeight());
@@ -270,7 +276,7 @@ public class CustomPanel extends JPanel {
             g.drawImage(biRoomBackground, 0, 0, null);
 
             Main.handler.update();
-
+            //updates all objects in the demo
             g.translate(getWidth()/2, getHeight()/2);
 
             decodeMap(g, strDemoMap);
@@ -320,7 +326,7 @@ public class CustomPanel extends JPanel {
                 byte bytTileTexture = (byte)(shrtTile >> 4 & 15);
                 byte bytSpawnObject = (byte)(shrtTile >> 8 & 15);
                 byte bytSpawnInfo = (byte)(shrtTile >> 12 & 15);
-
+                //responsible for holding all of the data for a tile
                 if(bytTileType == 0) {
                     g.drawImage(biTileTextures[bytTileTexture], intCount2 * 40 - (int)(camObject.getWorldX() + camObject.getWidth()/2), intCount1 * 40 - (int)(camObject.getWorldY() + camObject.getHeight()/2), null);
                 } else if(bytTileType == 1) {
@@ -330,14 +336,18 @@ public class CustomPanel extends JPanel {
                     Main.handler.addObject(new Door(intCount2 * 40, intCount1 * 40, 40, 40, new BufferedImage[]{biTileTextures[bytTileTexture], biTileTextures[bytTileTexture + 6]}, ObjectId.DOOR, Main.handler, Main.ssm));
                     strMap[intCount1][intCount2] = "" + (shrtTile - 2);
                 }
+                //draws out certain tiles depending on the preceding information
 
                 if(Main.intSessionId == 1 && bytSpawnObject == 1) {
                     if(Main.ssm != null) Main.ssm.sendText("h>a>aENEMY~" + (intCount2 * 40) + "," + (intCount1 * 40) + "," + (bytSpawnInfo & 3) + "," + (bytSpawnInfo >> 2 & 3) + "," + Main.handler.objectList.size());
                     Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 0, 0, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, Main.handler.objectList.size(), ObjectId.ENEMY, Main.handler, Main.ssm));
+                    //if the tile was determined to have an enemy, add an enemy and ensures that the enemy has the correct spawn information
                     strMap[intCount1][intCount2] = "" + (shrtTile & 255);
+                    
                 } else if(Door.blnRoomCleared && bytSpawnObject == 2) {
                     Main.handler.addObject(new Item(intCount2 * 40, intCount1 * 40, 20, 20, ObjectId.ITEM, Main.handler, null));
                     strMap[intCount1][intCount2] = "" + (shrtTile & 255);
+                    //drops the item upon completion
                 }
             }
         }

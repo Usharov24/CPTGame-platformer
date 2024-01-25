@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class ResourceLoader {
-    
+    //class to load in images faster and more effectively
     public BufferedImage loadImage(String strPath) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biImage = null;
@@ -22,7 +22,7 @@ public class ResourceLoader {
         } catch(IOException e) {
             e.printStackTrace();
         }
-
+        //loads in a bufferedimage
         return biImage;
     }
 
@@ -36,7 +36,7 @@ public class ResourceLoader {
                 e.printStackTrace();
             }
         }
-
+        //loads an array of buffered images
         return biImages;
     }
 
@@ -60,7 +60,7 @@ public class ResourceLoader {
                 intIndex++;
             }
         }
-
+        //reads each individual square on the sprite sheet and returns it as an array
         return biImages;
     }
 
@@ -89,7 +89,7 @@ public class ResourceLoader {
         for(int intCount = 0; intCount < biImages.length; intCount++) {
             biImages[intCount] = biSubimages[intCount];
         }
-
+        //same as the last method except the intRemove is used 
         return biImages;
     }
 
@@ -118,7 +118,7 @@ public class ResourceLoader {
                 }
             }
         }
-
+        //more customization for loading sprite sheets and allows users to control how big the array will be
         return biImages;
     }
 
@@ -135,13 +135,14 @@ public class ResourceLoader {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        
 
         String[][] strContents = new String[strLines.size()][strLines.get(0).length];
 
         for(int intCount = 0; intCount < strContents.length; intCount++) {
             strContents[intCount] = strLines.get(intCount);
         }
-
+        //returns the content of a CSV file split by commas into a double array
         return strContents;
     }
 
@@ -156,7 +157,7 @@ public class ResourceLoader {
         } catch(IOException | FontFormatException e) {
             e.printStackTrace();
         }
-
+        //loads a font
         return font;
     }
 
@@ -171,6 +172,7 @@ public class ResourceLoader {
         } catch(IOException | FontFormatException e) {
             e.printStackTrace();
         }
+        //loads a font but allows customization of the font size
 
         return font;
     }

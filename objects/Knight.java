@@ -124,7 +124,7 @@ public class Knight extends GameObject {
                 float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 blnFalling = true;
-            
+                //used to find the direction of the mouse
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
                 fltDashVelX = Math.round(fltDiffX * 20);
@@ -139,7 +139,7 @@ public class Knight extends GameObject {
                 float fltDiffX = input.fltMouseX - (fltWorldX + fltWidth/2);
                 float fltDiffY = input.fltMouseY - (fltWorldY + fltHeight/2);
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-                
+                //used to find the direction of the mouse
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
 
@@ -196,6 +196,7 @@ public class Knight extends GameObject {
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 100 * fltFireRateMult && blnBoost) {
                 lngTimer[2] = System.currentTimeMillis();
+                //shoots slash left or right depending on mouse
                 if(input.fltMouseX - 640 < 0){
                     handler.addObject(new SlashAttacks(fltWorldX + 25, fltWorldY + 15, -20, System.currentTimeMillis() + 300, 50, 50, 135,  60*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.SLASH, handler, ssm));
                     
@@ -435,6 +436,7 @@ public class Knight extends GameObject {
                 g2d.setColor(Color.white);
                 g2d.drawString(Integer.toString(Math.round(((3000-(System.currentTimeMillis()-lngTimer[3]))/1000))), 417, -302);
             }
+            //used to tell the player the cooldown times
         } else {
             if(blnLeft) {
                 g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 32, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), -32, 64, null);
@@ -495,8 +497,5 @@ public class Knight extends GameObject {
         this.blnLeft = blnLeft;
     }
 
-    public long[] getTimer(){
-        return this.lngTimer;
-    }
     //methods used over a network or locally to determine what happens.
 }
