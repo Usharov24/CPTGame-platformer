@@ -1,3 +1,8 @@
+//ANNIHILATION STATION
+//V1.2
+//CREATED BY STUDENTS FROM ST.AUGESTINE CHS
+//ALBERT, DINO, GREG
+
 package Framework;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -783,6 +788,7 @@ public class Main implements ActionListener, WindowListener {
 
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
+            //sets the panel to the character selection panel through the help demo
         }
     }
 
@@ -790,6 +796,7 @@ public class Main implements ActionListener, WindowListener {
         if(ssm != null) {
             ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
             ssm.disconnect();
+            //if a window closes, disconnect the host.
         }
     }
 

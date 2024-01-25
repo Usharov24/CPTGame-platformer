@@ -15,7 +15,7 @@ import javax.swing.AbstractButton;
 import Framework.ResourceLoader;
 
 public class CustomButton extends AbstractButton implements MouseListener {
-
+    //extends the abstractbutton class to create our own button
     // Properties
     private ResourceLoader resLoader = new ResourceLoader();
 
@@ -35,6 +35,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
     // Constructors
     public CustomButton(int intWidth, int intHeight, BufferedImage[] biImages, ActionListener listener) {
         this(intWidth, intHeight, null, biImages, listener);
+        
     }
 
     public CustomButton(float fltWidth, float fltHeight, String strText, BufferedImage[] biImages, ActionListener listener) {
@@ -53,6 +54,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
         setMaximumSize(new Dimension((int)fltWidth + 10, (int)fltHeight + 10));
         setMinimumSize(size);
         setFocusable(true);
+        //adds mouse and action listeners to the button immidiatly while also setting the size right awat
     }
 
     protected void paintComponent(Graphics g) {
@@ -64,12 +66,14 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 setLocation(getX() - 1, getY() - 1);
                 intFrameCount++;
             }
+            //if the mouse entered the area of the button, enlarge it
             
             if(biImages != null) g.drawImage(biImages[intFrameCount], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
-
+            //draws the sprite for the button
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
+            //draws the words on the button
             if(strText != null) g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
         } else {
             if(getWidth() > getMinimumSize().width && getHeight() > getMinimumSize().height) {
@@ -77,13 +81,16 @@ public class CustomButton extends AbstractButton implements MouseListener {
                 setLocation(getX() + 1, getY() + 1);
                 intFrameCount--;
             }
+            //makes the buttons a certain size
             g.setColor(Color.blue);
             if(biImages != null) g.drawImage((blnEnabled) ? biImages[intFrameCount] : biImages[biImages.length - 1], intFrameCount - biImages.length + 1, intFrameCount - biImages.length + 1, null);
             else g.fillRect(0, 0, getWidth(), getHeight());
             g.setFont(font);
+            //draws out more things for the buttons
             FontMetrics fm = g.getFontMetrics();
             g.setColor(Color.white);
             if(strText != null) g.drawString(strText, (getWidth() - fm.stringWidth(strText))/2, (fm.getAscent() + (getHeight() - fm.getHeight())/2));
+            //draws the string for the buttons
         }
     }
 
@@ -94,11 +101,13 @@ public class CustomButton extends AbstractButton implements MouseListener {
             location.x = intX;
             location.y = intY;
         }
+        //sets the location of the button
     }
 
     public void setEnabled(boolean blnEnabled) {
         this.blnEnabled = blnEnabled;
     }
+    //sets if the button is enabled or not
 
     public void mouseReleased(MouseEvent evt) {
         if(blnEnabled && listener != null) {
@@ -109,17 +118,22 @@ public class CustomButton extends AbstractButton implements MouseListener {
             intFrameCount = 0;
         }
     }
+    //checks to see if the button is no longer being pressed
 
     public void mouseEntered(MouseEvent evt) {
         blnMouseEntered = true;
         repaint();
     }
+    //ensures that the mouse is inside the area of the button
 
     public void mouseExited(MouseEvent evt) {
         blnMouseEntered = false;
         repaint();
+        //ensures that the mouse has left the area of the button
     }
 
+
+    //unused
     public void mouseClicked(MouseEvent evt) {}
 
     public void mousePressed(MouseEvent evt) {}

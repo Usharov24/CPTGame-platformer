@@ -174,7 +174,7 @@ public class Wizard extends GameObject {
                 float fltDiffX = input.fltMouseX - 640;
                 float fltDiffY = input.fltMouseY - 360;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
-
+                //used to find the angle needed for bullet trajectory
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
                 
@@ -274,7 +274,7 @@ public class Wizard extends GameObject {
             if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
             else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
             //sends all essential player information
-            
+
         }
     }
 
@@ -417,7 +417,7 @@ public class Wizard extends GameObject {
                 g2d.setColor(Color.white);
                 g2d.drawString(Integer.toString(Math.round(((4000-(System.currentTimeMillis()-lngTimer[3]))/1000))), 417, -302);
             }
-             
+             //draws little boxes that tell the player how they have to wait for their abilities
         } else {
             if(blnLeft){
                 g2d.drawImage(biSprite[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 32, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), -32, 64, null);
@@ -446,7 +446,7 @@ public class Wizard extends GameObject {
             return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
     }
-    //bounds for the player to use upon collisions
+    //x hitboxes
 
     public Rectangle getBounds2() {
         if(intPosition == Main.intSessionId - 1) {
@@ -460,6 +460,8 @@ public class Wizard extends GameObject {
             return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
     }
+
+    //y hitboxes
 
     public float getHP(){
         return fltHP;
@@ -489,8 +491,5 @@ public class Wizard extends GameObject {
         this.blnLeft = blnLeft;
     }
 
-    public long[] getTimer(){
-        return this.lngTimer;
-    }
     //all these methods are used in either the enemy class or the main class to determine dmg health etc.
 }
