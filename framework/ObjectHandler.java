@@ -1,8 +1,8 @@
-package framework;
+package Framework;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import objects.GameObject;
+import Objects.GameObject;
 
 public class ObjectHandler {
 
@@ -39,6 +39,10 @@ public class ObjectHandler {
                 intCount = 0;
             }
         }
+    }
+
+    public void clearList() {
+        objectList.clear();
     }
 
     public void addObject(GameObject object) {

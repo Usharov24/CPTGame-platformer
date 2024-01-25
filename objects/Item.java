@@ -1,11 +1,13 @@
-package objects;
+package Objects;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import framework.SuperSocketMaster;
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Framework.SuperSocketMaster;
+
 import java.awt.Rectangle;
 
 public class Item extends GameObject {
@@ -92,13 +94,5 @@ public class Item extends GameObject {
 
     public int getPlacement(){
      return this.intItem;
-    }
-
-    public boolean isActive() {
-        return blnActive;
-    }
-
-    public void setInactive() {
-        blnActive = false;
     }
 }

@@ -1,10 +1,10 @@
-package objects;
+package Objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.SuperSocketMaster;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.SuperSocketMaster;
 
 public abstract class GameObject {
     

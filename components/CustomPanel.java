@@ -1,4 +1,4 @@
-package components;
+package Components;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -7,22 +7,23 @@ import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import objects.*;
+import Framework.Main;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Objects.*;
 
 public class CustomPanel extends JPanel {
 
     private ResourceLoader resLoader = new ResourceLoader();
 
-    private BufferedImage AbilityButtons = resLoader.loadImage("/res\\AbilityButtons.png");
+    private BufferedImage[] biHelpMenuScreens = resLoader.loadSpriteSheet("/res\\HelpMenuScreens.png", 860, 720);
     private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
     private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
+    private BufferedImage biRoomBackground = resLoader.loadImage("/res\\RoomBackground.png");
     private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
 
-    private String[][][] strMap = {resLoader.loadCSV("/res\\room1.csv"), resLoader.loadCSV("/res\\room2.csv")};
+    private String[][][] strMaps = new String[7][][];
+    private String[][] strDemoMap = null;
 
     public CustomPanel() {
         super();
@@ -61,138 +62,163 @@ public class CustomPanel extends JPanel {
             g.drawString("Username", 340, 370);
             g.drawString("Join Code", 340, 445);
         } else if(Main.state == Main.State.HELP) {
-            g.setColor(new Color(36, 133, 151));
+            g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(new Color(255, 255, 255));
-            g.setFont(new Font("Dialog", Font.BOLD, 18));
-            g.drawImage(AbilityButtons, 30, 320, null);
-            g.drawString("Annihilation Station is a combat-focused platformer game. Players navigate through rooms to proceed in the game. Watch out for enemies", 30, 200);
-            g.drawString("in your way. There are many types of enemies, some are more difficult than others. Defeat enemies by using your player's ability which", 30, 220);
-            g.drawString("may be activated through the 4 buttons show below. Along the way, there are also items scattered throughout. Items boost the players'", 30, 240);
-            g.drawString("abilities to make it easier to navigate through the rooms. ", 30, 260);
-        } else if(Main.state == Main.State.DEMO) {
-            g.setColor(new Color(36, 133, 151));
-            g.fillRect(0, 0, getWidth(), getHeight());
+            
+            g.drawImage(biHelpMenuScreens[Main.intHelpScreenCount], 210, 0, null);
         } else if(Main.state == Main.State.CHARACTER){
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else if(Main.state == Main.State.GAME) {
-            g.setColor(Color.black);
-            g.fillRect(0, 0, getWidth(), getHeight());
+            if(Main.intRoomCount == 0) {
+                for(int intCount = 0; intCount < strMaps.length; intCount++) {
+                    strMaps[intCount] = resLoader.loadCSV("/res\\Room1.csv,/res\\Room2.csv,/res\\Room3.csv,/res\\Room4.csv,/res\\Room5.csv,/res\\Room6.csv,/res\\Room7.csv".split(",")[intCount]);
+                }
+                Main.intRoomCount++;
+            }
+
+            g.drawImage(biRoomBackground, 0, 0, null);
+
+            Main.handler.update();
 
             Main.handler.update();
 
             // CAMERA START /////////////////////////////////////////////////////
             g.translate(getWidth()/2, getHeight()/2);
 
-            decodeMap(g);
+            decodeMap(g, strMaps[Main.intRoomCount - 1]);
             Main.handler.draw(g);
 
             g.translate(-getWidth()/2, -getHeight()/2);
             // CAMERA END ///////////////////////////////////////////////////////
             
             // HUD CODE HERE ////////////////////////////////////////////////////
-            
-            // HUD Variables
-            ObjectHandler handler = Main.handler;
-            int intBarWidth = 400;
-            int intBarHeight = 20;
-            float fltSniperHP = 0;
-            float fltBruteHP = 0;
-            float fltKnightHP = 0;
-            float fltWizardHP = 0;
-            float fltSniperMaxHP = 0;
-            float fltBruteMaxHP = 0;
-            float fltKnightMaxHP = 0;
-            float fltWizardMaxHP = 0;
+            for(int intCount = 0; intCount < 4; intCount++) {
+                GameObject object = Main.handler.getObject(intCount);
+                float fltPlayerHP = 0, fltPlayerMaxHP = 0;
 
-            // HP Getter
-            for(int i = 0; i < handler.objectList.size(); i++){
-                GameObject object = handler.getObject(i);
-                if(object.getId() == ObjectId.PLAYER){
+                if(!(object instanceof Sniper) && !(object instanceof Brute) && !(object instanceof Knight) && !(object instanceof Wizard)) continue;
 
-                    // Current HP
-                    if(object instanceof Sniper) fltSniperHP = ((Sniper)object).getHP();
-                    if(object instanceof Brute) fltBruteHP = ((Brute)object).getHP();
-                    if(object instanceof Knight) fltKnightHP = ((Knight)object).getHP();
-                    if(object instanceof Wizard) fltWizardHP = ((Wizard)object).getHP();
+                if(object instanceof Sniper) {
+                    fltPlayerHP = ((Sniper)object).getHP();
+                    fltPlayerMaxHP = ((Sniper)object).getMaxHP();
+                } else if(object instanceof Brute) {
+                    fltPlayerHP = ((Brute)object).getHP();
+                    fltPlayerMaxHP = ((Brute)object).getMaxHP();
+                } else if(object instanceof Knight) {
+                    fltPlayerHP = ((Knight)object).getHP();
+                    fltPlayerMaxHP = ((Knight)object).getMaxHP();
+                } else if(object instanceof Wizard) {
+                    fltPlayerHP = ((Wizard)object).getHP();
+                    fltPlayerMaxHP = ((Wizard)object).getMaxHP();
+                }
 
-                    // Max HP
-                    if(object instanceof Sniper) fltSniperMaxHP = ((Sniper)object).getMaxHP();
-                    if(object instanceof Brute) fltBruteMaxHP = ((Brute)object).getMaxHP();
-                    if(object instanceof Knight) fltKnightMaxHP = ((Knight)object).getMaxHP();
-                    if(object instanceof Wizard) fltWizardMaxHP = ((Wizard)object).getMaxHP();
+                if(intCount == Main.intSessionId - 1) {
+                    g.setColor(Color.white);
+                    g.setFont(font.deriveFont(20f));
+                    g.drawString(Main.strNameList[intCount], 10, 25);
+                    
+                    g.setColor(new Color(0, 0, 0, 150));
+                    g.fillRect(10, 35, 325, 25);
 
-                    // Set Lower Bound of HP to 0
-                    if(fltSniperHP <= 0) fltSniperHP = 0;
-                    if(fltBruteHP <= 0) fltBruteHP = 0;
-                    if(fltKnightHP <= 0) fltKnightHP = 0;
-                    if(fltWizardHP <= 0) fltWizardHP = 0;
+                    g.setColor(new Color(126, 222, 80));
+                    if(fltPlayerHP > 0) g.fillRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+
+                    g.setColor(new Color(95, 173, 44));
+                    if(fltPlayerHP > 0) g.drawRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+                } else {
+                    g.setColor(Color.white);
+                    g.setFont(font.deriveFont(15f));
+                    
+                    g.drawString(Main.strNameList[intCount], 10, (intCount < Main.intSessionId - 1) ? 75 + 30 * intCount : 75 + 30 * (intCount - 1));
+
+                    g.setColor(new Color(0, 0, 0, 150));
+                    g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), 175, 10);
+
+                    g.setColor(new Color(126, 222, 80));
+                    if(fltPlayerHP > 0) g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
+
+                    g.setColor(new Color(95, 173, 44));
+                    if(fltPlayerHP > 0) g.drawRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
                 }
             }
-
-            // Health Bar
-            g.setColor(Color.red);
-            g.fillRect(100, 16, (int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
-            g.fillRect(100, 46, (int)(intBarWidth*fltBruteHP/fltBruteMaxHP), intBarHeight);
-            g.fillRect(100, 76, (int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
-            g.fillRect(100, 106, (int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
-
-            // Health Bar Background
-            g.setColor(new Color(64, 64, 64));
-            g.fillRect(100+(int)(intBarWidth*fltSniperHP/fltSniperMaxHP), 16, intBarWidth-(int)(intBarWidth*fltSniperHP/fltSniperMaxHP), intBarHeight);
-            g.fillRect(100+(int)(intBarWidth*fltBruteHP/fltBruteMaxHP), 46, intBarWidth-(int)(intBarWidth*fltBruteHP/fltBruteMaxHP), intBarHeight);
-            g.fillRect(100+(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), 76, intBarWidth-(int)(intBarWidth*fltKnightHP/fltKnightMaxHP), intBarHeight);
-            g.fillRect(100+(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), 106, intBarWidth-(int)(intBarWidth*fltWizardHP/fltWizardMaxHP), intBarHeight);
-
-            // Health Bar Labels
-            g.setColor(Color.white);
-            g.setFont(new Font("Dialog", Font.BOLD, 18));
-            g.drawString("Sniper", 20, 32);
-            g.drawString("Brute", 20, 62);
-            g.drawString("Knight", 20, 92);
-            g.drawString("Wizard", 20, 122);
-
-            // Health Bar Borders
-            for(int intBar = 0; intBar <= 3; intBar++){
-                g.setColor(Color.black);
-                g.drawRect(100, 16+30*intBar, intBarWidth, intBarHeight);
+            // HUD CODE END ////////////////////////////////////////////////////
+        } else if(Main.state == Main.State.DEMO) {
+            if(Main.intRoomCount == 0) {
+                strDemoMap = resLoader.loadCSV("/res\\DemoRoom.csv");
+                Main.intRoomCount++;
             }
 
-            // HUD CODE END ////////////////////////////////////////////////////
+            g.drawImage(biRoomBackground, 0, 0, null);
+
+            Main.handler.update();
+
+            g.translate(getWidth()/2, getHeight()/2);
+
+            decodeMap(g, strDemoMap);
+            Main.handler.draw(g);
+
+            g.translate(-getWidth()/2, -getHeight()/2);
+
+            GameObject object = Main.handler.getObject(0);
+            float fltPlayerHP = 0, fltPlayerMaxHP = 0;
+
+            if((object instanceof Sniper) || (object instanceof Brute) || (object instanceof Knight) || (object instanceof Wizard)) {
+                if(object instanceof Sniper) {
+                    fltPlayerHP = ((Sniper)object).getHP();
+                    fltPlayerMaxHP = ((Sniper)object).getMaxHP();
+                } else if(object instanceof Brute) {
+                    fltPlayerHP = ((Brute)object).getHP();
+                    fltPlayerMaxHP = ((Brute)object).getMaxHP();
+                } else if(object instanceof Knight) {
+                    fltPlayerHP = ((Knight)object).getHP();
+                    fltPlayerMaxHP = ((Knight)object).getMaxHP();
+                } else if(object instanceof Wizard) {
+                    fltPlayerHP = ((Wizard)object).getHP();
+                    fltPlayerMaxHP = ((Wizard)object).getMaxHP();
+                }
+                    
+                g.setColor(new Color(0, 0, 0, 150));
+                g.fillRect(10, 35, 325, 25);
+
+                g.setColor(new Color(126, 222, 80));
+                if(fltPlayerHP > 0) g.fillRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+
+                g.setColor(new Color(95, 173, 44));
+                if(fltPlayerHP > 0) g.drawRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+            }
         }
     }
 
-    private void decodeMap(Graphics g) {
+    private void decodeMap(Graphics g, String[][] strMap) {
         GameObject camObject = Main.handler.getObject(Main.intSessionId - 1);
 
-        for(int intCount1 = 0; intCount1 < strMap[0].length; intCount1++) {
-            for(int intCount2 = 0; intCount2 < strMap[0][0].length; intCount2++) {
-                short shrtTile = Short.parseShort(strMap[Main.intRoomCount][intCount1][intCount2]);
+        for(int intCount1 = 0; intCount1 < strMap.length; intCount1++) {
+            for(int intCount2 = 0; intCount2 < strMap[0].length; intCount2++) {
+                short shrtTile = Short.parseShort(strMap[intCount1][intCount2]);
 
                 byte bytTileType = (byte)(shrtTile & 15);
                 byte bytTileTexture = (byte)(shrtTile >> 4 & 15);
                 byte bytSpawnObject = (byte)(shrtTile >> 8 & 15);
                 byte bytSpawnInfo = (byte)(shrtTile >> 12 & 15);
-                //System.out.println(bytTileType + " " + bytTileTexture + " " + bytSpawnObject + " " + bytSpawnInfo);
 
                 if(bytTileType == 0) {
                     g.drawImage(biTileTextures[bytTileTexture], intCount2 * 40 - (int)(camObject.getWorldX() + camObject.getWidth()/2), intCount1 * 40 - (int)(camObject.getWorldY() + camObject.getHeight()/2), null);
                 } else if(bytTileType == 1) {
                     Main.handler.addObject(new Barrier(intCount2 * 40, intCount1 * 40, 40, 40, biTileTextures[bytTileTexture], ObjectId.BARRIER, Main.handler, null));
-                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile - 1);
-                } else if(Main.intSessionId == 1 && bytTileType == 2) {
+                    strMap[intCount1][intCount2] = "" + (shrtTile - 1);
+                } else if(bytTileType == 2) {
                     Main.handler.addObject(new Door(intCount2 * 40, intCount1 * 40, 40, 40, new BufferedImage[]{biTileTextures[bytTileTexture], biTileTextures[bytTileTexture + 6]}, ObjectId.DOOR, Main.handler, Main.ssm));
-                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile - 2);
+                    strMap[intCount1][intCount2] = "" + (shrtTile - 2);
                 }
 
                 if(Main.intSessionId == 1 && bytSpawnObject == 1) {
+                    if(Main.ssm != null) Main.ssm.sendText("h>a>aENEMY~" + (intCount2 * 40) + "," + (intCount1 * 40) + "," + (bytSpawnInfo & 3) + "," + (bytSpawnInfo >> 2 & 3) + "," + Main.handler.objectList.size());
                     Main.handler.addObject(new Enemy(intCount2 * 40, intCount1 * 40, 0, 0, 0, 0, bytSpawnInfo & 3, bytSpawnInfo >> 2 & 3, Main.handler.objectList.size(), ObjectId.ENEMY, Main.handler, Main.ssm));
-                    Main.ssm.sendText("h>a>aENEMY~" + (intCount2 * 40) + "," + (intCount1 * 40) + "," + (bytSpawnInfo & 3) + "," + (bytSpawnInfo >> 2 & 3));
-                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile & 255);
+                    strMap[intCount1][intCount2] = "" + (shrtTile & 255);
                 } else if(Door.blnRoomCleared && bytSpawnObject == 2) {
                     Main.handler.addObject(new Item(intCount2 * 40, intCount1 * 40, 20, 20, ObjectId.ITEM, Main.handler, null));
-                    strMap[Main.intRoomCount][intCount1][intCount2] = "" + (shrtTile & 255);
+                    strMap[intCount1][intCount2] = "" + (shrtTile & 255);
                 }
             }
         }

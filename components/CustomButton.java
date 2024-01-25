@@ -1,4 +1,4 @@
-package components;
+package Components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.AbstractButton;
 
-import framework.ResourceLoader;
+import Framework.ResourceLoader;
 
 public class CustomButton extends AbstractButton implements MouseListener {
 

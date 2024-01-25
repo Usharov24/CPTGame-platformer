@@ -1,13 +1,15 @@
-package objects;
+package Objects;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import Framework.Main;
+import Framework.ObjectHandler;
+import Framework.ObjectId;
+import Framework.ResourceLoader;
+import Framework.SuperSocketMaster;
+
 import java.awt.Graphics2D;
-import framework.Main;
-import framework.ObjectHandler;
-import framework.ObjectId;
-import framework.ResourceLoader;
-import framework.SuperSocketMaster;
 
 public class Enemy extends GameObject {
 
@@ -18,6 +20,8 @@ public class Enemy extends GameObject {
     private BufferedImage[] biBigEnem = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
     private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
     private BufferedImage biImg;
+    private String[][] strEnemValues = resLoader.loadCSV("/res\\EnemValues.csv");
+
 
     private double dblTimer = System.currentTimeMillis();
 
@@ -26,13 +30,13 @@ public class Enemy extends GameObject {
     private float fltTargetX;
     private float fltTargetY;
     private float fltBurnDmg = 0;
-
+    private long lngHitTimer = 0;
     private int intBleedCount = 0;
     private int intPosition;
     private int intEnemyType;
     private int intEnemyClass;
 
-    private boolean blnFalling = true;
+    private boolean blnFalling = false;
     private boolean blnLeft = true;
 
     
@@ -50,15 +54,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
                 this.fltHeight = 60;
-                fltHP = 100;
-                fltDmg = 40;
+                fltHP = Integer.parseInt(strEnemValues[1][1]);
+                fltDmg = Integer.parseInt(strEnemValues[1][2]);
                 biImg = biSmallEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 30;
                 this.fltHeight = 60;
-                fltHP = 250;
-                fltDmg = 100;
+                fltHP = Integer.parseInt(strEnemValues[2][1]);
+                fltDmg = Integer.parseInt(strEnemValues[2][2]);
                 biImg = biSmallEnem[1];
             }
         }
@@ -66,15 +70,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltWidth = 60;
                 this.fltHeight = 60;
-                fltHP = 450;
-                fltDmg = 150;
+                fltHP = Integer.parseInt(strEnemValues[3][1]);
+                fltDmg = Integer.parseInt(strEnemValues[3][2]);
                 biImg = biMedEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltWidth = 40;
                 this.fltHeight = 60;
-                fltHP = 600;
-                fltDmg = 100;
+                fltHP = Integer.parseInt(strEnemValues[4][1]);
+                fltDmg = Integer.parseInt(strEnemValues[4][2]);
                 biImg = biMedEnem[1];
             }
         }
@@ -82,15 +86,15 @@ public class Enemy extends GameObject {
             if(intEnemyClass == 1){
                 this.fltHeight = 100;
                 this.fltWidth = 100;
-                fltHP = 600;
-                fltDmg = 300;
+                fltHP = Integer.parseInt(strEnemValues[5][1]);
+                fltDmg = Integer.parseInt(strEnemValues[5][2]);
                 biImg = biBigEnem[0];
             }
             if(intEnemyClass == 2){
                 this.fltHeight = 70;
                 this.fltWidth = 50;
-                fltHP = 600;
-                fltDmg = 150;
+                fltHP = Integer.parseInt(strEnemValues[6][1]);
+                fltDmg = Integer.parseInt(strEnemValues[6][2]);
                 biImg = biBigEnem[1];
             }
         }
@@ -106,8 +110,8 @@ public class Enemy extends GameObject {
 
         if(fltWorldX < 0 || fltWorldX > 1919 || fltWorldY < 0 || fltWorldY > 1439) fltHP = 0;
 
-        fltTargetX = findNearestObject(fltWorldX, fltWorldY).getWorldX();
-        fltTargetY = findNearestObject(fltWorldX, fltWorldY).getWorldY();
+        fltTargetX = findNearestObject().getWorldX();
+        fltTargetY = findNearestObject().getWorldY();
 
         //finds which player the enemy should target
         //small enemies
@@ -115,28 +119,30 @@ public class Enemy extends GameObject {
             //crawlers
             if(intEnemyClass == 1) {
                 if(fltTargetX > fltWorldX) {
-                    fltVelX = 8;
+                    fltVelX += 2;
                 } else {
-                    fltVelX = -8;
+                    fltVelX += -2;
                 }
+                if(fltVelX > 8) fltVelX = 8;
+                else if(fltVelX < -8) fltVelX = -8; 
 
                 if(fltTargetY < fltWorldY && !blnFalling) {
-                    fltVelY = -30;
+                    fltVelY = -40;
                     blnFalling = true;
                 }
+
                 //makes the enemy follow the player
-            }
-            //shooters
-            if(intEnemyClass == 2){
+            } else if(intEnemyClass == 2){
                 float fltDiffX = fltTargetX - fltWorldX;
                 float fltDiffY = fltTargetY - fltWorldY;
                 
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 1500) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10 + "," + fltDmg + "," + false + "," + 0);
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg*5, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
             }
         }
@@ -156,7 +162,6 @@ public class Enemy extends GameObject {
                 if(fltWorldY < fltTargetY){
                     fltVelY += 1; 
                 }
-
                 //homes slowly onto the player
             }
             //shooters
@@ -167,9 +172,10 @@ public class Enemy extends GameObject {
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 2000) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 50, 50,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 250));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 15, fltWorldY + fltHeight/2 - 15, fltDiffX * 20 , fltDiffY * 20 , 30, 30,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 150));
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 15) + "," + (fltWorldY + fltHeight/2 - 15) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 30 + "," + 30 + "," + fltDmg + "," + false + "," + 150);
                 }
                 //shoots at the player
             }   
@@ -182,16 +188,16 @@ public class Enemy extends GameObject {
                 float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 if(fltTargetX > fltWorldX){
-                    fltWorldX +=10;
-                }
-                else{
-                    fltVelX -= 10;
+                    fltVelX = 8;
+                } else {
+                    fltVelX = -8;
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
-                if (System.currentTimeMillis() - dblTimer > 1000) {
+                if (System.currentTimeMillis() - dblTimer > 500) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 100));
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 50));
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 30) + "," + (fltDiffY * 30) + "," + 10 + "," + 10 + "," + fltDmg + "," + true + "," + 50);
                 }
                 //cooldown on shooting at the player
             }
@@ -201,7 +207,7 @@ public class Enemy extends GameObject {
                     fltVelX -= 3; 
                 }
                 if(fltWorldX < fltTargetX){
-                    fltVelX += 3; 
+                    fltVelX += 3;
                 }
                 if(fltWorldY > fltTargetY){
                     fltVelY -= 3; 
@@ -209,6 +215,7 @@ public class Enemy extends GameObject {
                 if(fltWorldY < fltTargetY){
                     fltVelY += 3; 
                 }
+
                 //homes the enemy on a player
             }
         }
@@ -219,12 +226,12 @@ public class Enemy extends GameObject {
         else if(fltVelX < -35) fltVelX = -35; 
         //caps out the velocities
         
-        fltVelY += 3;
+        if(!(intEnemyType == 2 && intEnemyClass == 1) && !(intEnemyType == 3 && intEnemyClass == 1)) fltVelY += 3;
 
         //gravity!
         if(fltVelX < 0) blnLeft = true;
         else if(fltVelX > 0) blnLeft = false;
-
+        
         collisions();
         //checks what the enemy collides with
 
@@ -239,21 +246,21 @@ public class Enemy extends GameObject {
         }
         //damage interaction
 
-        ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
+        if(ssm != null) ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
     }
 
-    public GameObject findNearestObject(float fltWorldX, float fltWorldY){
-        float fltDistX = 0;     
-        float fltDistY = 0;
-        float flttotaldist = 0;
-        float fltpastTotal = 0;
+    public GameObject findNearestObject() {
+        float fltDistX;     
+        float fltDistY;
+        float flttotaldist;
+        float fltpastTotal = 1000000000;
         int intreturn = 0;
         for(int i = 0; i < handler.objectList.size(); i++){
             if(handler.getObject(i).getId() == ObjectId.PLAYER){
-                fltDistX = fltWorldX - handler.getObject(i).getWorldX();
-                fltDistY = fltWorldY - handler.getObject(i).getWorldY();
+                fltDistX = handler.getObject(i).getWorldX() - this.fltWorldX;
+                fltDistY = handler.getObject(i).getWorldY() - this.fltWorldY;
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-                if(flttotaldist > fltpastTotal){
+                if(flttotaldist < fltpastTotal){
                     fltpastTotal = flttotaldist;
                     intreturn = i;
                 }
@@ -281,32 +288,38 @@ public class Enemy extends GameObject {
                 } else if(getBounds2().intersects(object.getBounds()) && fltVelY < 0) {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
-                    blnFalling = false;
                 }
                 //if the enemy collides witha  barrier, stop it
-            } else if(object.getId() == ObjectId.BULLET) {
+            } else if(object.getId() == ObjectId.BULLET && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     handler.removeObject(object);
                     Bullet bullet = (Bullet) object;
+                    if(bullet.getPeirce() == 0){
+                        handler.removeObject(object);
+                    }
+                    else{
+                        bullet.setPeirce(bullet.getPeirce()-1);
+                    }
                     fltHP -= bullet.getDmg();
 
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
                         //handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
-                        fltBurnDmg = bullet.getBleed();
+                        fltBurnDmg = bullet.getBurn();
                         intBleedCount = (int) bullet.getBleed();
                     }    
                     if(bullet.getCelebShot() > 0){
-                        for(int intcount = 0; intcount < bullet.getCelebShot(); intcount++){
+                        for(int intcount = 0; intcount < bullet.getCelebShot()*3; intcount++){
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, bullet.getVelX(), bullet.getVelY(), 6, 6, 0, 0, 0, 0, bullet.getCelebShot(), bullet.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, bullet.getBoom(), bullet.getChar()));
                         }
                     }     
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //determine what to do with a bullet upon collision depending on its parameters
             }
-            else if(object.getId() == ObjectId.WAVE) {
+            else if(object.getId() == ObjectId.WAVE && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     WaveAttacks wave = (WaveAttacks) object;
@@ -325,10 +338,11 @@ public class Enemy extends GameObject {
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, wave.getVelX(), wave.getVelY(), 6, 6, 0, 0, 0, 0, wave.getCelebShot(), wave.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, wave.getBoom(), wave.getChar()));                        
                         }
                     } 
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //takes damage from waves
             }
-            else if(object.getId() == ObjectId.SLASH) {
+            else if(object.getId() == ObjectId.SLASH && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     //handler.getObject(i) -- player dmg
                     SlashAttacks slash = (SlashAttacks) object;
@@ -346,13 +360,15 @@ public class Enemy extends GameObject {
                             handler.addObject(new Bullet(fltWorldX + fltWidth/2, fltWorldY + fltHeight/2, slash.getVelX(), slash.getVelY(), 6, 6, 0, 0, 0, 0, slash.getCelebShot(), slash.getDmg(), ObjectId.BULLET, handler, ssm, biBullets[0], false, slash.getBoom(), slash.getChar()));
                         }
                     }      
+                    lngHitTimer = System.currentTimeMillis();
                 }
                 //takes damage from slashes
             }
-            else if(object.getId() == ObjectId.BOOM) {
+            else if(object.getId() == ObjectId.BOOM && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
                     Explosion boom = (Explosion) object;
                     fltHP -= boom.getDmg();
+                    lngHitTimer = System.currentTimeMillis();
                 }
             }
             //hurt by booms
