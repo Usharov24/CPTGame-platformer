@@ -14,17 +14,23 @@ import Objects.*;
 
 public class CustomPanel extends JPanel {
 
+    // Resource Loader
     private ResourceLoader resLoader = new ResourceLoader();
 
+    // Load Images
     private BufferedImage[] biHelpMenuScreens = resLoader.loadSpriteSheet("/res\\HelpMenuScreens.png", 860, 720);
     private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
     private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
     private BufferedImage biRoomBackground = resLoader.loadImage("/res\\RoomBackground.png");
+
+    // Load Font
     private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
 
+    // Maps
     private String[][][] strMaps = new String[7][][];
     private String[][] strDemoMap = null;
 
+    // Constructors
     public CustomPanel() {
         super();
     }
@@ -38,6 +44,7 @@ public class CustomPanel extends JPanel {
         setFocusable(blnFocusable);
     }
 
+    // Display
     public void paintComponent(Graphics g) {
         if(Main.state == Main.State.MAIN_MENU) {
             g.drawImage(biTitleScreen, 0, 0, null);
@@ -78,8 +85,6 @@ public class CustomPanel extends JPanel {
             }
 
             g.drawImage(biRoomBackground, 0, 0, null);
-
-            Main.handler.update();
 
             Main.handler.update();
 
@@ -190,6 +195,7 @@ public class CustomPanel extends JPanel {
         }
     }
 
+    // Draw Map to Screen
     private void decodeMap(Graphics g, String[][] strMap) {
         GameObject camObject = Main.handler.getObject(Main.intSessionId - 1);
 

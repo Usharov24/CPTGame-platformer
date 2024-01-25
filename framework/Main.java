@@ -18,10 +18,14 @@ import Objects.*;
 import java.awt.image.BufferedImage;
 
 public class Main implements ActionListener, WindowListener {
+
+    // Handlers
     public static ObjectHandler handler = new ObjectHandler();
-    public static SuperSocketMaster ssm;
     private InputHandler input = new InputHandler();
     private ResourceLoader resLoader = new ResourceLoader();
+
+    // Network
+    public static SuperSocketMaster ssm;
 
     // Button Images
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
@@ -51,10 +55,12 @@ public class Main implements ActionListener, WindowListener {
     private CustomButton[] netButtons = {new CustomButton(800, 80, "Host Game", biNetButtons, this), new CustomButton(800, 80, "Join Game", biNetButtons, this)};
     private CustomButton netStartButton = new CustomButton(200, 100, "Start", biMenuButtons, this);
     
+    // Character Selection Buttons
     private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons[0], this), new CustomButton(290, 290, null, biCharacterButtons[1], this), 
                                                new CustomButton(290, 290, null, biCharacterButtons[2], this), new CustomButton(290, 290, null, biCharacterButtons[3], this)};
     private CustomButton readyButton = new CustomButton(800, 80, "Ready", biNetButtons, this);
     
+    // Chat Area
     private JTextArea chatTextArea = new JTextArea();
     private JTextField chatTextField = new JTextField();
 
@@ -66,6 +72,7 @@ public class Main implements ActionListener, WindowListener {
     // Timer
     private Timer timer = new Timer(1000/60, this);
     
+    // Program Display States
     public static State state = State.MAIN_MENU;
 
     public enum State {
@@ -79,6 +86,8 @@ public class Main implements ActionListener, WindowListener {
             return intPanelNumber;
         }
     }
+
+    // Networking Variables
     public static String[] strNameList = new String[4];
     public static int intSessionId;
     public static int intRoomCount;
@@ -92,9 +101,12 @@ public class Main implements ActionListener, WindowListener {
     
     // Constructor
     public Main() {
+
+        // Set Panel Size to 1280x720
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
         }
+
         // Listeners
         thePanels[5].addKeyListener(input);
         thePanels[5].addMouseListener(input);
@@ -109,7 +121,7 @@ public class Main implements ActionListener, WindowListener {
             mainMenuButtons[intCount].setLocation(540, 200 + 110 * intCount);
             thePanels[0].add(mainMenuButtons[intCount]);
         }
-        ///////////////////////////////////////////////////////////////////////////////////////////
+        // Help Panel Components /////////////////////////////////////////////////////////////////////
 
         for(int intCount = 0; intCount < helpMenuButtons.length; intCount++) {
             helpMenuButtons[intCount].setLocation((intCount == 2) ? 535 : 30 + 1120 * intCount, (intCount == 2) ? 350 : 255);
@@ -151,10 +163,12 @@ public class Main implements ActionListener, WindowListener {
             thePanels[4].add(characterButtons[intCount]);
         }
 
+        // Ready Button
         readyButton.setLocation(240, 620);
         readyButton.setEnabled(false);
         thePanels[4].add(readyButton);
 
+        // Chat Message Text Area
         chatTextArea.setSize(225, 225);
         chatTextArea.setLocation(10, 450);
         chatTextArea.setBackground(new Color(0, 0, 0, 150));
@@ -164,6 +178,7 @@ public class Main implements ActionListener, WindowListener {
         chatTextArea.setVisible(false);
         thePanels[5].add(chatTextArea);
 
+        // Send Message Text Field
         chatTextField.setSize(225, 30);
         chatTextField.setLocation(10, 680);
         chatTextField.setBackground(new Color(0, 0, 0, 150));
@@ -173,11 +188,13 @@ public class Main implements ActionListener, WindowListener {
         chatTextField.setVisible(false);
         thePanels[5].add(chatTextField);
 
+        // Back Buttons
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             backButtons[intCount].setLocation(20, 20);
             thePanels[intCount + 1].add(backButtons[intCount]);
         }
 
+        // Frame Details
         theFrame.setContentPane(thePanels[0]);  
         theFrame.addWindowListener(this);
         theFrame.setIconImage(ioLogo.getImage());
@@ -187,13 +204,20 @@ public class Main implements ActionListener, WindowListener {
         theFrame.setVisible(true);
         timer.start();
     }
+
     // Override actionPerformed Method
     public void actionPerformed(ActionEvent evt) {
+
+        // 60 fps Gameplay
         if(evt.getSource() == timer) thePanels[state.getValue()].repaint();
         
+        // Networking
         if(evt.getSource() == ssm) {
+
+            // Read Network Message
             String strMessage = ssm.readText();
 
+            // Host
             if(intSessionId == 1) {
                 if(strMessage.substring(5, 6).equals("o")){
                     String[] strPayload = strMessage.split("~")[1].split(",");
@@ -427,6 +451,8 @@ public class Main implements ActionListener, WindowListener {
                 }
             }
         }
+
+        // Main Menu Button Actions
         if(evt.getSource() == mainMenuButtons[0]) {
             state = State.HOST_MENU;
             theFrame.setContentPane(thePanels[1]);
@@ -712,6 +738,7 @@ public class Main implements ActionListener, WindowListener {
 
     public void windowOpened(WindowEvent evt) {}
 
+    // Main Method
     public static void main(String[] args) {
         new Main();
     }

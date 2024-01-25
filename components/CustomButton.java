@@ -16,6 +16,7 @@ import Framework.ResourceLoader;
 
 public class CustomButton extends AbstractButton implements MouseListener {
 
+    // Properties
     private ResourceLoader resLoader = new ResourceLoader();
 
     private Dimension size = new Dimension();
@@ -31,6 +32,7 @@ public class CustomButton extends AbstractButton implements MouseListener {
     private boolean blnMouseEntered = false;
     private boolean blnEnabled = true;
 
+    // Constructors
     public CustomButton(int intWidth, int intHeight, BufferedImage[] biImages, ActionListener listener) {
         this(intWidth, intHeight, null, biImages, listener);
     }

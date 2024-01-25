@@ -11,16 +11,21 @@ import Framework.SuperSocketMaster;
 import java.awt.Rectangle;
 
 public class Item extends GameObject {
-    private BufferedImage biImg = null;
+
+    // Properties
     private int intItem;
     private int intRarity = 0;
     private boolean blnFalling = true;
     private boolean blnActive = true;
+
+    // Images
+    private BufferedImage biImg = null;
     private ResourceLoader resLoader = new ResourceLoader();
     private BufferedImage[] biCommonItems = resLoader.loadImages("/res\\AGoo.png", "/res\\Cow.png", "/res\\Wungoos.png", "/res\\GunPowder.png", "/res\\AlienLeg.png", "/res\\PointBrush.png", "/res\\chalk.png", "/res\\ACream.png", "/res\\MoonDust.png");
     private BufferedImage[] biRareItems = resLoader.loadImages("/res\\ConGrav.png", "/res\\Bornana.png", "/res\\Milk.png", "/res\\KneeCap.png", "/res\\ShotGun.png", "/res\\Slashes.png", "/res\\Fire.png");
     private BufferedImage[] biLegyItems = resLoader.loadImages("/res\\VampToes.png", "/res\\Magnet.png", "/res\\GGoo.png", "/res\\MHeart.png", "/res\\Celeb.png");
 
+    // Constructor
     public Item(float fltX, float fltY, float fltHeight, float fltWidth, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltX, fltY, fltHeight, fltWidth, id, handler, ssm);
         this.fltWidth = fltWidth;
@@ -49,6 +54,7 @@ public class Item extends GameObject {
         camObject = handler.getObject(Main.intSessionId - 1);
     }
 
+    // Handle Falling Items
     public void update(){
         if(!blnActive) return;
 
@@ -62,6 +68,7 @@ public class Item extends GameObject {
         fltWorldY += fltVelY;
     }
 
+    // Collision Detection
     public void collisions(){
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
@@ -77,6 +84,7 @@ public class Item extends GameObject {
         }
     }
 
+    // Draw Items to Screen
     public void draw(Graphics g) {
         if(!blnActive) return;
 
