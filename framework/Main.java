@@ -25,62 +25,149 @@ import java.awt.image.BufferedImage;
 public class Main implements ActionListener, WindowListener {
 
     // Handlers
+    /**
+     * The ObjectHandler object for accessing objects
+     */
     public static ObjectHandler handler = new ObjectHandler();
+    /**
+     * The InputHandler object for handling input
+     */
     private InputHandler input = new InputHandler();
+    /**
+     * The ResourceLoader for loading resources
+     */
     private ResourceLoader resLoader = new ResourceLoader();
     
     // Network
+    /*
+     * the SuperSocketMaster object for network communication
+     */
     public static SuperSocketMaster ssm;
 
     // Button Images
+    /**
+     * The BufferedImages for menu buttons
+     */
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
+    /**
+     * The BufferedImages for net buttons
+     */
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
+    /**
+     * The BufferedImages for arrow buttons
+     */
     private BufferedImage[][] biArrowButtons = resLoader.loadSpriteSheet("/res\\ArrowButtons.png", 110, 210, 2, 7);
+    /**
+     * The BufferedImages for character buttons
+     */
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
+    /**
+     * The BufferedImages for tile textures
+     */
     private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
 
     // Frame
+    /**
+     * The JFrame of the program
+     */
     public static JFrame theFrame = new JFrame("Annihilation Station");
 
+    /**
+     * The panels created for different states of the program
+     */
     private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), 
                                        new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), 
                                        new CustomPanel(null, true)};
     
     // Main Menu Components
+    /**
+     * Main menu buttons
+     */
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
+    /**
+     * Help menu buttons
+     */
     private CustomButton[] helpMenuButtons = {new CustomButton(100, 200, biArrowButtons[1], this), new CustomButton(100, 200, biArrowButtons[0], this), 
                                               new CustomButton(200, 100, "Demo", biMenuButtons, this)};
+    /**
+     * Back buttons
+     */
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
                                           new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
+    /**
+     * The end screen button
+     */
     private CustomButton endScreenButton = new CustomButton(200, 100, "Quit", biMenuButtons, this);
 
     // Host & Join Components
+    /**
+     * JText areas for the net panels
+     */
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
+    /**
+     * JTextFields for the net panel
+     */
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
+    /**
+     * Buttons for the net panel
+     */
     private CustomButton[] netButtons = {new CustomButton(800, 80, "Host Game", biNetButtons, this), new CustomButton(800, 80, "Join Game", biNetButtons, this)};
+    /**
+     * Start button for the net panel
+     */
     private CustomButton netStartButton = new CustomButton(200, 100, "Start", biMenuButtons, this);
     
     // Character Selection Buttons
+    /**
+     * Buttons for character selection
+     */
     private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons[0], this), new CustomButton(290, 290, null, biCharacterButtons[1], this), 
                                                new CustomButton(290, 290, null, biCharacterButtons[2], this), new CustomButton(290, 290, null, biCharacterButtons[3], this)};
+    /**
+     * The ready button for the character panel
+     */
     private CustomButton readyButton = new CustomButton(800, 80, "Ready", biNetButtons, this);
     
     // Chat Area
+    /**
+     * JTextArea for the chat
+     */
     private JTextArea chatTextArea = new JTextArea();
+    /**
+     * JTextField for the chat
+     */
     private JTextField chatTextField = new JTextField();
 
     //All Sprites loaded
+    /**
+     * Sprites for bullets
+     */
     private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
+    /**
+     * Sprites for the vac grenade
+     */
     private BufferedImage[] biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
+    /**
+     * Image for the icon of the frame
+     */
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
     // Timer
+    /**
+     * Timer object to fire ActionEvents 60 times a second
+     */
     private Timer timer = new Timer(1000/60, this);
     
     // Program Display States
+    /**
+     * State variable representing the state of the program
+     */
     public static State state = State.MAIN_MENU;
 
+    /**
+     * Enum representing the different panels and the state of the program
+     */
     public enum State {
         MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5), DEMO(6);
 
@@ -94,22 +181,58 @@ public class Main implements ActionListener, WindowListener {
     }
 
     // Networking Variables
+    /**
+     * Array containing the names of all the players
+     */
     public static String[] strNameList = new String[4];
+    /**
+     * Array containing information about whether each player is currently alive
+     */
     public static int[] intAlivePlayers = {0, 0, 0, 0};
+    /**
+     * The session ID of a player
+     */
     public static int intSessionId;
+    /**
+     * The current room number
+     */
     public static int intRoomCount;
+    /**
+     * The current size of the server
+     */
     public static int intServerSize;
+    /**
+     * The current help screen
+     */
     public static int intHelpScreenCount = 0;
+    /**
+     * The start and end times of each run
+     */
     public static long lngRunStartTime = 0, lngRunEndTime = 0;
 
+    /**
+     * The current and previous character buttons pressed
+     */
     private int intCurrentButton = -1, intPreviousButton = -1;
+    /**
+     * Indicates how many players have pressed the ready button
+     */
     private int intReady;
+    /**
+     * Array containing the character each player has selected
+     */
     private int[] intCharacterSelections = {-1, -1, -1, -1};
+    /**
+     * Array containing the available IDs
+     */
     private boolean[] blnAvailableIds = {true, true, true};
     
     // Constructor
+    /**
+     * The constructor for the Main class
+     * It is responsible for setting up all the JComponents
+     */
     public Main() {
-
         // Set Panel Size to 1280x720
         for(int intCount = 0; intCount < thePanels.length; intCount++) {
             thePanels[intCount].setPreferredSize(new Dimension(1280, 720));
@@ -226,6 +349,10 @@ public class Main implements ActionListener, WindowListener {
     }
 
     // Override actionPerformed Method
+    /**
+     * The actionPerformed method
+     * It is responsible for handling all ActionEvents
+     */
     public void actionPerformed(ActionEvent evt) {
 
         // 60 fps Gameplay

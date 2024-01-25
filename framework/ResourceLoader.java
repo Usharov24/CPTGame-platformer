@@ -13,6 +13,12 @@ import javax.imageio.ImageIO;
 
 public class ResourceLoader {
     //class to load in images faster and more effectively
+    /**
+     * Method to load an image
+     * 
+     * @param strPath The path to the image
+     * @return Returns a BufferedImage of the loaded image
+     */
     public BufferedImage loadImage(String strPath) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biImage = null;
@@ -26,6 +32,12 @@ public class ResourceLoader {
         return biImage;
     }
 
+    /**
+     * Loads multiple images
+     * 
+     * @param strPaths The paths to the images
+     * @return Returns a BufferedImage array of the loaded images
+     */
     public BufferedImage[] loadImages(String... strPaths) {
         BufferedImage[] biImages = new BufferedImage[strPaths.length];
 
@@ -40,6 +52,14 @@ public class ResourceLoader {
         return biImages;
     }
 
+    /**
+     * Loads a sprite sheet
+     * 
+     * @param strPath The path to the sprite sheet
+     * @param intImgWidth Width of a single subimage
+     * @param intImgHeight Height of a single sprite image
+     * @return Returns an array of BufferedImages
+     */
     public BufferedImage[] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
@@ -64,6 +84,15 @@ public class ResourceLoader {
         return biImages;
     }
 
+    /**
+     * Loads a sprite sheet and removes certain indeces
+     * 
+     * @param strPath The path to the sprite sheet
+     * @param intImgWidth Width of a single subimage
+     * @param intImgHeight Height of a single sprite image
+     * @param intRemove The number of elements to remove
+     * @return Returns an array of BufferedImages
+     */
     public BufferedImage[] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight, int intRemove) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
@@ -93,6 +122,16 @@ public class ResourceLoader {
         return biImages;
     }
 
+    /**
+     * Loads a sprite sheet into multiple arrays
+     * 
+     * @param strPath The path to the sprite sheet
+     * @param intImgWidth Width of a single subimage
+     * @param intImgHeight Height of a single sprite image
+     * @param intNumArrays The number of arrays to create
+     * @param intArrayLength The length of each array
+     * @return Returns an array of BufferedImages
+     */
     public BufferedImage[][] loadSpriteSheet(String strPath, int intImgWidth, int intImgHeight, int intNumArrays, int intArrayLength) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         BufferedImage biSpriteSheet = null;
@@ -122,6 +161,12 @@ public class ResourceLoader {
         return biImages;
     }
 
+    /**
+     * Loads a CSV file
+     * 
+     * @param strPath The path to the CSV
+     * @return Returns a 2D array of the CSV contents
+     */
     public String[][] loadCSV(String strPath) {
         InputStreamReader inputReader = new InputStreamReader(getClass().getResourceAsStream(strPath));
         BufferedReader br = new BufferedReader(inputReader);
@@ -146,6 +191,12 @@ public class ResourceLoader {
         return strContents;
     }
 
+    /**
+     * Loads a font
+     * 
+     * @param strPath The path to the font
+     * @return Returns a Font object
+     */
     public Font loadFont(String strPath) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         Font font = null;
@@ -161,6 +212,13 @@ public class ResourceLoader {
         return font;
     }
 
+    /**
+     * Loads a font with a specified size
+     * 
+     * @param strPath The path to the font
+     * @param fltSize The size of the font
+     * @return Returns a Font object
+     */
     public Font loadFont(String strPath, float fltSize) {
         InputStream inputStream = getClass().getResourceAsStream(strPath);
         Font font = null;

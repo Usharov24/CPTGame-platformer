@@ -14,161 +14,169 @@ import Framework.SuperSocketMaster;
 import Framework.InputHandler.InputButtons;
 
 public class Brute extends GameObject {
-
-    private InputHandler input;
     /**
     The inputhandler which holds key values
      **/
-    private ResourceLoader resLoader = new ResourceLoader();
+    private InputHandler input;
     /**
     The resource loader which helps load files
      **/
-    private BufferedImage[] biBulletTexture;
+    private ResourceLoader resLoader = new ResourceLoader();
     /**
     The BufferedImage which stores the bullet textures
      **/
-    private BufferedImage[] biSprite;
+    private BufferedImage[] biBulletTexture;
     /**
     The BufferedImage which stores the player texturex
      **/
-    private BufferedImage[] biCountDown;
+    private BufferedImage[] biSprite;
     /**
     The BufferedImage which stores the ability cooldowntextures
      **/
-    private BufferedImage[] biVacTextures;
+    private BufferedImage[] biCountDown;
     /**
     The BufferedImage which stores the vacuum grenade textures
      **/
+    private BufferedImage[] biVacTextures;
 
-
-    private float fltAcc = 1f, fltDec = 0.5f;
     /**
     The float fltDec and atAcc which stores the values for acceleration and deceleration
      **/
-    private float fltDmgMult = 1;
+    private float fltAcc = 1f, fltDec = 0.5f;
     /**
     The float which will store the value for the damage multiplied which is at 1 at the start
      **/
-    private float fltRegen = 4;
+    private float fltDmgMult = 1;
     /**
     The float which will store the value for the regeneration values which is at 4 at the start
      **/
-    private float fltBSpeedMult = 1;
+    private float fltRegen = 4;
     /**
     The float which will store the value for the bullet speed multiplier value which is at 1 at the start
      **/
-    private float fltPSpeedMult = 1;
+    private float fltBSpeedMult = 1;
     /**
     The float which will store the value for the player speed multiplier value which is at 1 at the start
      **/
-    private float fltReflectDmg = 0;
+    private float fltPSpeedMult = 1;
     /**
     The float which will store the value for the reflection damage value which is at 0 at the start
      **/
-    private float fltMaxHP = 2500;
+    private float fltReflectDmg = 0;
     /**
     The float which will store the value for the MaxHP values which is at 2500 at the start
      **/
-    private float fltPastDmgMult = 1;
+    private float fltMaxHP = 2500;
     /**
     The float which will store the value for the past damage multiplier values which is at 1 at the start
      **/
-    private float fltBurnDmg = 0; 
+    private float fltPastDmgMult = 1;
     /**
     The float which will store the value for the burning damage values which is at 0 at the start
-     **/ 
-    private float fltAirDmgMult = 1;
-     /**
+     **/
+    private float fltBurnDmg = 0; 
+    /**
     The float which will store the value for the air damage multiplier values which is at 1 at the start
      **/ 
-    private float fltLifeSteal = 0; 
+    private float fltAirDmgMult = 1; 
      /**
     The float which will store the value for the lifesteal values which is at 0 at the start
-     **/ 
-    private float fltHP = 2500;
-     /**
+     **/
+    private float fltLifeSteal = 0; 
+    /**
     The float which will store the value for the HP values which is at 2500 at the start
      **/ 
-    private float fltDef = 1;
-     /**
+    private float fltHP = 2500; 
+    /**
     The float which will store the value for the defense values which is at 1 at the start
-     **/ 
-    private float fltFireRateMult = 1;
-     /**
+     **/
+    private float fltDef = 1; 
+    /**
     The float which will store the value for the fire rate multiplier values which is at 1 at the start
-     **/ 
-    private float fltAngle = 270;
-     /**
+     **/
+    private float fltFireRateMult = 1; 
+    /**
     The float which will store the value for the angle of the rocket
-     **/ 
-    private float fltUltSpeed = 0;
-     /**
+     **/
+    private float fltAngle = 270;
+    /**
     The float which will store the value for the ultimate speed
      **/ 
-    private long[] lngTimer = {0, 0, 0, 0, 0, 0};
-     /**
+    private float fltUltSpeed = 0;
+    /**
     The long which will store the value for the time between abilities which is at 0 at the start
      **/ 
-
-    private int intPosition;
-     /**
+    private long[] lngTimer = {0, 0, 0, 0, 0, 0}; 
+    /**
     The int value for the position in handlers list
      **/
-    private int intJumpCount;
+    private int intPosition;
     /**
     The int value for the number of jumps made
     **/
-    private int intWungoosCount;
+    private int intJumpCount;
     /**
     The int value for the number of Wungoos picked up
     **/
-    private int intPeirceCount;
+    private int intWungoosCount;
     /**
     The int value for the peirce a bullet has
     **/
-    private int intExplodeRad;
+    private int intPeirceCount;
     /**
     The int value for the explosion radius for a projectile
     **/
-    private int intShurikenCount;
+    private int intExplodeRad;
     /**
     The int value for the number of bonus projectiles
     **/
-    private int intBleedCount;
+    private int intShurikenCount;
     /**
     The int value for the number of procs each projectile has
     **/
-    private int intCelebShot;
+    private int intBleedCount;
     /**
     The int value for the number of bonus shots upon a bullets collisions
     **/
-    private int intJumpCap = 2;
+    private int intCelebShot;
     /**
     The int value for the max number of jumps which is 2 in this character
     **/
-
-    private boolean blnLeft = false;
+    private int intJumpCap = 2;
     /**
     The boolean value direction the character is facing which starts off as false
     **/
-    private boolean blnFalling = true;
-     /**
+    private boolean blnLeft = false;
+    /**
     The boolean value for falling which starts off as true
     **/
-    
-    private boolean blnHoming = false;
+    private boolean blnFalling = true;
     /**
     The boolean value for homing which starts off as false
     **/
-    private boolean blnSlamming = false;
+    private boolean blnHoming = false;
     /**
     The boolean value for slamming which starts off as false
     **/
-    private boolean blnUlt = false;
+    private boolean blnSlamming = false;
     /**
     The boolean value for ultimate which starts off as false
     **/
+    private boolean blnUlt = false;
 
+    /**
+     * The constructor for the Brute player character
+     * 
+     * @param fltWorldX The x coordinate of the object on the world coordinate system
+     * @param fltWorldY The y coordinate of the object on the world coordinate system
+     * @param fltWidth The width of the object
+     * @param fltHeight The height of the object
+     * @param id The ObjectId of the object
+     * @param handler The ObjectHandler object used for accessing other objects
+     * @param ssm The SuperSocketMaster object used for network communication
+     * @param input The InputHandler object used to recieve input from the user
+     * @param intPosition The position of the object in the object list
+     */
     public Brute(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.input = input;
@@ -183,18 +191,9 @@ public class Brute extends GameObject {
     }
 
     /**
-     * Constructor for the Brute
-     * @param fltWorldX - float value for the X position of the Brute
-     * @param fltWorldY - float value for the Y position of the Brute
-     * @param fltWidth - float value for the width of the Brute
-     * @param fltHeight - float value for the height of the Brute
-     * @param id - ObjectId value, the id of the object
-     * @param handler - handler value, which list is it a part of
-     * @param ssm - the ssm of the players
-     * @param input - the input list of keys
-     * @param intPosition - float value for the width of the Brute
-     **/
-
+     * The update method for the Brute object
+     * This method handles input, updating the character's position, and handling collisions with other objects
+     */
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
@@ -368,9 +367,10 @@ public class Brute extends GameObject {
             //sends player stats and sets dmg back to normal if changeg
         }
     }
+
     /**
-     * @return void 
-     * this checks for collisions
+     * The collisions method for the Brute object
+     * This method checks if the Brute collides with any other object and updates the Brute accordingly
      */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
@@ -532,6 +532,10 @@ public class Brute extends GameObject {
         }
     }
 
+    /**
+     * The draw method for the Brute object
+     * This method draw the Brute depending on the state of the object, such as the direction it is facing
+     */
     public void draw(Graphics g) {
         if(fltHP <= 0) return;
 
@@ -578,6 +582,11 @@ public class Brute extends GameObject {
         //draws the player and flips the sprite if necessary
     }
 
+    /**
+     * The first bounds method for the Brute object
+     * 
+     * @return This method returns a rectangle that acts as the horizontal collision box for the Brute
+     */
     public Rectangle getBounds() {
         if(intPosition == Main.intSessionId - 1) {
             float fltBoundsX = fltVelX - fltWidth/2;
@@ -592,6 +601,11 @@ public class Brute extends GameObject {
         }
     }
 
+    /**
+     * The second bounds method for the Brute object
+     * 
+     * @return This method returns a rectangle that acts as the vertical collision box for the Brute
+     */
     public Rectangle getBounds2() {
         if(intPosition == Main.intSessionId - 1) {
             float fltBoundsY = fltVelY - fltHeight/2;
@@ -604,58 +618,59 @@ public class Brute extends GameObject {
             return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         }
     }
-    /**
-     * 
-     * @return Rectange of the y bounds for a player
-     *
-     */
 
+    /**
+     * Getter method for the Brute's health
+     * 
+     * @return Returns the Brute's current health
+     */
     public float getHP(){
         return fltHP;
     }
-    /**
-     * 
-     * @return float hp value
-     */
 
+    /**
+     * Getter method for the Brute's max health
+     * 
+     * @return Returns the current max health of the Brute
+     */
     public float getMaxHP(){
         return fltMaxHP;
     }
-     /**
+
+    /**
+     * Setter method for the Brute's health
      * 
-     * @return float Maxhp value
+     * @param fltHP The new value to set the Brute's health to
      */
-
-
     public void setHP(float fltHP){
         this.fltHP = fltHP;
     }
 
-     /**
-     * @param fltHP which is the health being set
-     * @return void
+    /**
+     * Setter method for the Brute's max health
+     * 
+     * @param fltMaxHP The new value to set the Brute's max health to
      */
-
-
     public void setMaxHP(float fltMaxHP){
         this.fltMaxHP = fltMaxHP;
     }
-    /**
-     * @param fltMaxHP which is the health being set
-     * @return void
-     */
 
+    /**
+     * Getter method for the Brute's defence
+     * 
+     * @return Returns the Brute's defence value
+     */
     public float getDef(){
         return fltDef;
     }
 
     /**
-     * @return boolean blnLeft which determines which direction the player is pointing
+     * Method to determine the direction the Brute's sprite should face
+     * 
+     * @param blnLeft Returns a boolean indicating the direction the sprite should face
      */
-
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
-
     //methods used to change and grab values from the player when needed
 }

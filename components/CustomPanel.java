@@ -22,36 +22,78 @@ import Objects.*;
 public class CustomPanel extends JPanel {
 
     // Resource Loader
+    /**
+     * The ResourceLoader object used to load resources
+     */
     private ResourceLoader resLoader = new ResourceLoader();
 
     // Load Images
+    /**
+     * The images used as the help menu screens
+     */
     private BufferedImage[] biHelpMenuScreens = resLoader.loadSpriteSheet("/res\\HelpMenuScreens.png", 860, 720);
+    /**
+     * The images used as tile textures
+     */
     private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
+    /**
+     * The image used for the title screen
+     */
     private BufferedImage biTitleScreen = resLoader.loadImage("/res\\Title.png");
+    /**
+     * The image used for the background of levels
+     */
     private BufferedImage biRoomBackground = resLoader.loadImage("/res\\RoomBackground.png");
 
     // Load Font
+    /**
+     * The Font object used for drawing text
+     */
     private Font font = resLoader.loadFont("/res\\bitwise.ttf", 28);
 
     // Maps
+    /**
+     * The array used to store the map data for all the levels
+     */
     private String[][][] strMaps = new String[7][][];
+    /**
+     * The array used to store the data for the demo level
+     */
     private String[][] strDemoMap = null;
 
     // Constructors
+    /**
+     * The default constructor
+     */
     public CustomPanel() {
         super();
     }
 
+    /**
+     * The constructor used to set the layout of the panel
+     * 
+     * @param layout The LayoutManager object
+     */
     public CustomPanel(LayoutManager layout) {
         super(layout);
     }
 
+    /**
+     * The constructor used to set the layout of the panel and make it focusable
+     * 
+     * @param layout The LayoutManager object
+     * @param blnFocusable Boolean to determine if the panel is focusable
+     */
     public CustomPanel(LayoutManager layout, boolean blnFocusable) {
         super(layout);
         setFocusable(blnFocusable);
     }
 
     // Display
+    /**
+     * Overridden paint method of the panel
+     * Used to perform all graphics related tasks
+     */
     public void paintComponent(Graphics g) {
         if(Main.state == Main.State.MAIN_MENU) {
             g.drawImage(biTitleScreen, 0, 0, null);
@@ -315,6 +357,12 @@ public class CustomPanel extends JPanel {
     }
 
     // Draw Map to Screen
+    /**
+     * Method used to decode the map data from CSV files
+     * 
+     * @param g The graphics context
+     * @param strMap The map data to be decoded and processed
+     */
     private void decodeMap(Graphics g, String[][] strMap) {
         GameObject camObject = Main.handler.getObject(Main.intSessionId - 1);
 

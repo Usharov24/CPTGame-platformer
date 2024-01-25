@@ -9,16 +9,27 @@ import java.util.EnumSet;
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
     
     // Input Buttons
-
+    /**
+     * EnumSet containing the input keys
+     */
     public EnumSet<InputButtons> buttonSet = EnumSet.noneOf(InputButtons.class);
 
+    /**
+     * The x and y position of the mouse on the screen
+     */
     public float fltMouseX, fltMouseY;
 
+    /**
+     * Enum of all the input keys
+     */
     public enum InputButtons {
         W, A, S, D, F, SHIFT, SPACE, ENTER, BUTTON1, BUTTON2, BUTTON3;
     }
 
     // Key Press
+    /**
+     * The method to determine if a key has been pressed
+     */
     public void keyPressed(KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_W) buttonSet.add(InputButtons.W);
         if(evt.getKeyCode() == KeyEvent.VK_A) buttonSet.add(InputButtons.A);
@@ -31,6 +42,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     // Key Release
+    /**
+     * The method to determine if a key has been released
+     */
     public void keyReleased(KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_W) buttonSet.remove(InputButtons.W);
         if(evt.getKeyCode() == KeyEvent.VK_A) buttonSet.remove(InputButtons.A);
@@ -47,6 +61,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     // Mouse Press
+    /**
+     * The method to determine if a mouse button has been pressed
+     */
     public void mousePressed(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
@@ -58,6 +75,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     // Mouse Release
+    /**
+     * The method to determine if a mouse button has been released
+     */
     public void mouseReleased(MouseEvent evt) {
         if(evt.getButton() == MouseEvent.BUTTON1) buttonSet.remove(InputButtons.BUTTON1);
         if(evt.getButton() == MouseEvent.BUTTON2) buttonSet.remove(InputButtons.BUTTON2);
@@ -66,6 +86,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     // Mouse Drag
+    /**
+     * The method to determine if the mouse is being dragged
+     */
     public void mouseDragged(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
@@ -73,6 +96,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     // Mouse Move
+    /*The method to determine if a mouse is being moved */
     public void mouseMoved(MouseEvent evt) {
         fltMouseX = evt.getX();
         fltMouseY = evt.getY();
