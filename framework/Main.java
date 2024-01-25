@@ -389,11 +389,8 @@ public class Main implements ActionListener, WindowListener {
             theFrame.pack();
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
-        } else if(evt.getSource() == mainMenuButtons[4]){
-            state = State.DEMO;
-            theFrame.setContentPane(thePanels[6]);
-            theFrame.pack();
         }
+
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             if(evt.getSource() == backButtons[intCount]) {
                 if(intCount < 3) {
@@ -403,10 +400,12 @@ public class Main implements ActionListener, WindowListener {
                         ssm = null;
                         intSessionId = 0;
                         intServerSize = 0;
+
                         for(int intCount2 = 0; intCount2 < blnAvailableIds.length; intCount2++) {
                             blnAvailableIds[intCount2] = true;
                         }
                     }
+
                     if(state.getValue() == 1) {
                         netTextFields[0].setText("");
                         netTextFields[1].setText("");
