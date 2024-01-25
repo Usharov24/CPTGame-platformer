@@ -1018,6 +1018,7 @@ public class Main implements ActionListener, WindowListener {
         }
     }
 
+    // Unused Methods
     public void windowClosed(WindowEvent evt) {}
 
     public void windowActivated(WindowEvent evt) {}
