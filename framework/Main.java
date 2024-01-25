@@ -508,6 +508,7 @@ public class Main implements ActionListener, WindowListener {
                 }
             }
         }
+
         if(ssm == null && !netTextFields[0].getText().equals("")) netButtons[0].setEnabled(true);
         else netButtons[0].setEnabled(false);
         if(ssm == null && !netTextFields[2].getText().equals("") && !netTextFields[3].getText().equals("")) netButtons[1].setEnabled(true);
@@ -516,12 +517,16 @@ public class Main implements ActionListener, WindowListener {
         if(evt.getSource() == netButtons[0]) {
             ssm = new SuperSocketMaster(8080, this);
             ssm.connect();
+
             intSessionId = 1;
             intServerSize++;
+
             char[] chrCharacters = ssm.getMyAddress().toCharArray();
+
             for(int intCount = 0; intCount < chrCharacters.length; intCount++) {
                 chrCharacters[intCount] += 55;
             }
+
             netTextAreas[0].append(" " + netTextFields[0].getText() + " joined");
             strNameList[0] = netTextFields[0].getText();
             netTextFields[1].setText(new String(chrCharacters));
@@ -541,6 +546,7 @@ public class Main implements ActionListener, WindowListener {
                 netButtons[1].setEnabled(false);
             }
         }
+
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             if(evt.getSource() == characterButtons[intCount]) {
                 intPreviousButton = intCurrentButton;
@@ -556,8 +562,10 @@ public class Main implements ActionListener, WindowListener {
                 if(intPreviousButton == -1) readyButton.setEnabled(true);
             }
         }
+
         if(ssm != null) netStartButton.setEnabled(true);
         else netStartButton.setEnabled(false);
+
         if(evt.getSource() == netStartButton) {
             state = State.CHARACTER;
             ssm.sendText("h>a>mCHARACTER_PANEL");
@@ -622,14 +630,12 @@ public class Main implements ActionListener, WindowListener {
             theFrame.pack();
         }
 
-        if(input.buttonSet.contains(InputHandler.InputButtons.ENTER)) {
-            chatTextArea.setVisible(true);
-            chatTextField.setVisible(true);
-            chatTextField.requestFocusInWindow();
-        } else {
-            chatTextArea.setVisible(false);
-            chatTextField.setVisible(false);
+        if(state == State.GAME && intRoomCount == 8) {
+            System.out.println("h");
         }
+
+        chatTextArea.setVisible((input.buttonSet.contains(InputHandler.InputButtons.ENTER)) ? true : false);
+        chatTextField.setVisible((input.buttonSet.contains(InputHandler.InputButtons.ENTER)) ? true : false);
 
         if(evt.getSource() == chatTextField) {
             input.buttonSet.remove(InputHandler.InputButtons.ENTER);
