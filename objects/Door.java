@@ -11,13 +11,35 @@ import Framework.ObjectId;
 import Framework.SuperSocketMaster;
 
 public class Door extends GameObject {
-
+    /**
+    The int value for number of playered enetered
+    **/
     private static int[] intPlayersEntered = new int[4];
+    /**
+    The boolean value for room cleared
+    **/
     public static boolean blnRoomCleared;
-
+    /**
+    The gameobject which follows the player
+    **/
     private GameObject camObject;
+    /**
+    The bufferedimage which is the door sprite
+    **/
     private BufferedImage[] biTextures;
-
+     /**
+     * Constructor for the Door
+     * @param fltWorldX - float value for the X position of the door
+     * @param fltWorldY - float value for the Y position of the door
+     * @param fltWidth - float value for the width of the door
+     * @param fltHeight - float value for the height of the door
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param biTextures - the sprite of the
+     * @param intPosition - float value for the width of the door
+     * 
+     **/
     public Door(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, BufferedImage[] biTextures, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.biTextures = biTextures;
@@ -65,10 +87,10 @@ public class Door extends GameObject {
             GameObject object = handler.getObject(Main.intSessionId - 1);
 
             if(object instanceof Sniper) {
-                Sniper sniper = (Sniper)object;
-                sniper.setWorldX(150 + 40 * (Main.intSessionId - 1));
-                sniper.setWorldY(1400);
-                if(sniper.getHP() <= 0) sniper.setHP(sniper.getMaxHP()/2);
+                Sniper door = (Sniper)object;
+                door.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                door.setWorldY(1400);
+                if(door.getHP() <= 0) door.setHP(door.getMaxHP()/2);
             } else if(object instanceof Brute) {
                 Brute brute = (Brute)object;
                 brute.setWorldX(150 + 40 * (Main.intSessionId - 1));

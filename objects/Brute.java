@@ -650,16 +650,12 @@ public class Brute extends GameObject {
     }
 
     /**
-     * @return float fltDef which is the defense of the player
+     * @return boolean blnLeft which determines which direction the player is pointing
      */
 
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
-
-    /**
-     * @return boolean blnLeft which determines which direction the player is pointing
-     */
 
     //methods used to change and grab values from the player when needed
 }

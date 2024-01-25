@@ -159,19 +159,6 @@ public class Knight extends GameObject {
     The boolean value for homing which starts off as false
     **/
     //all variables used for items and player interactions
-
-    public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.input = input;
-        this.fltWidth = fltWidth;
-        this.fltHeight = fltHeight;
-        this.intPosition = intPosition;
-        //informs the program how to handle this object
-        biSprite = resLoader.loadImages("/res\\Knight.png");
-        biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
-        //defines the sprites and hitboxes for the player,
-    }
     /**
      * Constructor for the Knight
      * @param fltWorldX - float value for the X position of the knight
@@ -184,6 +171,18 @@ public class Knight extends GameObject {
      * @param input - the input list of keys
      * @param intPosition - float value for the width of the knight
      **/
+    public Knight(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
+        this.input = input;
+        this.fltWidth = fltWidth;
+        this.fltHeight = fltHeight;
+        this.intPosition = intPosition;
+        //informs the program how to handle this object
+        biSprite = resLoader.loadImages("/res\\Knight.png");
+        biBulletTexture = resLoader.loadImage("/res\\Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
+        //defines the sprites and hitboxes for the player,
+    }
 
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
@@ -640,16 +639,14 @@ public class Knight extends GameObject {
     }
 
     /**
-     * @return float fltDef which is the defense of the player
-     */
+    * @return boolean blnLeft which determines which direction the player is pointing
+    */
 
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
 
-    /**
-     * @return boolean blnLeft which determines which direction the player is pointing
-     */
+   
 
     //methods used over a network or locally to determine what happens.
 }

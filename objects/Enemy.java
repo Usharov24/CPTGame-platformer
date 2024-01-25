@@ -12,36 +12,104 @@ import Framework.SuperSocketMaster;
 import java.awt.Graphics2D;
 
 public class Enemy extends GameObject {
+    /**
+    The resource laoder which loads
 
+     **/
     private ResourceLoader resLoader = new ResourceLoader();
-
+    /**
+    The BufferedImage which stores the small enemies
+     **/
     private BufferedImage[] biSmallEnem = resLoader.loadImages("/res\\SmallChase.png", "/res\\SmallShoot.png");
+    /**
+    The BufferedImage which stores the medium enemies
+     **/
     private BufferedImage[] biMedEnem = resLoader.loadImages("/res\\MedChase.png", "/res\\MedShoot.png");
+    /**
+    The BufferedImage which stores the big enemies
+     **/
     private BufferedImage[] biBigEnem = resLoader.loadImages("/res\\BigChase.png", "/res\\BigShoot.png");
+    /**
+    The BufferedImage which bullets
+     **/
     private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
+    /**
+    The BufferedImage which stores the eenemy texture
+     **/
     private BufferedImage biImg;
+    /**
+    The BufferedImage which stores the common textures
+     **/
     private String[][] strEnemValues = resLoader.loadCSV("/res\\EnemValues.csv");
     //holds the values for all the enemies
 
-
+    /**
+    The double which stores timer
+     **/
     private double dblTimer = System.currentTimeMillis();
-
+    /**
+    The float which stores the dmg
+     **/
     private float fltDmg;
+    /**
+    The float which stores the hp
+     **/
     private float fltHP;
+    /**
+    The float which stores the targter x
+     **/
     private float fltTargetX;
+    /**
+    The float which stores the targter y
+     **/
     private float fltTargetY;
+    /**
+    The float which stroes burn dmg
+     **/
     private float fltBurnDmg = 0;
+    /**
+    The long which hit timer
+     **/
     private long lngHitTimer = 0;
+    /**
+    The int which stores the bleed
+     **/
     private int intBleedCount = 0;
+    /**
+    The int which stores the position
+     **/
     private int intPosition;
+    /**
+    The int which stores the enemy type
+     **/
     private int intEnemyType;
+    /**
+    The int which stores the class
+     **/
     private int intEnemyClass;
-
+    /**
+    The boolean which determines if falling
+     **/
     private boolean blnFalling = false;
+    /**
+    The boolean which determines if left
+     **/
     private boolean blnLeft = true;
 
     
-
+    /** @param fltWorldX - float value for the X position of the knight
+     * @param fltWorldY - float value for the Y position of the knight
+     * @param fltVelX - float value for the velocity X
+     * @param fltVelY - float value for the velocity Y
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param fltWidth - the width
+     * @param fltHeight - the height
+     * @param intposition - position in handler
+     * @param intnenemyclass - the teir of enemy
+     * @param intenemytype - the type of enemy
+    */
     public Enemy(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, int intEnemyType, int intEnemyClass, int intPosition, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
@@ -104,7 +172,6 @@ public class Enemy extends GameObject {
 
         //defines the enemy stats
     }
-
     public void update() {
         if(Main.intSessionId != 1) return;
         if(fltHP <= 0) return;
@@ -249,6 +316,10 @@ public class Enemy extends GameObject {
 
         if(ssm != null) ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
     }
+    /**
+     * @return gameobject 
+     * finds the nearest player
+     */
 
     public GameObject findNearestObject() {
         float fltDistX;     
@@ -270,7 +341,10 @@ public class Enemy extends GameObject {
         //finds nearest player object
         return handler.getObject(intreturn);
     }
-    
+    /**
+     * @return void 
+     * checks collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
@@ -401,7 +475,10 @@ public class Enemy extends GameObject {
         }
     }
     //x bounds
-
+    /**
+     * @return rectangle 
+     * the bounds of the enemy
+     * */
     public Rectangle getBounds2() {
         if(fltHP > 0) {
             float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
@@ -415,35 +492,51 @@ public class Enemy extends GameObject {
         }
     }
     //y bounds
-
+    /**
+     * @return void  sets hp
+     */
     public void setHP(float fltHP){
         this.fltHP = fltHP;
     }
-
+    /**
+     * @return float  gets hp
+     */
     public float getHP(){
         return fltHP;
     }
-
+    /**
+     * @return float  gets dmg
+     */
     public float getDmg(){
         return fltDmg;
     }
-
+    /**
+     * @return float  gets velx
+     */
     public float getVelX(){
         return this.fltVelX;
     }
-
+    /**
+     * @return float  gets vely
+     */
     public float getVelY(){
         return this.fltVelX;
     }
-
+    /**
+     * @return void sets velx
+     */
     public void setVelX(float fltVelX){
         this.fltVelX = fltVelX;
     }
-
+    /**
+     * @return void sets vely
+     */
     public void setVelY(float fltVelY){
         this.fltVelY = fltVelY;
     }
-
+    /**
+     * @return void sets blnleft
+     */
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
