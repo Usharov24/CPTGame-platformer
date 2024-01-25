@@ -81,14 +81,14 @@ public class Bullet extends GameObject {
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
-        float fltpastTotal = 0;
+        float fltpastTotal = 9000000;
         int intreturn = 0;
         for(int i = 0; i < handler.objectList.size(); i++) {
             if(handler.getObject(i).getId() == ObjectId.ENEMY) {
                 fltDistX = fltWorldX - handler.getObject(i).getWorldX();
                 fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-                if(flttotaldist > fltpastTotal){
+                if(flttotaldist < fltpastTotal){
                     fltpastTotal = flttotaldist;
                     intreturn = i;
                 }
@@ -109,8 +109,6 @@ public class Bullet extends GameObject {
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
                         
-                        if(Main.intSessionId == 0) ssm.sendText("h>a>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + ","+ fltDmg + "," + fltHeight + "," + fltHeight); 
-                        else ssm.sendText("c" + (Main.intSessionId + 1) + ">h>aBOOM~" + fltWorldX + "," + (fltWorldY + fltHeight/2) + "," + fltDmg + "," + fltHeight + "," + fltHeight);
                     }        
                 }
             }        

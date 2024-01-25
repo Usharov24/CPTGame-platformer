@@ -310,77 +310,56 @@ public class Sniper extends GameObject {
                 handler.removeObject(handler.getObject(intCount));
                 Item item = (Item) object;
                 if(item.getRarity() == 1){ 
-                    if(item.getPlacement() == 1){
-                        fltDmgMult += 0.2;
-                    }
-                    else if(item.getPlacement() == 2){
+                    if(item.getPlacement() == 1) {
+                        fltDmgMult += 0.4;
+                    } else if(item.getPlacement() == 2) {
                         fltMaxHP += 100;
                         fltHP += 100;
-                    }
-                    else if(item.getPlacement() == 3){
+                    } else if(item.getPlacement() == 3) {
                         //add statement later using bln movement
-                        intWungoosCount += 1;                       
-                    }
-                    else if(item.getPlacement() == 4){
+                        intWungoosCount += 2;                       
+                    } else if(item.getPlacement() == 4) {
                         fltBSpeedMult *= 1.2;
-                    }
-                    else if(item.getPlacement() == 5){
+                    } else if(item.getPlacement() == 5) {
                         fltPSpeedMult *= 1.2;
-                    }
-                    else if(item.getPlacement() == 6){
+                    } else if(item.getPlacement() == 6) {
                         fltReflectDmg += 1;
                         //reflect 10% of the dmg and then mult by this
-                    }
-                    else if(item.getPlacement() == 7){
+                    } else if(item.getPlacement() == 7) {
                         intPeirceCount += 1;
-                    }
-                    else if(item.getPlacement() == 8){
-                        fltDef += 0.2;
-                    }
-
-                    else if(item.getPlacement() == 9){
+                    } else if(item.getPlacement() == 8) {
+                        fltDef += 0.3;
+                    } else if(item.getPlacement() == 9) {
                         fltFireRateMult *= 0.9;
                     }
-                }
-                else if(item.getRarity() == 2){ 
-                    if(item.getPlacement() == 1){
+                } else if(item.getRarity() == 2) { 
+                    if(item.getPlacement() == 1) {
                         fltAirDmgMult += 0.2;
-                    }
-                    else if(item.getPlacement() == 2){
-                        fltMaxHP *= 0.2;
-                        fltHP *= 0.2;
-                    }
-                    else if(item.getPlacement() == 3){
+                    } else if(item.getPlacement() == 2) {
+                        fltMaxHP *= 0.3;
+                        fltHP *= 0.3;
+                    } else if(item.getPlacement() == 3) {
                         intExplodeRad += 25;
-                    }
-                    else if(item.getPlacement() == 4){
-                        intJumpCap ++;
-                    }
-                    else if(item.getPlacement() == 5){
+                    } else if(item.getPlacement() == 4) {
+                        intJumpCap++;
+                    } else if(item.getPlacement() == 5) {
                         intBleedCount += 1;
-                    }
-                    else if(item.getPlacement() == 6){
+                    } else if(item.getPlacement() == 6) {
                         intShurikenCount += 1;
-                    }
-                    else if(item.getPlacement() == 7){
+                    } else if(item.getPlacement() == 7) {
                         fltBurnDmg += 10;
                     }
-                }
-                else if(item.getRarity() == 3){ 
-                    if(item.getPlacement() == 1){
+                } else if(item.getRarity() == 3) { 
+                    if(item.getPlacement() == 1) {
                         fltLifeSteal += 0.2;
-                    }
-                    else if(item.getPlacement() == 2){
+                    } else if(item.getPlacement() == 2) {
                         //wont do anything for brute
                         blnHoming = true;
-                    }
-                    else if(item.getPlacement() == 3){
+                    } else if(item.getPlacement() == 3) {
                         fltRegen *= 2;
-                    }
-                    else if(item.getPlacement() == 4){
-                        fltFireRateMult *= 0.75;
-                    }
-                    else if(item.getPlacement() == 5){
+                    } else if(item.getPlacement() == 4) {
+                        fltFireRateMult *= 0.6;
+                    } else if(item.getPlacement() == 5) {
                         intCelebShot += 1;
                     }
                 }

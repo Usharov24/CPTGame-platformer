@@ -332,17 +332,17 @@ public class Brute extends GameObject {
             //if the player collides with any enemy object, take dmg and maybe remove the object
             else if((object.getId() == ObjectId.ITEM && getBounds().intersects(object.getBounds()))) {  
                 Item item = (Item) object;
-                System.out.println("otuch");
+                handler.removeObject(object);
                 
                 if(item.getRarity() == 1) { 
                     if(item.getPlacement() == 1) {
-                        fltDmgMult += 0.2;
+                        fltDmgMult += 0.4;
                     } else if(item.getPlacement() == 2) {
                         fltMaxHP += 100;
                         fltHP += 100;
                     } else if(item.getPlacement() == 3) {
                         //add statement later using bln movement
-                        intWungoosCount += 1;                       
+                        intWungoosCount += 2;                       
                     } else if(item.getPlacement() == 4) {
                         fltBSpeedMult *= 1.2;
                     } else if(item.getPlacement() == 5) {
@@ -353,7 +353,7 @@ public class Brute extends GameObject {
                     } else if(item.getPlacement() == 7) {
                         intPeirceCount += 1;
                     } else if(item.getPlacement() == 8) {
-                        fltDef += 0.2;
+                        fltDef += 0.3;
                     } else if(item.getPlacement() == 9) {
                         fltFireRateMult *= 0.9;
                     }
@@ -361,8 +361,8 @@ public class Brute extends GameObject {
                     if(item.getPlacement() == 1) {
                         fltAirDmgMult += 0.2;
                     } else if(item.getPlacement() == 2) {
-                        fltMaxHP *= 0.2;
-                        fltHP *= 0.2;
+                        fltMaxHP *= 0.3;
+                        fltHP *= 0.3;
                     } else if(item.getPlacement() == 3) {
                         intExplodeRad += 25;
                     } else if(item.getPlacement() == 4) {
@@ -383,7 +383,7 @@ public class Brute extends GameObject {
                     } else if(item.getPlacement() == 3) {
                         fltRegen *= 2;
                     } else if(item.getPlacement() == 4) {
-                        fltFireRateMult *= 0.75;
+                        fltFireRateMult *= 0.6;
                     } else if(item.getPlacement() == 5) {
                         intCelebShot += 1;
                     }

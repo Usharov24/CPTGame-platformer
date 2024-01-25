@@ -133,9 +133,10 @@ public class SuperSocketMaster{
   private synchronized void addActionListener(ActionListener listener) {
     actionListener = AWTEventMulticaster.add(actionListener, listener);
   }
-  //private synchronized void removeActionListener(ActionListener listener) {
-  //  actionListener = AWTEventMulticaster.remove(actionListener, listener);
-  //}
+  /*private synchronized void removeActionListener(ActionListener listener) {
+    actionListener = AWTEventMulticaster.remove(actionListener, listener);
+  }
+  */
   private void postActionEvent() {
     // when event occurs which causes "action" semantic
     ActionListener listener = actionListener;
