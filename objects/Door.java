@@ -57,7 +57,7 @@ public class Door extends GameObject {
 
         blnRoomCleared = true;
         //when all enemies are dead, set the room to be cleared
-        if(Main.intSessionId == 1 && intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize) {
+        if(Main.intSessionId == 1 && intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize - (Main.intAlivePlayers[0] + Main.intAlivePlayers[1] + Main.intAlivePlayers[2] + Main.intAlivePlayers[3])) {
             // Remove any remaining object from the list
             // Ex. Enemies, barriers, items, bullets, doors, etc.
             handler.clearEntities();
@@ -68,18 +68,22 @@ public class Door extends GameObject {
                 Sniper sniper = (Sniper)object;
                 sniper.setWorldX(150 + 40 * (Main.intSessionId - 1));
                 sniper.setWorldY(1400);
+                if(sniper.getHP() <= 0) sniper.setHP(sniper.getMaxHP()/2);
             } else if(object instanceof Brute) {
                 Brute brute = (Brute)object;
                 brute.setWorldX(150 + 40 * (Main.intSessionId - 1));
                 brute.setWorldY(1400);
+                if(brute.getHP() <= 0) brute.setHP(brute.getMaxHP()/2);
             } else if(object instanceof Knight) {
                 Knight knight = (Knight)object;
                 knight.setWorldX(150 + 40 * (Main.intSessionId - 1));
                 knight.setWorldY(1400);
+                if(knight.getHP() <= 0) knight.setHP(knight.getMaxHP()/2);
             } else if(object instanceof Wizard) {
                 Wizard wizard = (Wizard)object;
                 wizard.setWorldX(150 + 40 * (Main.intSessionId - 1));
                 wizard.setWorldY(1400);
+                if(wizard.getHP() <= 0) wizard.setHP(wizard.getMaxHP()/2);
             }
             //when transferring to another level, move all the characters to a space
 

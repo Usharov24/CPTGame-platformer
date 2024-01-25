@@ -48,7 +48,8 @@ public class Main implements ActionListener, WindowListener {
                                               new CustomButton(200, 100, "Demo", biMenuButtons, this)};
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
                                           new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
-    
+    private CustomButton endScreenButton = new CustomButton(200, 100, "Quit", biMenuButtons, this);
+
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
@@ -89,10 +90,12 @@ public class Main implements ActionListener, WindowListener {
 
     // Networking Variables
     public static String[] strNameList = new String[4];
+    public static int[] intAlivePlayers = {0, 0, 0, 0};
     public static int intSessionId;
     public static int intRoomCount;
     public static int intServerSize;
     public static int intHelpScreenCount = 0;
+    public static long lngRunStartTime = 0, lngRunEndTime = 0;
 
     private int intCurrentButton = -1, intPreviousButton = -1;
     private int intReady;
@@ -334,7 +337,7 @@ public class Main implements ActionListener, WindowListener {
                         for(int intCount = 0; intCount < blnAvailableIds.length; intCount++) {
                             if(blnAvailableIds[intCount]) {
                                 blnAvailableIds[intCount] = false;
-                                ssm.sendText("h>c0>mSESSION_ID~" + (intCount + 2));
+                                ssm.sendText("h>c0>mSESSION_ID~" + (intCount + 2) + "," + intServerSize);
                                 //sends the session ID of a client to the client 
                                 strNameList[intCount + 1] = strMessage.split("~")[1];
                                 netTextAreas[0].append("\n " + strNameList[intCount + 1] + " joined");
@@ -445,6 +448,31 @@ public class Main implements ActionListener, WindowListener {
                 //resonsible for creating objects with the messsages sent. all essential parameters are sent and clients create the objects with them
                 else if(strMessage.contains("mNEXT_ROOM")) {
                     handler.clearEntities();
+
+                    GameObject object = handler.getObject(Main.intSessionId - 1);
+
+                    if(object instanceof Sniper) {
+                        Sniper sniper = (Sniper)object;
+                        sniper.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                        sniper.setWorldY(1400);
+                        if(sniper.getHP() <= 0) sniper.setHP(sniper.getMaxHP()/2);
+                    } else if(object instanceof Brute) {
+                        Brute brute = (Brute)object;
+                        brute.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                        brute.setWorldY(1400);
+                        if(brute.getHP() <= 0) brute.setHP(brute.getMaxHP()/2);
+                    } else if(object instanceof Knight) {
+                        Knight knight = (Knight)object;
+                        knight.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                        knight.setWorldY(1400);
+                        if(knight.getHP() <= 0) knight.setHP(knight.getMaxHP()/2);
+                    } else if(object instanceof Wizard) {
+                        Wizard wizard = (Wizard)object;
+                        wizard.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                        wizard.setWorldY(1400);
+                        if(wizard.getHP() <= 0) wizard.setHP(wizard.getMaxHP()/2);
+                    }
+
                     intRoomCount++;
                     //goes to the next room if the message is recieved
                 } else if(strMessage.contains("mPLAYER_NAMES")) { 
@@ -456,7 +484,8 @@ public class Main implements ActionListener, WindowListener {
                     }
                     //recieves the player names from the host and then prints the names in the textArea
                 } else if(strMessage.contains("mSESSION_ID")) {
-                    intSessionId = Integer.parseInt(strMessage.split("~")[1]);
+                    intSessionId = Integer.parseInt(strMessage.split("~")[1].split(",")[0]);
+                    intServerSize = Integer.parseInt(strMessage.split("~")[1].split(",")[1]);
                     //client recieves its own personalized session id!
                     System.out.println("Session Id: " + intSessionId);
                 } else if(strMessage.contains("mDISCONNECT")) {
@@ -495,6 +524,9 @@ public class Main implements ActionListener, WindowListener {
                     //host tells client to switch to a different panel
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
+
+                    lngRunStartTime = System.currentTimeMillis();
+
                     for(int intCount = 0; intCount < 2; intCount++) {
                         handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
                         handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
@@ -505,6 +537,7 @@ public class Main implements ActionListener, WindowListener {
                     theFrame.pack();
                 } else if(strMessage.contains("cCHAT")) {
                     String strPayload = strMessage.split("~")[1];
+                    System.out.println(strPayload);
 
                     chatTextArea.append(strPayload + "\n");
                     //recives messages and adds them to the chat
@@ -534,6 +567,7 @@ public class Main implements ActionListener, WindowListener {
             if(evt.getSource() == backButtons[intCount]) {
                 if(intCount < 3) {
                     if(ssm != null) {
+                        handler.clearList();
                         ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
                         ssm.disconnect();
                         ssm = null;
@@ -558,9 +592,11 @@ public class Main implements ActionListener, WindowListener {
                     intHelpScreenCount = 0;
 
                     state = State.MAIN_MENU;
+
                     theFrame.setContentPane(thePanels[0]);
                     theFrame.pack();
                 } else if(intCount == 3) {
+                    handler.clearList();
                     if(intSessionId == 1 && ssm != null) state = State.HOST_MENU;
                     else if(ssm != null) state = State.JOIN_MENU;
                     else state = State.HELP;
@@ -577,10 +613,11 @@ public class Main implements ActionListener, WindowListener {
                     for(int intCount2 = 0; intCount2 < blnAvailableIds.length; intCount2++) {
                         blnAvailableIds[intCount2] = true;
                     }
+
                     for(int intCount2 = 0; intCount2 < characterButtons.length; intCount2++) {
                         characterButtons[intCount2].setEnabled(true);
                     }
-                    //clears up all session dis and ensures the buttons should be working
+                    //clears up all session ids and ensures the buttons should be working
                     readyButton.setEnabled(false);
                     for(int intCount2 = (intSessionId == 1) ? 0 : 2; intCount2 < netTextFields.length; intCount2++) {
                         netTextFields[intCount2].setText("");
@@ -696,6 +733,7 @@ public class Main implements ActionListener, WindowListener {
 
         if(ssm != null && intSessionId == 1 && state.getValue() == 4 && intReady == intServerSize) {
             state = State.GAME;
+
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 if(intCharacterSelections[intCount] == 0) {
                     handler.addObject(new Sniper(150 + 40 * intCount, 1400, 32, 64, ObjectId.PLAYER, handler, ssm, input, intCount), intCount);
@@ -713,13 +751,65 @@ public class Main implements ActionListener, WindowListener {
             }
             //if the state is game, add all the characters and ensure all clients add as well by senidng a message
             ssm.sendText("h>a>mGAME_PANEL");
+
             for(int intCount = 0; intCount < 2; intCount++) {
                 handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
                 handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
                 //adds in all of the barriers to ensure players don't cross vertically or horizontally
             }
+
+            lngRunStartTime = System.currentTimeMillis();
+
             theFrame.setContentPane(thePanels[5]);
             thePanels[5].requestFocusInWindow();
+            theFrame.pack();
+        }
+
+        if(state == State.GAME && intRoomCount == 8 || intAlivePlayers[0] + intAlivePlayers[1] + intAlivePlayers[2] + intAlivePlayers[3] == intServerSize) endScreenButton.setVisible(true);
+
+        if(evt.getSource() == endScreenButton) {
+            handler.clearList();
+
+            ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
+            ssm.disconnect();
+            ssm = null;
+
+            intSessionId = 0;
+            intServerSize = 0;
+            intRoomCount = 0;
+            intReady = 0;
+            intCurrentButton = -1;
+
+            lngRunStartTime = 0;
+            lngRunEndTime = 0;
+
+            for(int intCount2 = 0; intCount2 < blnAvailableIds.length; intCount2++) {
+                blnAvailableIds[intCount2] = true;
+            }
+
+            for(int intCount2 = 0; intCount2 < characterButtons.length; intCount2++) {
+                characterButtons[intCount2].setEnabled(true);
+            }
+
+            for(int intCount = 0; intCount < strNameList.length; intCount++) {
+                strNameList[intCount] = null;
+            }
+
+            for(int intCount = 0; intCount < intAlivePlayers.length; intCount++) {
+                intAlivePlayers[intCount] = 0;
+            }
+
+            for(int intCount = 0; intCount < netTextAreas.length; intCount++) {
+                netTextAreas[intCount].setText("");
+            }
+
+            for(int intCount = 0; intCount < netTextFields.length; intCount++) {
+                netTextFields[intCount].setText("");
+            }
+
+            state = State.MAIN_MENU;
+
+            theFrame.setContentPane(thePanels[0]);
             theFrame.pack();
         }
 
@@ -729,10 +819,11 @@ public class Main implements ActionListener, WindowListener {
         if(evt.getSource() == chatTextField) {
             input.buttonSet.remove(InputHandler.InputButtons.ENTER);
             chatTextArea.append(strNameList[intSessionId - 1] + ": " + chatTextField.getText() + "\n");
-            chatTextField.setText("");
 
             if(intSessionId == 1) ssm.sendText("h>a>cCHAT~" + strNameList[intSessionId - 1] + ": " + chatTextField.getText());
             else ssm.sendText("c" + intSessionId + ">h>cCHAT~" + strNameList[intSessionId - 1] + ": " + chatTextField.getText());
+
+            chatTextField.setText("");
 
             thePanels[5].requestFocusInWindow();
             //sends a message with the contents of the chat

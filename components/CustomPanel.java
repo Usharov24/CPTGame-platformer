@@ -5,6 +5,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 import Framework.Main;
@@ -77,74 +84,180 @@ public class CustomPanel extends JPanel {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
         } else if(Main.state == Main.State.GAME) {
-            if(Main.intRoomCount == 0) {
-                for(int intCount = 0; intCount < strMaps.length; intCount++) {
-                    strMaps[intCount] = resLoader.loadCSV("/res\\Room1.csv,/res\\Room2.csv,/res\\Room3.csv,/res\\Room4.csv,/res\\Room5.csv,/res\\Room6.csv,/res\\Room7.csv".split(",")[intCount]);
+            if(Main.intRoomCount != 8 && Main.intAlivePlayers[0] + Main.intAlivePlayers[1] + Main.intAlivePlayers[2] + Main.intAlivePlayers[3] != Main.intServerSize) {
+                if(Main.intRoomCount == 0) {
+                    for(int intCount = 0; intCount < strMaps.length; intCount++) {
+                        strMaps[intCount] = resLoader.loadCSV("/res\\Room1.csv,/res\\Room2.csv,/res\\Room3.csv,/res\\Room4.csv,/res\\Room5.csv,/res\\Room6.csv,/res\\Room7.csv".split(",")[intCount]);
+                    }
+                    Main.intRoomCount++;
                 }
-                Main.intRoomCount++;
-            }
 
-            g.drawImage(biRoomBackground, 0, 0, null);
+                g.drawImage(biRoomBackground, 0, 0, null);
 
-            Main.handler.update();
+                Main.handler.update();
 
-            // CAMERA START /////////////////////////////////////////////////////
-            g.translate(getWidth()/2, getHeight()/2);
+                // CAMERA START /////////////////////////////////////////////////////
+                g.translate(getWidth()/2, getHeight()/2);
 
-            decodeMap(g, strMaps[Main.intRoomCount - 1]);
-            Main.handler.draw(g);
+                if(Main.intRoomCount < 8) decodeMap(g, strMaps[Main.intRoomCount - 1]);
+                Main.handler.draw(g);
 
-            g.translate(-getWidth()/2, -getHeight()/2);
-            // CAMERA END ///////////////////////////////////////////////////////
+                g.translate(-getWidth()/2, -getHeight()/2);
+                // CAMERA END ///////////////////////////////////////////////////////
             
-            // HUD CODE HERE ////////////////////////////////////////////////////
-            for(int intCount = 0; intCount < 4; intCount++) {
-                GameObject object = Main.handler.getObject(intCount);
-                float fltPlayerHP = 0, fltPlayerMaxHP = 0;
+                // HUD CODE HERE ////////////////////////////////////////////////////
+                for(int intCount = 0; intCount < 4; intCount++) {
+                    GameObject object = Main.handler.getObject(intCount);
+                    float fltPlayerHP = 0, fltPlayerMaxHP = 0;
 
-                if(!(object instanceof Sniper) && !(object instanceof Brute) && !(object instanceof Knight) && !(object instanceof Wizard)) continue;
+                    if(!(object instanceof Sniper) && !(object instanceof Brute) && !(object instanceof Knight) && !(object instanceof Wizard)) continue;
 
-                if(object instanceof Sniper) {
-                    fltPlayerHP = ((Sniper)object).getHP();
-                    fltPlayerMaxHP = ((Sniper)object).getMaxHP();
-                } else if(object instanceof Brute) {
-                    fltPlayerHP = ((Brute)object).getHP();
-                    fltPlayerMaxHP = ((Brute)object).getMaxHP();
-                } else if(object instanceof Knight) {
-                    fltPlayerHP = ((Knight)object).getHP();
-                    fltPlayerMaxHP = ((Knight)object).getMaxHP();
-                } else if(object instanceof Wizard) {
-                    fltPlayerHP = ((Wizard)object).getHP();
-                    fltPlayerMaxHP = ((Wizard)object).getMaxHP();
+                    if(object instanceof Sniper) {
+                        fltPlayerHP = ((Sniper)object).getHP();
+                        fltPlayerMaxHP = ((Sniper)object).getMaxHP();
+                    } else if(object instanceof Brute) {
+                        fltPlayerHP = ((Brute)object).getHP();
+                        fltPlayerMaxHP = ((Brute)object).getMaxHP();
+                    } else if(object instanceof Knight) {
+                        fltPlayerHP = ((Knight)object).getHP();
+                        fltPlayerMaxHP = ((Knight)object).getMaxHP();
+                    } else if(object instanceof Wizard) {
+                        fltPlayerHP = ((Wizard)object).getHP();
+                        fltPlayerMaxHP = ((Wizard)object).getMaxHP();
+                    }
+
+                    if(intCount == Main.intSessionId - 1) {
+                        g.setColor(Color.white);
+                        g.setFont(font.deriveFont(20f));
+                        g.drawString(Main.strNameList[intCount], 10, 25);
+                    
+                        g.setColor(new Color(0, 0, 0, 150));
+                        g.fillRect(10, 35, 325, 25);
+
+                        g.setColor(new Color(126, 222, 80));
+                        if(fltPlayerHP > 0) g.fillRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+
+                        g.setColor(new Color(95, 173, 44));
+                        if(fltPlayerHP > 0) g.drawRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+                    } else {
+                        g.setColor(Color.white);
+                        g.setFont(font.deriveFont(15f));
+                    
+                        g.drawString(Main.strNameList[intCount], 10, (intCount < Main.intSessionId - 1) ? 75 + 30 * intCount : 75 + 30 * (intCount - 1));
+
+                        g.setColor(new Color(0, 0, 0, 150));
+                        g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), 175, 10);
+
+                        g.setColor(new Color(126, 222, 80));
+                        if(fltPlayerHP > 0) g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
+
+                        g.setColor(new Color(95, 173, 44));
+                        if(fltPlayerHP > 0) g.drawRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
+                    }
+                }
+            } else if(Main.intAlivePlayers[0] + Main.intAlivePlayers[1] + Main.intAlivePlayers[2] + Main.intAlivePlayers[3] == Main.intServerSize) {
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
+
+                g.setColor(Color.white);
+                g.setFont(font.deriveFont(100f));
+                FontMetrics fm = g.getFontMetrics();
+                g.drawString("You've Been Annihilated!", (getWidth() - fm.stringWidth("You've Been Annihilated!"))/2, 130);
+
+                g.setFont(font.deriveFont(40f));
+                fm = g.getFontMetrics();
+                g.drawString("Better luck next time!", (getWidth() - fm.stringWidth("Better luck next time!"))/2, 210);
+            } else {
+                long lngTimeToCompleteMin = 0;
+                long lngTimeToCompleteSec = 0;
+
+                if(Main.lngRunEndTime == 0) {
+                    Main.lngRunEndTime = System.currentTimeMillis();
+
+                    lngTimeToCompleteMin = (int)(Main.lngRunEndTime - Main.lngRunStartTime)/60000;
+                    lngTimeToCompleteSec = (int)((Main.lngRunEndTime - Main.lngRunStartTime) % 60000)/1000;
+
+                    try(BufferedWriter bw = new BufferedWriter(new FileWriter("highscores.csv", true))) {
+                        bw.write(Main.strNameList[Main.intSessionId - 1] + "," + Long.toString((Main.lngRunEndTime - Main.lngRunStartTime)/1000));
+                        bw.newLine();
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
-                if(intCount == Main.intSessionId - 1) {
-                    g.setColor(Color.white);
-                    g.setFont(font.deriveFont(20f));
-                    g.drawString(Main.strNameList[intCount], 10, 25);
+                g.setColor(Color.black);
+                g.fillRect(0, 0, getWidth(), getHeight());
+
+                g.setColor(Color.white);
+                g.setFont(font.deriveFont(100f));
+                FontMetrics fm = g.getFontMetrics();
+                g.drawString("You Escaped!", (getWidth() - fm.stringWidth("You Escaped!"))/2, 130);
+
+                g.setFont(font.deriveFont(40f));
+                fm = g.getFontMetrics();
+                g.drawString("Time taken to complete: " + Long.toString(lngTimeToCompleteMin) + "min " + Long.toString(lngTimeToCompleteSec) + "sec", (getWidth() - fm.stringWidth("Time taken to complete: " + Long.toString(lngTimeToCompleteMin) + "min " + Long.toString(lngTimeToCompleteSec) + "sec"))/2, 210);
+                g.drawString("Leaderboard", (getWidth() - fm.stringWidth("Leaderboard"))/2, 300);
+
+                g.setFont(font.deriveFont(25f));
+                fm = g.getFontMetrics();
+                g.drawString("Rank        Name        Time to Complete", (getWidth() - fm.stringWidth("Rank        Name        Time to Complete"))/2, 350);
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("highscores.csv")))) {
+                    ArrayList<ArrayList<String>> strContents = new ArrayList<>();
+                    String[][] strScores = null;
+
+                    String strLine = null;
+                    int intIndex = 0;
+
+                    while((strLine = br.readLine()) != null) {
+                        strContents.add(new ArrayList<String>());
+
+                        for(int intCount = 0; intCount < strLine.split(",").length; intCount++) {
+                            strContents.get(intIndex).add(strLine.split(",")[intCount]);
+                        }
+
+                        intIndex++;
+                    }
+
+                    strScores = new String[strContents.size()][strContents.get(0).size()];
+
+                    for(int intCount1 = 0; intCount1 < strScores.length; intCount1++) {
+                        for(int intCount2 = 0; intCount2 < strScores[0].length; intCount2++) {
+                            strScores[intCount1][intCount2] = strContents.get(intCount1).get(intCount2);
+                        }
+                    }
                     
-                    g.setColor(new Color(0, 0, 0, 150));
-                    g.fillRect(10, 35, 325, 25);
+                    String[] strTemp;
+                    boolean blnSwapped;
+                    for(int intCount1 = 0; intCount1 < strScores.length - 1; intCount1++) {
+                        blnSwapped = false;
 
-                    g.setColor(new Color(126, 222, 80));
-                    if(fltPlayerHP > 0) g.fillRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
+                        for(int intCount2 = 0; intCount2 < strScores.length - intCount1 - 1; intCount2++) {
+                            if(Integer.parseInt(strScores[intCount2][1]) < Integer.parseInt(strScores[intCount1 + 1][1])) {
+                                strTemp = strScores[intCount2];
+                                strScores[intCount2] = strScores[intCount1 + 1];
+                                strScores[intCount2 + 1] = strTemp;
+                                blnSwapped = true;
+                            }
+                        }
 
-                    g.setColor(new Color(95, 173, 44));
-                    if(fltPlayerHP > 0) g.drawRect(10, 35, (int)(325 * (fltPlayerHP/fltPlayerMaxHP)), 25);
-                } else {
-                    g.setColor(Color.white);
-                    g.setFont(font.deriveFont(15f));
-                    
-                    g.drawString(Main.strNameList[intCount], 10, (intCount < Main.intSessionId - 1) ? 75 + 30 * intCount : 75 + 30 * (intCount - 1));
+                        if(!blnSwapped) break;
+                    }
 
-                    g.setColor(new Color(0, 0, 0, 150));
-                    g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), 175, 10);
+                    intIndex = 0;
+                    for(int intCount1 = 0; intCount1 < strScores.length; intCount1++) {
+                        for(int intCount2 = 0; intCount2 < strScores[0].length; intCount2++) {
+                            g.drawString(strScores[intCount1][intCount2], 416 + 100 * intCount2, 385 + 40 * intCount1);
+                        }
+                    }
 
-                    g.setColor(new Color(126, 222, 80));
-                    if(fltPlayerHP > 0) g.fillRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
-
-                    g.setColor(new Color(95, 173, 44));
-                    if(fltPlayerHP > 0) g.drawRect(10, (intCount < Main.intSessionId - 1) ? 80 + 30 * intCount : 80 + 30 * (intCount - 1), (int)(175 * (fltPlayerHP/fltPlayerMaxHP)), 10);
+                    for(int intCount = 0; intCount < 5; intCount++) {
+                        g.drawString(Integer.toString(intCount + 1), 416, 385 + 40 * intCount);
+                    }
+                } catch(IOException e) {
+                    e.printStackTrace();
+                } catch(NullPointerException e) {
+                    g.drawString("No saved scores", (getWidth() - fm.stringWidth("No saved scores"))/2, 400);
                 }
             }
             // HUD CODE END ////////////////////////////////////////////////////

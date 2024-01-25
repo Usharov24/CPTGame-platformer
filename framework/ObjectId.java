@@ -1,5 +1,6 @@
 package Framework;
 
+// Ids for objects
 public enum ObjectId {
     PLAYER,
     ENEMY,

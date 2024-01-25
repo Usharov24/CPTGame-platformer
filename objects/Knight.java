@@ -74,6 +74,11 @@ public class Knight extends GameObject {
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
+        if(fltHP <= 0) {
+            Main.intAlivePlayers[intPosition] = 1;
+            return;
+        }
+
         if(Main.state == Main.State.GAME && (fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480)) {
             fltWorldX = 200;
             fltWorldY = 1400;
@@ -394,6 +399,8 @@ public class Knight extends GameObject {
     }
 
     public void draw(Graphics g) {
+        if(fltHP <= 0) return;
+
         Graphics2D g2d = (Graphics2D)g;
         
         if(intPosition == Main.intSessionId - 1) {
