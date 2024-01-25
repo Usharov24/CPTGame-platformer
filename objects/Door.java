@@ -26,6 +26,7 @@ public class Door extends GameObject {
             intPlayersEntered[intCount] = 0;
         }
         blnRoomCleared = false;
+        //used to open/close the door
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
@@ -43,6 +44,7 @@ public class Door extends GameObject {
                 } else {
                     continue;
                 }
+                //when all enemies are dead, continue the code
             }
             
             if(object.getId() == ObjectId.PLAYER && getBounds().intersects(object.getBounds())) {
@@ -50,10 +52,11 @@ public class Door extends GameObject {
             } else if(object.getId() == ObjectId.PLAYER) {
                 intPlayersEntered[intCount] = 0;
             }
+            //used to ensure all players enter the door
         }
 
         blnRoomCleared = true;
-              
+        //when all enemies are dead, set the room to be cleared
         if(Main.intSessionId == 1 && intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize) {
             // Remove any remaining object from the list
             // Ex. Enemies, barriers, items, bullets, doors, etc.
@@ -78,6 +81,7 @@ public class Door extends GameObject {
                 wizard.setWorldX(150 + 40 * (Main.intSessionId - 1));
                 wizard.setWorldY(1400);
             }
+            //when transferring to another level, move all the characters to a space
 
             for(int intCount = 0; intCount < intPlayersEntered.length; intCount++) {
                 intPlayersEntered[intCount] = 0;
@@ -85,6 +89,7 @@ public class Door extends GameObject {
 
             Main.intRoomCount++;
             if(ssm != null) ssm.sendText("h>a>mNEXT_ROOM");
+            //sends a msg to clients to load in the next room
         }
     }
 
@@ -93,10 +98,12 @@ public class Door extends GameObject {
 
         if(!blnRoomCleared) g2d.drawImage(biTextures[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
         else g2d.drawImage(biTextures[1], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+        //draws a different sprite depending on whether or not the room has been cleared
     }
 
     public Rectangle getBounds() {
         if(blnRoomCleared) return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         else return new Rectangle();
+        //hit box for the door
     }
 }

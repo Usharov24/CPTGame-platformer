@@ -257,12 +257,12 @@ public class Wizard extends GameObject {
             if(fltHP > fltMaxHP){
                 fltHP = fltMaxHP;
             }
-
+            //ensures players dont go over their max health
             fltVelY += 3;
 
             if(fltVelX > 10 * fltPSpeedMult) fltVelX = 10 * fltPSpeedMult;
             else if(fltVelX < -10 * fltPSpeedMult) fltVelX = -10 * fltPSpeedMult;
-
+            //stops the player from speeindg
             if(fltVelY > 35) fltVelY = 35;
             else if(fltVelY < -35) fltVelY = -35;
             
@@ -273,6 +273,8 @@ public class Wizard extends GameObject {
             
             if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
             else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oWIZARD~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
+            //sends all essential player information
+            
         }
     }
 

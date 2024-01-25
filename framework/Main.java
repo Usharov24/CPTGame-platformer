@@ -23,7 +23,7 @@ public class Main implements ActionListener, WindowListener {
     public static ObjectHandler handler = new ObjectHandler();
     private InputHandler input = new InputHandler();
     private ResourceLoader resLoader = new ResourceLoader();
-
+    
     // Network
     public static SuperSocketMaster ssm;
 
@@ -111,21 +111,23 @@ public class Main implements ActionListener, WindowListener {
         thePanels[5].addKeyListener(input);
         thePanels[5].addMouseListener(input);
         thePanels[5].addMouseMotionListener(input);
-
+        
         thePanels[6].addKeyListener(input);
         thePanels[6].addMouseListener(input);
         thePanels[6].addMouseMotionListener(input);
-
+        //adds essential listeners to the menu panels
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
             mainMenuButtons[intCount].setLocation(540, 200 + 110 * intCount);
             thePanels[0].add(mainMenuButtons[intCount]);
+            //adds all of the main menu buttons in one for loop
         }
         // Help Panel Components /////////////////////////////////////////////////////////////////////
 
         for(int intCount = 0; intCount < helpMenuButtons.length; intCount++) {
             helpMenuButtons[intCount].setLocation((intCount == 2) ? 535 : 30 + 1120 * intCount, (intCount == 2) ? 350 : 255);
             thePanels[3].add(helpMenuButtons[intCount]);
+            //adds the help menu buttons
         }
 
         // Host & Join Panels /////////////////////////////////////////////////////////////////////
@@ -137,6 +139,7 @@ public class Main implements ActionListener, WindowListener {
             netTextAreas[intCount].setEditable(false);
             netTextAreas[intCount].setBorder(new LineBorder(new Color(205, 237, 253), 4));
             thePanels[intCount + 1].add(netTextAreas[intCount]);
+            //adds the netTextAreas which are responsible for connecting clients to hosts
         }
         
         for(int intCount = 0; intCount < netTextFields.length; intCount++) {
@@ -145,28 +148,33 @@ public class Main implements ActionListener, WindowListener {
             netTextFields[intCount].setEditable((intCount == 1) ? false : true);
             netTextFields[intCount].setBorder(new LineBorder(new Color(205, 237, 253), 4));
             thePanels[(intCount < 2) ? 1 : 2].add(netTextFields[intCount]);
+            //adds all the textFields which are where the player will input ip and other information
         }
 
         for(int intCount = 0; intCount < netButtons.length; intCount++) {
             netButtons[intCount].setLocation(240, 540);
             netButtons[intCount].setEnabled(false);
             thePanels[intCount + 1].add(netButtons[intCount]);
+            //adds all the essential buttons to the menu
         }
 
         netStartButton.setLocation(950, 175);
         netStartButton.setEnabled(false);
         thePanels[1].add(netStartButton);
+        //the start button for the game
 
         // Character Panel Components /////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < characterButtons.length; intCount++) {
             characterButtons[intCount].setLocation((intCount < 2) ? 345 + 300 * intCount : 345 + 300 * (intCount - 2), (intCount < 2) ? 15 : 315);
             thePanels[4].add(characterButtons[intCount]);
+            //adds all the characterbuttons.
         }
 
         // Ready Button
         readyButton.setLocation(240, 620);
         readyButton.setEnabled(false);
         thePanels[4].add(readyButton);
+        //used for communicating to the host when the player is ready and picked a character
 
         // Chat Message Text Area
         chatTextArea.setSize(225, 225);
@@ -177,6 +185,7 @@ public class Main implements ActionListener, WindowListener {
         chatTextArea.setEditable(false);
         chatTextArea.setVisible(false);
         thePanels[5].add(chatTextArea);
+        //used to recieve msgs from one player to another
 
         // Send Message Text Field
         chatTextField.setSize(225, 30);
@@ -187,11 +196,13 @@ public class Main implements ActionListener, WindowListener {
         chatTextField.addActionListener(this);
         chatTextField.setVisible(false);
         thePanels[5].add(chatTextField);
+        //sends the msgs
 
         // Back Buttons
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             backButtons[intCount].setLocation(20, 20);
             thePanels[intCount + 1].add(backButtons[intCount]);
+            //used to go backwards to a different screen
         }
 
         // Frame Details
@@ -203,6 +214,7 @@ public class Main implements ActionListener, WindowListener {
         theFrame.setResizable(false);
         theFrame.setVisible(true);
         timer.start();
+        //adds all essentials to the frame and starts the timer
     }
 
     // Override actionPerformed Method
@@ -224,46 +236,52 @@ public class Main implements ActionListener, WindowListener {
                     GameObject object = handler.getObject(Integer.parseInt(strPayload[strPayload.length - 1]));
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
+                    //sets the coordinates of the player using the message recieved
                     if(strMessage.contains("SNIPER")) {
                         Sniper sniper = (Sniper) object;
                         sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
-
+                        //sets up sprite
                         sniper.setHP(Float.parseFloat(strPayload[3]));
                         sniper.setMaxHP(Float.parseFloat(strPayload[4]));
+                        //sets up the player health
 
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
+                        //sends to all the other clients
                     } else if(strMessage.contains("BRUTE")) {
                         Brute brute = (Brute) object;
                         brute.setLeft(Boolean.parseBoolean(strPayload[2]));
-
+                        //sets up sprite
                         brute.setHP(Float.parseFloat(strPayload[3]));
                         brute.setMaxHP(Float.parseFloat(strPayload[4]));
-
+                        //sets up the player health
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
+                        //sends to all the other clients
                     } else if(strMessage.contains("KNIGHT")) {
                         Knight knight = (Knight) object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
-
+                        //responsible for flipping the sprite left and right
                         knight.setHP(Float.parseFloat(strPayload[3]));
                         knight.setMaxHP(Float.parseFloat(strPayload[4]));
-
+                        //changes the health values
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
+                        //sends the values to all other connected clients
                     } else if(strMessage.contains("WIZARD")) {
                         Wizard wizard = (Wizard) object;
                         wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
-
+                        //turns the sprite left and right
                         wizard.setHP(Float.parseFloat(strPayload[3]));
                         wizard.setMaxHP(Float.parseFloat(strPayload[4]));
-
+                        //changes player health
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
+                        //ensures all clients recieve the information as well
                     }
                 } else if(strMessage.contains("aBULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");    
@@ -271,53 +289,71 @@ public class Main implements ActionListener, WindowListener {
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBULLET~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBULLET~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBULLET~" + strMessage.split("~")[1]);
+                    //create a bullet with the msg recieved and then send the same msg to all clients
                 } else if(strMessage.contains("aWAVE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new WaveAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Float.parseFloat(strPayload[7]), Integer.parseInt(strPayload[8]), Float.parseFloat(strPayload[9]), Integer.parseInt(strPayload[10]), 0, 0, ObjectId.WAVE, handler, ssm));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aWAVE~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aWAVE~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aWAVE~" + strMessage.split("~")[1]);
+                    //create a wave attack with the msg recieved and then send the same msg to all clients
                 } else if(strMessage.contains("aSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis(), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.SLASH, handler, ssm));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aSLASH~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aSLASH~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aSLASH~" + strMessage.split("~")[1]);
+                    //create a slash attack with the msg recieved and then send the same msg to all clients
                 } else if(strMessage.contains("aBIGSLASH")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new SlashAttacks(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), System.currentTimeMillis() + 300, Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), Integer.parseInt(strPayload[7]), Float.parseFloat(strPayload[8]), Integer.parseInt(strPayload[9]), 0, 0, ObjectId.BULLET, handler, ssm));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBIGSLASH~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBIGSLASH~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBIGSLASH~" + strMessage.split("~")[1]);
+                    //create a wave attack with the msg recieved and then send the same msg to all clients, the difference is that this slash lasts longer because of the System.currentTimeMillis() + 300
                 } else if(strMessage.contains("aBOOM")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new Explosion(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), ObjectId.BOOM, handler, ssm));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aBOOM~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aBOOM~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aBOOM~" + strMessage.split("~")[1]);
+                    //creates an explosion and sends the msg to all clients
                 } else if(strMessage.contains("aVAC")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>aVAC~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>aVAC~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>aVAC~" + strMessage.split("~")[1]);
+                    //creates a vacuum grenade and sends the msg to all clients
                 } else if(strMessage.contains("mCLIENT_JOIN")) {
-                    intServerSize++;
-                    System.out.println("Player Joined\nServer Size: " + intServerSize);
-                    for(int intCount = 0; intCount < blnAvailableIds.length; intCount++) {
-                        if(blnAvailableIds[intCount]) {
-                            blnAvailableIds[intCount] = false;
-                            ssm.sendText("h>c0>mSESSION_ID~" + (intCount + 2));
-                            strNameList[intCount + 1] = strMessage.split("~")[1];
-                            netTextAreas[0].append("\n " + strNameList[intCount + 1] + " joined");
-                            break;
+                    if(intServerSize < 4){
+                        intServerSize++;
+                        //if the server size is 4, dont allow any more in, 
+                        System.out.println("Player Joined\nServer Size: " + intServerSize);
+                        netStartButton.setEnabled(true);
+                        for(int intCount = 0; intCount < blnAvailableIds.length; intCount++) {
+                            if(blnAvailableIds[intCount]) {
+                                blnAvailableIds[intCount] = false;
+                                ssm.sendText("h>c0>mSESSION_ID~" + (intCount + 2));
+                                //sends the session ID of a client to the client 
+                                strNameList[intCount + 1] = strMessage.split("~")[1];
+                                netTextAreas[0].append("\n " + strNameList[intCount + 1] + " joined");
+                                //writes the name and adds "Joined" to it, makes sure all named are added to all clients
+                                break;
+                            }
                         }
+                        ssm.sendText("h>a>mPLAYER_NAMES~" + strNameList[0] + "," + strNameList[1] + "," + strNameList[2] + "," + strNameList[3]);
+                        //sends all the names
+                    }else{
+                        ssm.sendText("h>c0>mDISCONNECT");
+                        //if more than 4 players, tell the 5th player to disconnect
                     }
-                    ssm.sendText("h>a>mPLAYER_NAMES~" + strNameList[0] + "," + strNameList[1] + "," + strNameList[2] + "," + strNameList[3]);
+                    
                 } else if(strMessage.contains("mCLIENT_DISCONNECT")) {
                     intServerSize--;
                     System.out.println("Player Disconnected\nServer Size: " + intServerSize);
                     blnAvailableIds[Integer.parseInt(strMessage.substring(1, 2)) - 2] = true;
+                    //if a client disconnected, decrease the server size and find out which session id is available
                 } else if(strMessage.contains("mCHARACTER_SELECTED")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
@@ -326,20 +362,24 @@ public class Main implements ActionListener, WindowListener {
                     if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
                     if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>mCHARACTER_SELECTED~" + strMessage.split("~")[1]);
+                    //ensures that no other players pick the same character
                 } else if(strMessage.contains("mREADY")) {
                     intReady++;
+                    //used to see if all players are ready
                 } else if(strMessage.contains("cCHAT")){
                     String strPayload = strMessage.split("~")[1];
                     
                     chatTextArea.append(strPayload + "\n");
+                    //recieves messages
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
+                //client side networking
                 if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     GameObject object = handler.getObject(Integer.parseInt(strPayload[strPayload.length - 1]));
                     object.setWorldX(Float.parseFloat(strPayload[0]));
                     object.setWorldY(Float.parseFloat(strPayload[1]));
-                    
+                    //similar to the hosts where it sets the x and y, recieves health, and ensures the sprite of the player is facing the right direction
                     if(strMessage.contains("KNIGHT")){
                         Knight knight = (Knight)object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
@@ -365,6 +405,7 @@ public class Main implements ActionListener, WindowListener {
                         enemy.setHP(Float.parseFloat(strPayload[2]));
                         enemy.setLeft(Boolean.parseBoolean(strPayload[3]));
                     }
+                    //does not send any msgs back
                 } else if(strMessage.contains("aSNIPER")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new Sniper(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, handler, ssm, input, Integer.parseInt(strPayload[4])));
@@ -376,9 +417,10 @@ public class Main implements ActionListener, WindowListener {
                     handler.addObject(new Knight(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, handler, ssm, input, Integer.parseInt(strPayload[4])));
                 } else if(strMessage.contains("aBRUTE")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
-                    
                     handler.addObject(new Brute(Integer.parseInt(strPayload[0]), Integer.parseInt(strPayload[1]), Integer.parseInt(strPayload[2]), Integer.parseInt(strPayload[3]), ObjectId.PLAYER, handler, ssm, input, Integer.parseInt(strPayload[4])));
-                } else if(strMessage.contains("aENEMY_BULLET")) {
+                } 
+                //these lines of code are responsible for adding the players in at the correct spots
+                else if(strMessage.contains("aENEMY_BULLET")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new EnemyBullet(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]), Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]), Float.parseFloat(strPayload[6]), ObjectId.ENEMY_BULLET, handler, ssm, null, Boolean.parseBoolean(strPayload[7]), Float.parseFloat(strPayload[8])));
                 } else if(strMessage.contains("aENEMY")) {
@@ -399,9 +441,12 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("aVAC")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     handler.addObject(new VacGrenade(Float.parseFloat(strPayload[0]), Float.parseFloat(strPayload[1]), Float.parseFloat(strPayload[2]), Float.parseFloat(strPayload[3]),Float.parseFloat(strPayload[4]), Float.parseFloat(strPayload[5]),ObjectId.BOOM, handler, ssm, biVacTextures));
-                } else if(strMessage.contains("mNEXT_ROOM")) {
+                }
+                //resonsible for creating objects with the messsages sent. all essential parameters are sent and clients create the objects with them
+                else if(strMessage.contains("mNEXT_ROOM")) {
                     handler.clearEntities();
                     intRoomCount++;
+                    //goes to the next room if the message is recieved
                 } else if(strMessage.contains("mPLAYER_NAMES")) { 
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     netTextAreas[1].setText("");
@@ -409,38 +454,52 @@ public class Main implements ActionListener, WindowListener {
                         strNameList[intCount] = strPayload[intCount];
                         if(!strNameList[intCount].equals("null")) netTextAreas[1].append(" " + strNameList[intCount] + " joined\n");
                     }
+                    //recieves the player names from the host and then prints the names in the textArea
                 } else if(strMessage.contains("mSESSION_ID")) {
                     intSessionId = Integer.parseInt(strMessage.split("~")[1]);
+                    //client recieves its own personalized session id!
                     System.out.println("Session Id: " + intSessionId);
-                } else if(strMessage.contains("mHOST_DISCONNECT")) {
+                } else if(strMessage.contains("mDISCONNECT")) {
+                    ssm.disconnect();
+                    //host tells client to disconnet, client disconnects
+                }else if(strMessage.contains("mHOST_DISCONNECT")) {
+                    //incase the host disconnects
                     ssm = null;
+                    //sets ssm to null
                     netTextFields[2].setText("");
                     netTextFields[3].setText("");
                     netTextAreas[1].setText("");
+                    //removes everything
                     intSessionId = 0;
                     intCurrentButton = -1;
                     intReady = 0;
+                    //resets every important variable
                     for(int intCount2 = 0; intCount2 < characterButtons.length; intCount2++) {
                         characterButtons[intCount2].setEnabled(true);
+                        //resets buttons
                     }
                     readyButton.setEnabled(false);
                     state = State.JOIN_MENU;
                     theFrame.setContentPane(thePanels[2]);
                     theFrame.pack();
+                    //restarts the experience
                 } else if(strMessage.contains("mCHARACTER_SELECTED")) {
                     String[] strPayload = strMessage.split("~")[1].split(",");
                     characterButtons[Integer.parseInt(strPayload[0])].setEnabled(false);
                     if(Integer.parseInt(strPayload[1]) != -1) characterButtons[Integer.parseInt(strPayload[1])].setEnabled(true);
+                    //disables a button if another player has already pressed it, lifts the button up that the other player pressed before
                 } else if(strMessage.contains("mCHARACTER_PANEL")) {
                     theFrame.setContentPane(thePanels[4]);
                     theFrame.pack();
                     state = State.CHARACTER;
+                    //host tells client to switch to a different panel
                 } else if(strMessage.contains("mGAME_PANEL")) {
                     state = State.GAME;
                     for(int intCount = 0; intCount < 2; intCount++) {
                         handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
                         handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
                     }
+                    //host tells client to switch to a different panel, adds barriers from the game to ensure players don't fall
                     theFrame.setContentPane(thePanels[5]);
                     thePanels[5].requestFocusInWindow();
                     theFrame.pack();
@@ -448,6 +507,7 @@ public class Main implements ActionListener, WindowListener {
                     String strPayload = strMessage.split("~")[1];
 
                     chatTextArea.append(strPayload + "\n");
+                    //recives messages and adds them to the chat
                 }
             }
         }
@@ -468,6 +528,7 @@ public class Main implements ActionListener, WindowListener {
         } else if(evt.getSource() == mainMenuButtons[3]) {
             System.exit(0);
         }
+        //switches between menus based on which button was pressed
 
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             if(evt.getSource() == backButtons[intCount]) {
@@ -478,7 +539,7 @@ public class Main implements ActionListener, WindowListener {
                         ssm = null;
                         intSessionId = 0;
                         intServerSize = 0;
-
+                        //used to disconnect the host
                         for(int intCount2 = 0; intCount2 < blnAvailableIds.length; intCount2++) {
                             blnAvailableIds[intCount2] = true;
                         }
@@ -493,7 +554,7 @@ public class Main implements ActionListener, WindowListener {
                         netTextFields[3].setText("");
                         netTextAreas[1].setText("");
                     }
-
+                    //resets everything on the hosts end
                     intHelpScreenCount = 0;
 
                     state = State.MAIN_MENU;
@@ -519,6 +580,7 @@ public class Main implements ActionListener, WindowListener {
                     for(int intCount2 = 0; intCount2 < characterButtons.length; intCount2++) {
                         characterButtons[intCount2].setEnabled(true);
                     }
+                    //clears up all session dis and ensures the buttons should be working
                     readyButton.setEnabled(false);
                     for(int intCount2 = (intSessionId == 1) ? 0 : 2; intCount2 < netTextFields.length; intCount2++) {
                         netTextFields[intCount2].setText("");
@@ -531,6 +593,7 @@ public class Main implements ActionListener, WindowListener {
                     intServerSize = 0;
                     intCurrentButton = -1;
                     intReady = 0;
+                    // the host is ready to host another game 
                 }
             }
         }
@@ -539,7 +602,7 @@ public class Main implements ActionListener, WindowListener {
         else netButtons[0].setEnabled(false);
         if(ssm == null && !netTextFields[2].getText().equals("") && !netTextFields[3].getText().equals("")) netButtons[1].setEnabled(true);
         else netButtons[1].setEnabled(false);
-        
+        //ensures that if there is no connection, players cant join or host
         if(evt.getSource() == netButtons[0]) {
             ssm = new SuperSocketMaster(8080, this);
             ssm.connect();
@@ -552,12 +615,13 @@ public class Main implements ActionListener, WindowListener {
             for(int intCount = 0; intCount < chrCharacters.length; intCount++) {
                 chrCharacters[intCount] += 55;
             }
-
+            //creates the join code through char to int conversion
             netTextAreas[0].append(" " + netTextFields[0].getText() + " joined");
             strNameList[0] = netTextFields[0].getText();
             netTextFields[1].setText(new String(chrCharacters));
             netButtons[0].setEnabled(false);
-            netStartButton.setEnabled(true);
+            netStartButton.setEnabled(false);
+            //adds a name to the name array while also preparing the game
         } else if(evt.getSource() == netButtons[1]) {
             if(netTextFields[2].getText().toString().isEmpty() == false){
                 netButtons[1].setEnabled(false);
@@ -570,6 +634,7 @@ public class Main implements ActionListener, WindowListener {
                 ssm.connect();
                 ssm.sendText("c0>h>mCLIENT_JOIN~" + netTextFields[2].getText());
                 netButtons[1].setEnabled(false);
+                //sends a message when a client has joined a server
             }
         }
 
@@ -586,17 +651,16 @@ public class Main implements ActionListener, WindowListener {
                 if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
                 characterButtons[intCount].setEnabled(false);
                 if(intPreviousButton == -1) readyButton.setEnabled(true);
+                //used to ensure when someone picks a character, that button is disabled and the past button would be enables
             }
         }
-
-        if(ssm != null) netStartButton.setEnabled(true);
-        else netStartButton.setEnabled(false);
 
         if(evt.getSource() == netStartButton) {
             state = State.CHARACTER;
             ssm.sendText("h>a>mCHARACTER_PANEL");
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
+            //switches panels to the character selection panel
         }
         
         if(evt.getSource() == readyButton) {
@@ -613,6 +677,7 @@ public class Main implements ActionListener, WindowListener {
                 } else if(intCharacterSelections[0] == 3) {
                     handler.addObject(new Wizard(150, 800, 32, 64, ObjectId.PLAYER, handler, null, input, 0), 0);
                 }
+                //adds in all of the players and barriers for the game to begin
 
                 for(int intCount = 0; intCount < 2; intCount++) {
                     handler.addObject(new Barrier(0, (intCount == 0) ? 800 : -40, 1200, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
@@ -620,7 +685,7 @@ public class Main implements ActionListener, WindowListener {
                 }
 
                 state = State.DEMO;
-
+                //makes the panel switch to the demo panel
                 theFrame.setContentPane(thePanels[6]);
                 thePanels[6].requestFocusInWindow();
                 theFrame.pack();
@@ -646,23 +711,21 @@ public class Main implements ActionListener, WindowListener {
                     ssm.sendText("h>a>aWIZARD~" + (150 + 40 * intCount) + "," + 1400 + "," + 32 + "," + 64 + "," + intCount);
                 }
             }
+            //if the state is game, add all the characters and ensure all clients add as well by senidng a message
             ssm.sendText("h>a>mGAME_PANEL");
             for(int intCount = 0; intCount < 2; intCount++) {
                 handler.addObject(new Barrier(0, (intCount == 0) ? 1440 : -40, 1920, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
                 handler.addObject(new Barrier((intCount == 0) ? -40 : 1920, 0, 40, 1440, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
+                //adds in all of the barriers to ensure players don't cross vertically or horizontally
             }
             theFrame.setContentPane(thePanels[5]);
             thePanels[5].requestFocusInWindow();
             theFrame.pack();
         }
 
-        if(state == State.GAME && intRoomCount == 8) {
-            System.out.println("h");
-        }
-
         chatTextArea.setVisible((input.buttonSet.contains(InputHandler.InputButtons.ENTER)) ? true : false);
         chatTextField.setVisible((input.buttonSet.contains(InputHandler.InputButtons.ENTER)) ? true : false);
-
+        //turns the chat area on and off depending on if the enter key was pressed
         if(evt.getSource() == chatTextField) {
             input.buttonSet.remove(InputHandler.InputButtons.ENTER);
             chatTextArea.append(strNameList[intSessionId - 1] + ": " + chatTextField.getText() + "\n");
@@ -672,10 +735,12 @@ public class Main implements ActionListener, WindowListener {
             else ssm.sendText("c" + intSessionId + ">h>cCHAT~" + strNameList[intSessionId - 1] + ": " + chatTextField.getText());
 
             thePanels[5].requestFocusInWindow();
+            //sends a message with the contents of the chat
         }
 
         if(intHelpScreenCount == 0) helpMenuButtons[0].setEnabled(false);
         else helpMenuButtons[0].setEnabled(true);
+        //used for traversing across the helpscreen 
 
         if(intHelpScreenCount == 7) {
             helpMenuButtons[1].setEnabled(false);
@@ -684,6 +749,7 @@ public class Main implements ActionListener, WindowListener {
             helpMenuButtons[1].setEnabled(true);
             helpMenuButtons[2].setVisible(false);
         }
+        //makes certain help menu buttons on or off
 
         if(intRoomCount > 1 && state == State.DEMO) {
             handler.clearList();
@@ -702,6 +768,7 @@ public class Main implements ActionListener, WindowListener {
 
             theFrame.setContentPane(thePanels[3]);
             theFrame.pack();
+            //brings the player back to the help screen after the demo
         }
 
         if(evt.getSource() == helpMenuButtons[0]) {

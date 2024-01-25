@@ -22,7 +22,7 @@ public class Barrier extends GameObject {
     }
 
     public void update() {
-        
+        //static
     }
 
     public void draw(Graphics g) {
@@ -33,9 +33,11 @@ public class Barrier extends GameObject {
                 g2d.drawImage(biTexture, (int)(fltWorldX + biTexture.getWidth() * intCount1 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY + biTexture.getHeight() * intCount2 - camObject.getWorldY() - camObject.getHeight()/2), null);
             }
         }
+        //draws out the sprite for the barrier
     }
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        //the hitbox for the barrier to ensure other objects don't go into it
     }
 }

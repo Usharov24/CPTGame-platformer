@@ -33,22 +33,26 @@ public class Item extends GameObject {
         this.id = id;
 
         intItem = (int)Math.floor(Math.random() * 9 + 1); 
+        //randomly determines the rarity of the item
         if(intItem == 10) {
             intItem = (int)Math.floor(Math.random() * 5 + 1);
             biImg = biLegyItems[intItem-1];
-
             intRarity = 1;
             
-            
+            //when rarity has been discovered, randomly select an item from that rarity
         } else if(intItem > 6 && intItem != 10) {
             intItem = (int)Math.floor(Math.random() * 6 + 1);
             biImg = biRareItems[intItem-1];
             intRarity = 2;
+            //when rarity has been discovered, randomly select an item from that rarity
+
             
         } else {
             intItem = (int)Math.floor(Math.random() * 8 + 1);
             biImg = biCommonItems[intItem-1];
             intRarity = 3;
+            //when rarity has been discovered, randomly select an item from that rarity
+
         }
 
         camObject = handler.getObject(Main.intSessionId - 1);
@@ -64,7 +68,7 @@ public class Item extends GameObject {
         }
 
         collisions();
-
+        //makes the item fall if needed
         fltWorldY += fltVelY;
     }
 
@@ -80,6 +84,7 @@ public class Item extends GameObject {
 
                     fltWorldY = object.getWorldY() - fltHeight;
                 }
+                //does not pass through barriers
             }
         }
     }
@@ -89,11 +94,13 @@ public class Item extends GameObject {
         if(!blnActive) return;
 
         g.drawImage(biImg, (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+        //draws the sprite of the image
     }
 
     public Rectangle getBounds() {
         if(blnActive) return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         else return new Rectangle();
+        //if item is active, create its hitbox
     }
 
     public int getRarity(){
@@ -103,4 +110,5 @@ public class Item extends GameObject {
     public int getPlacement(){
      return this.intItem;
     }
+    //used to get the specifics of the item
 }

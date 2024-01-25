@@ -19,22 +19,27 @@ public class Explosion extends GameObject {
     public void update() {
         fltWidth -= 15;
         fltHeight -= 15;
+        //slowly decreases in size
         if(fltWidth < 0){
             handler.removeObject(this);
+            //when explosion is gone, remove it
         }
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
         g.fillOval((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        //draw the explosion
         
     }
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY -fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        //hitbox of the explosion
     }
 
     public float getDmg(){
         return this.fltDmg;
     }
+    //damage used to hurt enemies
 }

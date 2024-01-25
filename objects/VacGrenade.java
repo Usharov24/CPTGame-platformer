@@ -27,6 +27,7 @@ public class VacGrenade extends GameObject {
     
     public void update() {
         if(blnActive) {
+            //active determines if the grenade has stopped moving
             for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
                 GameObject object = handler.getObject(intCount);
 
@@ -35,7 +36,7 @@ public class VacGrenade extends GameObject {
                     float fltDiffY = fltWorldY + fltHeight/2 - object.getWorldY() - object.getHeight()/2;
                     float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
 
-                    if(fltLength <= 400) {
+                    if(fltLength <= 700) {
                         fltDiffX /= fltLength;
                         fltDiffY /= fltLength;
                         Enemy enemy = (Enemy) object;
@@ -43,11 +44,13 @@ public class VacGrenade extends GameObject {
                         enemy.setVelY(enemy.getVelY() + fltDiffY * 12);
                     }
                 }
+                //sucks the nearby enemies towards the grenade
             }
             
             if(((int)System.currentTimeMillis() - intStartTime)/1000 == 10) {
                 handler.removeObject(this);
             }
+            //after a set amount of time, remove it
         }
         
         fltVelY += 3;
@@ -57,7 +60,7 @@ public class VacGrenade extends GameObject {
 
         if(fltVelY > 25) fltVelY = 25;
         else if(fltVelY < -25) fltVelY = -25;
-
+        //reponsible for the movement of the grenade
         collisions();
 
         fltWorldX += fltVelX;
@@ -85,6 +88,7 @@ public class VacGrenade extends GameObject {
                     fltVelY = 0;
                     fltWorldY = object.getWorldY() + object.getHeight();
                 }
+                //mkaes sure the grenade doesnt clip through anything
             }
         }
     }
@@ -92,6 +96,7 @@ public class VacGrenade extends GameObject {
     public void draw(Graphics g) {
         if(blnActive) g.drawImage(biTextures[1], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
         else g.drawImage(biTextures[0], (int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), null);
+        //draws a certain sprite showing whether the grenade is active or not
     }
 
     public Rectangle getBounds() {
@@ -101,6 +106,7 @@ public class VacGrenade extends GameObject {
         else if(fltBoundsX < fltWorldX - fltWidth * 2f - camObject.getWorldX() - camObject.getWidth()/2) fltBoundsX = fltWorldX - fltWidth * 2f - camObject.getWorldX() - camObject.getWidth()/2;
 
         return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
+        //the hit box of the grenade
     }
 
     public Rectangle getBounds2() {
@@ -110,5 +116,7 @@ public class VacGrenade extends GameObject {
         else if(fltBoundsY < fltWorldY - fltHeight * 2f - camObject.getWorldY() - camObject.getHeight()/2) fltBoundsY = fltWorldY - fltHeight * 2f - camObject.getWorldY() - camObject.getHeight()/2;
 
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2) + 4, (int)fltBoundsY, (int)fltWidth - 8, (int)fltHeight);
+        //the hit box of the grenade
     }
+    //used to ensure the grenade doesn't pass through barriers
 }

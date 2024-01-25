@@ -33,33 +33,33 @@ public class WaveAttacks extends GameObject {
         this.intBleedCount = intBleedCount;
         this.fltBurnDmg = fltBurnDmg;
         this.intCelebShot = intCelebShot;
-
+        //all necessary parameters
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
     public void update() {
         fltSpread += 15;
-
+        //widens the area of the wave with each update
         collisions();
 
         fltWorldX+= fltVelX;
         fltWorldY += fltVelY;
+        //moves the wave in the direction
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        //g.drawArc((int)(fltWorldX - Math.abs(Math.cos(fltStartAngle))) , (int) (fltWorldY + Math.abs(Math.sin(fltStartAngle))),intSpread, intSpread, (int)fltStartAngle + 45,  -90);
-        //g.drawArc((int)fltWorldX, (int)fltWorldY, (int) (10 + Math.abs(intSpread*Math.cos(fltStartAngle))), (int) (10 + Math.abs(intSpread*Math.sin(fltStartAngle))), (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltWorldX-fltSpread/2 - camObject.getWorldX() - camObject.getWidth()/2), (int) (fltWorldY - fltSpread/2 - camObject.getWorldY() - camObject.getHeight()/2), (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltWorldX-fltSpread/2 - camObject.getWorldX() - camObject.getWidth()/2)-1, (int) (fltWorldY - fltSpread/2 - camObject.getWorldY() - camObject.getHeight()/2)-1, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltWorldX-fltSpread/2 - camObject.getWorldX() - camObject.getWidth()/2)-2, (int) (fltWorldY - fltSpread/2 - camObject.getWorldY() - camObject.getHeight()/2)-2, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltWorldX-fltSpread/2 - camObject.getWorldX() - camObject.getWidth()/2)-3, (int) (fltWorldY - fltSpread/2 - camObject.getWorldY() - camObject.getHeight()/2)-3, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
         g.drawArc((int)(fltWorldX-fltSpread/2 - camObject.getWorldX() - camObject.getWidth()/2)-4, (int) (fltWorldY - fltSpread/2 - camObject.getWorldY() - camObject.getHeight()/2)-4, (int) fltSpread, (int) fltSpread, (int)fltStartAngle + 45,  -90);
-        
+        //draws an arc
     }
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        //returns the hitboxes of the arc
     }
 
     private void collisions() {
@@ -67,7 +67,7 @@ public class WaveAttacks extends GameObject {
         if(fltWorldX < 0 || fltWorldX > 1920){
             handler.removeObject(this);
         }
-        
+        //if the arc leaves the room, remove it
     }
 
     public int getBoom(){
@@ -104,4 +104,5 @@ public class WaveAttacks extends GameObject {
     public float getVelY(){
         return this.fltVelY;
     }
+    //all used in the enemy class to ensure enemies take the correct amount of dmg
 }

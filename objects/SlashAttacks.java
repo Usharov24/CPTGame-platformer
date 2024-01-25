@@ -33,7 +33,7 @@ public class SlashAttacks extends GameObject {
         this.intBleedCount = intBleedCount;
         this.fltBurnDmg = fltBurnDmg;
         this.intCelebShot = intCelebShot;
-
+        //all the characteristics for the slashes
         camObject = handler.getObject(Main.intSessionId - 1);
     }
     
@@ -41,16 +41,17 @@ public class SlashAttacks extends GameObject {
         
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
-        
+        //moves the slash in a direction
         if(System.currentTimeMillis() - lngbirth > 100){
             if(intBoomRad > 0){
                 handler.addObject(new Explosion(fltWorldX - intBoomRad/2, fltWorldY - intBoomRad/2, fltDmg, intBoomRad*2, intBoomRad*2,ObjectId.BOOM, handler, ssm));
-                //arbitary value to make sure bomb doesnt explode multiple times
+                //timer to remove the object which also checks to make sure that the slash explodes if needed
             }  
             handler.removeObject(this);
         }
 
         collisions();
+        //checks if the slash is out of bounds
     }
 
     public void draw(Graphics g) {
@@ -59,51 +60,55 @@ public class SlashAttacks extends GameObject {
         for(int intCount = -2; intCount < 3; intCount++) {
             g.drawArc((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2) + intCount, (int) (fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int) fltWidth, (int) fltHeight, (int)fltStartAngle + 45, -90);
         }
+        //drawing of the arc
     }
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
+        //the hitbox of the slash
     }
     private void collisions() {
         
         if(fltWorldX < 0 || fltWorldX > 1920){
             handler.removeObject(this);
-            
         }
+        //checks if the slash collided with the outside barriers
     }
 
     public int getBoom(){
         return (int)fltExplosionRadius;
     }
+    //used to make sure enemies explode when needed
     public float getDmg(){
         return fltDmg;
     }
-
+    //afflicts dmg to enemies
     public float getBurn(){
         return fltBurnDmg;
     }
-
+    //burn dmg which is a type of dmg that ticks every frame
     public float getBleed(){
         return intBleedCount;
     }
-
+    //bleed dmg which does a burst of dmg after 5 strikes
     public int getChar(){
         return this.intSender;
     }
-
+    //used for lifesteal
     public float getLifeSteal(){
         return this.fltLifeSteal;
     }
-
+    //used for lifesteal as well
     public int getCelebShot(){
         return this.intCelebShot;
     }
-
+    //used to spot in bullets from the item
     public float getVelX(){
         return this.fltVelX;
     }
-
+    //returns x velocity
     public float getVelY(){
         return 0;
     }
+    //returns y velocity
 }

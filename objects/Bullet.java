@@ -114,21 +114,6 @@ public class Bullet extends GameObject {
         }
     }
 
-    public int getBoom(){
-        return (int)fltExplosionRadius;
-    }
-    public float getDmg(){
-        return fltDmg;
-    }
-
-    public float getBurn(){
-        return fltBurnDmg;
-    }
-
-    public float getBleed(){
-        return intBleedCount;
-    }
-
     public int getPeirce(){
         return intPeirceCount;
     }
@@ -136,24 +121,42 @@ public class Bullet extends GameObject {
     public void setPeirce(int intPeirceCount){
         this.intPeirceCount = intPeirceCount;
     }
+    //the two functions are used to determine when a bullet should despawn
 
+    public int getBoom(){
+        return (int)fltExplosionRadius;
+    }
+    //used to make sure enemies explode when needed
+    public float getDmg(){
+        return fltDmg;
+    }
+    //afflicts dmg to enemies
+    public float getBurn(){
+        return fltBurnDmg;
+    }
+    //burn dmg which is a type of dmg that ticks every frame
+    public float getBleed(){
+        return intBleedCount;
+    }
+    //bleed dmg which does a burst of dmg after 5 strikes
     public int getChar(){
         return this.intSender;
     }
-
+    //used for lifesteal
     public float getLifeSteal(){
         return this.fltLifeSteal;
     }
-
+    //used for lifesteal as well
     public int getCelebShot(){
         return this.intCelebShot;
     }
-
+    //used to spot in bullets from the item
     public float getVelX(){
         return this.fltVelX;
     }
-
+    //returns x velocity
     public float getVelY(){
-        return this.fltVelY;
+        return 0;
     }
+    //returns y velocity
 }

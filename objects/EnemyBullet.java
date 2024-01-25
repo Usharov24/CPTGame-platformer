@@ -13,8 +13,6 @@ import java.awt.Color;
 
 public class EnemyBullet extends GameObject {
 
-    private BufferedImage biTexture;
-
     private float fltExplosionRadius;
     private boolean blnHoming;
     private float fltDmg;
@@ -23,7 +21,6 @@ public class EnemyBullet extends GameObject {
         super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
         this.fltVelX = fltVelX;
         this.fltVelY = fltVelY;
-        this.biTexture = biTexture;
         this.blnHoming = blnHoming;
         this.fltDmg = fltDmg;
         this.fltExplosionRadius = fltExplosionRadius;
@@ -38,6 +35,7 @@ public class EnemyBullet extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             collisions();
+            //moves and checks forcollisions
         }   
         else{
             float fltTargetX = findNearestObject(fltWorldX, fltWorldY).getWorldX();
@@ -57,36 +55,37 @@ public class EnemyBullet extends GameObject {
             fltWorldX += fltVelX;
             fltWorldY += fltVelY;
             collisions();
+            //homes in on the player and checks for collisions
         }
     }
 
     public void draw(Graphics g) {
-        g.drawImage(biTexture, (int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2),(int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), null);
         g.setColor(Color.red);
-
-        
-        
         g.fillRect((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
+    //the drawing of the bullet
 
     public Rectangle getBounds() {
         return new Rectangle((int)(fltWorldX - fltWidth/2 - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - fltHeight/2 - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
     }
+    //the hitbox of the bullet
 
     public GameObject findNearestObject(float fltWorldX, float fltWorldY){
         float fltDistX = 0;     
         float fltDistY = 0;
         float flttotaldist = 0;
-        float fltpastTotal = 0;
+        float fltpastTotal = 9999999;
+        //arbitary value to make sure the totaldist is less
         int intreturn = 0;
         for(int i = 0; i < handler.objectList.size(); i++) {
             if(handler.getObject(i).getId() == ObjectId.PLAYER) {
                 fltDistX = fltWorldX - handler.getObject(i).getWorldX();
                 fltDistY = fltWorldY - handler.getObject(i).getWorldY();
                 flttotaldist = (float) Math.sqrt(fltDistX*fltDistX + fltDistY*fltDistY);
-                if(flttotaldist > fltpastTotal){
+                if(flttotaldist < fltpastTotal){
                     fltpastTotal = flttotaldist;
                     intreturn = i;
+                    //finds the nearest object
                 }
             }
         }
@@ -102,7 +101,7 @@ public class EnemyBullet extends GameObject {
                     handler.removeObject(this);
                     if(fltExplosionRadius > 0){
                         handler.addObject(new EnemyExplosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.ENEMY_BOOM, handler, ssm));
-                        //arbitary value to make sure bomb doesnt explode multiple times
+                        ///if the bullet hits a barrier, remove it and then create an explosion if necessary
                     }        
                 }
             }      

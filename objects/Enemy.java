@@ -21,6 +21,7 @@ public class Enemy extends GameObject {
     private BufferedImage[] biBullets = resLoader.loadImages("/res\\SniperBullet.png");
     private BufferedImage biImg;
     private String[][] strEnemValues = resLoader.loadCSV("/res\\EnemValues.csv");
+    //holds the values for all the enemies
 
 
     private double dblTimer = System.currentTimeMillis();
@@ -98,7 +99,7 @@ public class Enemy extends GameObject {
                 biImg = biBigEnem[1];
             }
         }
-
+        //uses the CSV from earlier to load stats into the enemy
         camObject = handler.getObject(Main.intSessionId - 1);
 
         //defines the enemy stats
@@ -291,21 +292,20 @@ public class Enemy extends GameObject {
                 }
                 //if the enemy collides witha  barrier, stop it
             } else if(object.getId() == ObjectId.BULLET && System.currentTimeMillis() - lngHitTimer > 100) {
+                //lngtimer is the immunity frames for the enemies
                 if(getBounds().intersects(object.getBounds())){
-                    //handler.getObject(i) -- player dmg
-                    handler.removeObject(object);
                     Bullet bullet = (Bullet) object;
                     if(bullet.getPeirce() == 0){
                         handler.removeObject(object);
                     }
                     else{
                         bullet.setPeirce(bullet.getPeirce()-1);
+                        //removes the bullet if the bullet is out of peirce, lowers peirce by one
                     }
                     fltHP -= bullet.getDmg();
-
+                    //takes dmg from the bullet
                     if(bullet.getBoom()> 0){
                         float fltExplosionRadius = bullet.getBoom();
-                        //handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, bullet.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = bullet.getBurn();
                         intBleedCount = (int) bullet.getBleed();
@@ -321,16 +321,15 @@ public class Enemy extends GameObject {
             }
             else if(object.getId() == ObjectId.WAVE && System.currentTimeMillis() - lngHitTimer > 100) {
                 if(getBounds().intersects(object.getBounds())){
-                    //handler.getObject(i) -- player dmg
                     WaveAttacks wave = (WaveAttacks) object;
                     fltHP -= wave.getDmg();
 
                     if(wave.getBoom() > 0){
                         float fltExplosionRadius = wave.getBoom();
-                        //handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, wave.getDmg(), fltExplosionRadius * 2, fltExplosionRadius * 2,ObjectId.BOOM, handler, ssm));
                         fltBurnDmg = wave.getBleed();
                         intBleedCount = (int) wave.getBleed();
+                        //gets the needed parameters
                     }
                     
                     if(wave.getCelebShot() > 0) {
@@ -448,5 +447,5 @@ public class Enemy extends GameObject {
     public void setLeft(boolean blnLeft){
         this.blnLeft = blnLeft;
     }
-    //all used from other classes.
+    //all used from other classes and mostly networking to ensure enemies are consistent
 }
