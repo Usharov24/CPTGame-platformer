@@ -108,7 +108,6 @@ public class Bullet extends GameObject {
                     if(fltExplosionRadius > 0){
                         handler.removeObject(this);
                         handler.addObject(new Explosion(fltWorldX - fltExplosionRadius/2, fltWorldY - fltExplosionRadius/2, fltDmg, fltExplosionRadius*2, fltExplosionRadius*2,ObjectId.BOOM, handler, ssm));
-                        
                     }        
                 }
             }        

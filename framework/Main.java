@@ -22,16 +22,25 @@ public class Main implements ActionListener, WindowListener {
     public static SuperSocketMaster ssm;
     private InputHandler input = new InputHandler();
     private ResourceLoader resLoader = new ResourceLoader();
-    // Frame
-    public static JFrame theFrame = new JFrame("Annihilation Station");
-    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true)};
+
     private BufferedImage[] biMenuButtons = resLoader.loadSpriteSheet("/res\\MenuButtons.png", 210, 110);
     private BufferedImage[] biNetButtons = resLoader.loadSpriteSheet("/res\\NetButtons.png", 810, 90);
-    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
+    private BufferedImage[][] biArrowButtons = resLoader.loadSpriteSheet("/res\\ArrowButtons.png", 110, 210, 2, 7);
     private BufferedImage[][] biCharacterButtons = resLoader.loadSpriteSheet("/res\\CharacterButtons.png", 300, 300, 4, 7);
+    private BufferedImage[] biTileTextures = resLoader.loadSpriteSheet("/res\\TileTextures.png", 40, 40);
+
+    // Frame
+    public static JFrame theFrame = new JFrame("Annihilation Station");
+
+    private CustomPanel[] thePanels = {new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, false), 
+                                       new CustomPanel(null, false), new CustomPanel(null, false), new CustomPanel(null, true), 
+                                       new CustomPanel(null, true)};
+    
     // Main Menu Components
     private CustomButton[] mainMenuButtons = {new CustomButton(200, 100, "Host", biMenuButtons, this), new CustomButton(200, 100, "Join", biMenuButtons, this), 
                                               new CustomButton(200, 100, "Help", biMenuButtons, this), new CustomButton(200, 100, "Quit", biMenuButtons, this)};
+    private CustomButton[] helpMenuButtons = {new CustomButton(100, 200, biArrowButtons[1], this), new CustomButton(100, 200, biArrowButtons[0], this), 
+                                              new CustomButton(200, 100, "Demo", biMenuButtons, this)};
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
                                           new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
     // Host & Join Components
@@ -51,7 +60,8 @@ public class Main implements ActionListener, WindowListener {
     private Timer timer = new Timer(1000/60, this);
     public static State state = State.MAIN_MENU;
     public enum State {
-        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5);
+        MAIN_MENU(0), HOST_MENU(1), JOIN_MENU(2), HELP(3), CHARACTER(4), GAME(5), DEMO(6);
+
         private final int intPanelNumber;
         State(int intPanelNumber) {
             this.intPanelNumber = intPanelNumber;
@@ -64,6 +74,7 @@ public class Main implements ActionListener, WindowListener {
     public static int intSessionId;
     public static int intRoomCount;
     public static int intServerSize;
+    public static int intHelpScreenCount = 0;
     private int intCurrentButton = -1, intPreviousButton = -1;
     private int intReady;
     private int[] intCharacterSelections = {-1, -1, -1, -1};
@@ -77,12 +88,23 @@ public class Main implements ActionListener, WindowListener {
         thePanels[5].addKeyListener(input);
         thePanels[5].addMouseListener(input);
         thePanels[5].addMouseMotionListener(input);
+
+        thePanels[6].addKeyListener(input);
+        thePanels[6].addMouseListener(input);
+        thePanels[6].addMouseMotionListener(input);
+
         // Start Panel Components ///////////////////////////////////////////////////////////////////
         for(int intCount = 0; intCount < mainMenuButtons.length; intCount++) {
             mainMenuButtons[intCount].setLocation(540, 200 + 110 * intCount);
             thePanels[0].add(mainMenuButtons[intCount]);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////
+
+        for(int intCount = 0; intCount < helpMenuButtons.length; intCount++) {
+            helpMenuButtons[intCount].setLocation((intCount == 2) ? 535 : 30 + 1120 * intCount, (intCount == 2) ? 350 : 255);
+            thePanels[3].add(helpMenuButtons[intCount]);
+        }
+
         // Host & Join Panels /////////////////////////////////////////////////////////////////////
         // May combine loops
         // Subject to change as menu is refined
@@ -373,17 +395,26 @@ public class Main implements ActionListener, WindowListener {
                         netTextFields[3].setText("");
                         netTextAreas[1].setText("");
                     }
+
+                    intHelpScreenCount = 0;
+
                     state = State.MAIN_MENU;
                     theFrame.setContentPane(thePanels[0]);
                     theFrame.pack();
                 } else if(intCount == 3) {
-                    ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
-                    ssm.disconnect();
-                    ssm = null;
-                    intSessionId = 0;
-                    intServerSize = 0;
-                    intCurrentButton = -1;
-                    intReady = 0;
+                    if(intSessionId == 1 && ssm != null) state = State.HOST_MENU;
+                    else if(ssm != null) state = State.JOIN_MENU;
+                    else state = State.HELP;
+
+                    theFrame.setContentPane((ssm != null) ? (intSessionId == 1) ? thePanels[1] : thePanels[2] : thePanels[3]);
+                    theFrame.pack();
+                    
+                    if(ssm != null) {
+                        ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
+                        ssm.disconnect();
+                        ssm = null;
+                    }
+
                     for(int intCount2 = 0; intCount2 < blnAvailableIds.length; intCount2++) {
                         blnAvailableIds[intCount2] = true;
                     }
@@ -394,12 +425,14 @@ public class Main implements ActionListener, WindowListener {
                     for(int intCount2 = (intSessionId == 1) ? 0 : 2; intCount2 < netTextFields.length; intCount2++) {
                         netTextFields[intCount2].setText("");
                     }
-        
+
                     if(intSessionId == 1) netTextAreas[0].setText("");
                     else netTextAreas[1].setText("");
-                    state = (intSessionId == 1) ? State.HOST_MENU : State.JOIN_MENU;
-                    theFrame.setContentPane((intSessionId == 1) ? thePanels[1] : thePanels[2]);
-                    theFrame.pack();
+
+                    intSessionId = 0;
+                    intServerSize = 0;
+                    intCurrentButton = -1;
+                    intReady = 0;
                 }
             }
         }
@@ -440,8 +473,10 @@ public class Main implements ActionListener, WindowListener {
             if(evt.getSource() == characterButtons[intCount]) {
                 intPreviousButton = intCurrentButton;
                 intCurrentButton = intCount;
-                if(intSessionId == 1) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
-                else ssm.sendText("c" + intSessionId + ">h>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
+
+                if(intSessionId == 1 && ssm != null) ssm.sendText("h>a>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
+                else if(ssm != null) ssm.sendText("c" + intSessionId + ">h>mCHARACTER_SELECTED~" + intCurrentButton + "," + intPreviousButton);
+
                 if(intSessionId == 1) intCharacterSelections[0] = intCurrentButton;
                 
                 if(intPreviousButton != -1) characterButtons[intPreviousButton].setEnabled(true);
@@ -457,12 +492,38 @@ public class Main implements ActionListener, WindowListener {
             theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
         }
+        
         if(evt.getSource() == readyButton) {
-            if(intSessionId == 1) intReady++;
-            else ssm.sendText("c" + intSessionId + ">h>mREADY");
+            if(intSessionId == 1 && ssm != null) intReady++;
+            else if(ssm != null) ssm.sendText("c" + intSessionId + ">h>mREADY");
+
+            if(ssm == null) {
+                if(intCharacterSelections[0] == 0) {
+                    handler.addObject(new Sniper(150, 800, 32, 64, ObjectId.PLAYER, handler, null, input, 0), 0);
+                } else if(intCharacterSelections[0] == 1) {
+                    handler.addObject(new Brute(150, 800, 32, 64, ObjectId.PLAYER, handler, null, input, 0), 0);
+                } else if(intCharacterSelections[0] == 2) {
+                    handler.addObject(new Knight(150, 800, 32, 64, ObjectId.PLAYER, handler, null, input, 0), 0);
+                } else if(intCharacterSelections[0] == 3) {
+                    handler.addObject(new Wizard(150, 800, 32, 64, ObjectId.PLAYER, handler, null, input, 0), 0);
+                }
+
+                for(int intCount = 0; intCount < 2; intCount++) {
+                    handler.addObject(new Barrier(0, (intCount == 0) ? 800 : -40, 1200, 40, (intCount == 0) ? biTileTextures[4] : biTileTextures[6], ObjectId.PERM_BARRIER, handler, null));
+                    handler.addObject(new Barrier((intCount == 0) ? -40 : 1200, 0, 40, 800, (intCount == 0) ? biTileTextures[5] : biTileTextures[7], ObjectId.PERM_BARRIER, handler, null));
+                }
+
+                state = State.DEMO;
+
+                theFrame.setContentPane(thePanels[6]);
+                thePanels[6].requestFocusInWindow();
+                theFrame.pack();
+            }
+
             readyButton.setEnabled(false);
         }
-        if(intSessionId == 1 && state.getValue() == 4 && intReady == intServerSize) {
+
+        if(ssm != null && intSessionId == 1 && state.getValue() == 4 && intReady == intServerSize) {
             state = State.GAME;
             for(int intCount = 0; intCount < intServerSize; intCount++) {
                 if(intCharacterSelections[intCount] == 0) {
@@ -486,6 +547,50 @@ public class Main implements ActionListener, WindowListener {
             }
             theFrame.setContentPane(thePanels[5]);
             thePanels[5].requestFocusInWindow();
+            theFrame.pack();
+        }
+
+        if(intHelpScreenCount == 0) helpMenuButtons[0].setEnabled(false);
+        else helpMenuButtons[0].setEnabled(true);
+
+        if(intHelpScreenCount == 7) {
+            helpMenuButtons[1].setEnabled(false);
+            helpMenuButtons[2].setVisible(true);
+        } else {
+            helpMenuButtons[1].setEnabled(true);
+            helpMenuButtons[2].setVisible(false);
+        }
+
+        if(intRoomCount > 1 && state == State.DEMO) {
+            handler.clearList();
+
+            for(int intCount2 = 0; intCount2 < characterButtons.length; intCount2++) {
+                characterButtons[intCount2].setEnabled(true);
+            }
+            readyButton.setEnabled(false);
+
+            intSessionId = 0;
+            intServerSize = 0;
+            intRoomCount = 0;
+            intCurrentButton = -1;
+
+            state = State.HELP;
+
+            theFrame.setContentPane(thePanels[3]);
+            theFrame.pack();
+        }
+
+        if(evt.getSource() == helpMenuButtons[0]) {
+            intHelpScreenCount--;
+        } else if(evt.getSource() == helpMenuButtons[1]) {
+            intHelpScreenCount++;
+        } else if(evt.getSource() == helpMenuButtons[2]) {
+            state = State.CHARACTER;
+
+            intSessionId = 1;
+            intServerSize = 1;
+
+            theFrame.setContentPane(thePanels[4]);
             theFrame.pack();
         }
     }

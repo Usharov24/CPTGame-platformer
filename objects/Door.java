@@ -33,15 +33,14 @@ public class Door extends GameObject {
     public void update() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
-
+            
             // Check to see if the room is clear of enemies
             if(!blnRoomCleared && object.getId() == ObjectId.ENEMY) {
                 Enemy enemy = (Enemy)object;
-
+                
                 if(enemy.getHP() > 0) {
                     return;
                 } else {
-                    if(intCount == handler.objectList.size() - 1) blnRoomCleared = true;
                     continue;
                 }
             }
@@ -52,18 +51,40 @@ public class Door extends GameObject {
                 intPlayersEntered[intCount] = 0;
             }
         }
+
+        blnRoomCleared = true;
               
         if(Main.intSessionId == 1 && intPlayersEntered[0] + intPlayersEntered[1] + intPlayersEntered[2] + intPlayersEntered[3] == Main.intServerSize) {
             // Remove any remaining object from the list
             // Ex. Enemies, barriers, items, bullets, doors, etc.
             handler.clearEntities();
 
+            GameObject object = handler.getObject(Main.intSessionId - 1);
+
+            if(object instanceof Sniper) {
+                Sniper sniper = (Sniper)object;
+                sniper.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                sniper.setWorldY(1400);
+            } else if(object instanceof Brute) {
+                Brute brute = (Brute)object;
+                brute.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                brute.setWorldY(1400);
+            } else if(object instanceof Knight) {
+                Knight knight = (Knight)object;
+                knight.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                knight.setWorldY(1400);
+            } else if(object instanceof Wizard) {
+                Wizard wizard = (Wizard)object;
+                wizard.setWorldX(150 + 40 * (Main.intSessionId - 1));
+                wizard.setWorldY(1400);
+            }
+
             for(int intCount = 0; intCount < intPlayersEntered.length; intCount++) {
                 intPlayersEntered[intCount] = 0;
             }
 
             Main.intRoomCount++;
-            ssm.sendText("h>a>mNEXT_ROOM");
+            if(ssm != null) ssm.sendText("h>a>mNEXT_ROOM");
         }
     }
 

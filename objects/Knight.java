@@ -74,9 +74,12 @@ public class Knight extends GameObject {
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
 
-        if(fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480) {
+        if(Main.state == Main.State.GAME && (fltWorldX < -40 || fltWorldX > 1960 || fltWorldY < -40 || fltWorldY > 1480)) {
             fltWorldX = 200;
             fltWorldY = 1400;
+        } else if(Main.state == Main.State.DEMO && (fltWorldX < -40 || fltWorldX > 1240 || fltWorldY < -40 || fltWorldY > 840)){
+            fltWorldX = 200;
+            fltWorldY = 800;
         }
 
         if(intPosition == Main.intSessionId - 1) {
@@ -159,10 +162,10 @@ public class Knight extends GameObject {
                     fltDiffY /= fltLength;
 
                 
-                    if(intPosition == 0) {
+                    if(intPosition == 0 && ssm != null) {
                         ssm.sendText("h>a>aBULLET~" +(fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                         ssm.sendText("h>a>aBULLET~" +(fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
-                    } else {
+                    } else if(ssm != null) {
                         ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                         ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 + fltRand2) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand4) * fltBSpeedMult + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 30*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                     }
@@ -176,14 +179,14 @@ public class Knight extends GameObject {
                 if(input.fltMouseX - 640 < 0){
                     handler.addObject(new SlashAttacks(fltWorldX + 25, fltWorldY + 15, -20, System.currentTimeMillis(), 50, 50, 135, 50 * fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.SLASH, handler, ssm));
 
-                    if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135 + "," + 50 * fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135+ "," + 50 * fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
+                    if(intPosition == 0 && ssm != null) ssm.sendText("h>a>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135 + "," + 50 * fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
+                    else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135+ "," + 50 * fltDmgMult+ "," + intExplodeRad+ "," + fltBurnDmg+ "," + intBleedCount+ "," + intCelebShot);
                 }
                 else{
                     handler.addObject(new SlashAttacks(fltWorldX, fltWorldY + 15 , 20, System.currentTimeMillis(), 50, 50, 270, 50*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.SLASH, handler, ssm));
 
-                    if(intPosition == 0) ssm.sendText("h>a>aSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 50 * fltDmgMult+ "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 50 * fltDmgMult+ "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    if(intPosition == 0 && ssm != null) ssm.sendText("h>a>aSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 50 * fltDmgMult+ "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>aSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 50 * fltDmgMult+ "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
                 //shoots the slashes either left or right and then sends the slash over a network
                 }
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON1) && System.currentTimeMillis() - lngTimer[2] > 100 * fltFireRateMult && blnBoost) {
@@ -191,14 +194,14 @@ public class Knight extends GameObject {
                 if(input.fltMouseX - 640 < 0){
                     handler.addObject(new SlashAttacks(fltWorldX + 25, fltWorldY + 15, -20, System.currentTimeMillis() + 300, 50, 50, 135,  60*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.SLASH, handler, ssm));
                     
-                    if(intPosition == 0) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135  + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    if(intPosition == 0 && ssm != null) ssm.sendText("h>a>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135  + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + (fltWorldX + 25) + "," + (fltWorldY + 15) + "," + -20 +"," + 50 + "," + 50 + "," + 135 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
                 }
                 else{
                     handler.addObject(new SlashAttacks(fltWorldX, fltWorldY + 15 , 20, System.currentTimeMillis() + 300, 50, 50, 270,  60*fltDmgMult, intExplodeRad, fltBurnDmg, intBleedCount, fltLifeSteal, intCelebShot, ObjectId.SLASH, handler, ssm));
                     
-                    if(intPosition == 0) ssm.sendText("h>a>aBIGSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
-                    else ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    if(intPosition == 0 && ssm != null) ssm.sendText("h>a>aBIGSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
+                    else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>aBIGSLASH~" + fltWorldX + "," + (fltWorldY + 15) + "," + 20 +"," + 50 + "," + 50 + "," + 270 + "," + 60 * fltDmgMult + "," + intExplodeRad + "," + fltBurnDmg + "," + intBleedCount + "," + intCelebShot);
                 }
                 //used for the ultimate to ensure the slashes last longer
             }else if(input.buttonSet.contains(InputHandler.InputButtons.BUTTON3) && System.currentTimeMillis() - lngTimer[3] > 3000 * fltFireRateMult) {
@@ -215,10 +218,10 @@ public class Knight extends GameObject {
                     float fltRand1 = (float)Math.random() * 3, fltRand2 = (float)Math.random() * 3;
                     float fltRand3 = (float)Math.random() * 3, fltRand4 = (float)Math.random() * 3;
 
-                    if(intPosition == 0) {
+                    if(intPosition == 0 && ssm != null) {
                         ssm.sendText("h>a>aBULLET~" +(fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 60*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                         ssm.sendText("h>a>aBULLET~" +(fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 60*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
-                    } else {
+                    } else if(ssm != null) {
                         ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 - fltRand1) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand3) * fltBSpeedMult  + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 60*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                         ssm.sendText("c" + (intPosition + 1) + ">h>aBULLET~" + (fltWorldX + fltWidth/2 - 3) + "," + (fltWorldY + fltHeight/2 - 3) + "," + (fltDiffX * 20 + fltRand2) * fltBSpeedMult + "," + (fltDiffY * 20 + fltRand4) * fltBSpeedMult + "," + 6 + "," + 6 + "," + intPeirceCount +"," + intBleedCount +","+ fltBurnDmg +","+ 60*fltDmgMult +","+ 4 +","+ blnHoming +","+ intExplodeRad);
                     }
@@ -274,8 +277,8 @@ public class Knight extends GameObject {
             
             fltDmgMult = fltPastDmgMult;
             //resets the damage mult back to standard
-            if(intPosition == 0) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
-            else ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            if(intPosition == 0 && ssm != null) ssm.sendText("h>a>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
+            else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oKNIGHT~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + intPosition);
             //sends player position and parameters over a network
         }
     }

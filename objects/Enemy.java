@@ -36,7 +36,7 @@ public class Enemy extends GameObject {
     private int intEnemyType;
     private int intEnemyClass;
 
-    private boolean blnFalling = true;
+    private boolean blnFalling = false;
     private boolean blnLeft = true;
 
     
@@ -132,9 +132,7 @@ public class Enemy extends GameObject {
                 }
 
                 //makes the enemy follow the player
-            }
-            //shooters
-            if(intEnemyClass == 2){
+            } else if(intEnemyClass == 2){
                 float fltDiffX = fltTargetX - fltWorldX;
                 float fltDiffY = fltTargetY - fltWorldY;
                 
@@ -143,7 +141,7 @@ public class Enemy extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 1500) {
                     dblTimer = System.currentTimeMillis();
-                    ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10 + "," + fltDmg + "," + false + "," + 0);
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 10 + "," + 10 + "," + fltDmg + "," + false + "," + 0);
                     handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 20 , fltDiffY * 20 , 10, 10,  fltDmg*5, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 0));
                 }
             }
@@ -176,8 +174,8 @@ public class Enemy extends GameObject {
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 2000) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 15, fltWorldY + fltHeight/2 - 15, fltDiffX * 20 , fltDiffY * 20 , 30, 30,  fltDmg*4, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 150));
-                    ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 15) + "," + (fltWorldY + fltHeight/2 - 15) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 30 + "," + 30 + "," + fltDmg*4 + "," + false + "," + 150);
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 15, fltWorldY + fltHeight/2 - 15, fltDiffX * 20 , fltDiffY * 20 , 30, 30,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, false, 150));
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 15) + "," + (fltWorldY + fltHeight/2 - 15) + "," + (fltDiffX * 20) + "," + (fltDiffY * 20) + "," + 30 + "," + 30 + "," + fltDmg + "," + false + "," + 150);
                 }
                 //shoots at the player
             }   
@@ -190,17 +188,16 @@ public class Enemy extends GameObject {
                 float fltDiffY = fltTargetY - fltWorldY - fltHeight/2;
                 float fltLength = (float)Math.sqrt(Math.pow(fltDiffX, 2) + Math.pow(fltDiffY, 2));
                 if(fltTargetX > fltWorldX){
-                    fltWorldX +=10;
-                }
-                else{
-                    fltVelX -= 10;
+                    fltVelX = 8;
+                } else {
+                    fltVelX = -8;
                 }
                 fltDiffX /= fltLength;
                 fltDiffY /= fltLength;
                 if (System.currentTimeMillis() - dblTimer > 500) {
                     dblTimer = System.currentTimeMillis();
-                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg*2, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 50));
-                    ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 30) + "," + (fltDiffY * 30) + "," + 10 + "," + 10 + "," + fltDmg*2 + "," + true + "," + 50);
+                    handler.addObject(new EnemyBullet(fltWorldX + fltWidth/2 - 5, fltWorldY + fltHeight/2 - 5, fltDiffX * 30 , fltDiffY * 30 , 10, 10,  fltDmg, ObjectId.ENEMY_BULLET, handler, ssm, null, true, 50));
+                    if(ssm != null) ssm.sendText("h>a>aENEMY_BULLET~" + (fltWorldX + fltWidth/2 - 5) + "," + (fltWorldY + fltHeight/2 - 5) + "," + (fltDiffX * 30) + "," + (fltDiffY * 30) + "," + 10 + "," + 10 + "," + fltDmg + "," + true + "," + 50);
                 }
                 //cooldown on shooting at the player
             }
@@ -210,7 +207,7 @@ public class Enemy extends GameObject {
                     fltVelX -= 3; 
                 }
                 if(fltWorldX < fltTargetX){
-                    fltVelX += 3; 
+                    fltVelX += 3;
                 }
                 if(fltWorldY > fltTargetY){
                     fltVelY -= 3; 
@@ -229,7 +226,7 @@ public class Enemy extends GameObject {
         else if(fltVelX < -35) fltVelX = -35; 
         //caps out the velocities
         
-        if(intEnemyType == 1) fltVelY += 3;
+        if(!(intEnemyType == 2 && intEnemyClass == 1) && !(intEnemyType == 3 && intEnemyClass == 1)) fltVelY += 3;
 
         //gravity!
         if(fltVelX < 0) blnLeft = true;
@@ -249,7 +246,7 @@ public class Enemy extends GameObject {
         }
         //damage interaction
 
-        ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
+        if(ssm != null) ssm.sendText("h>a>oENEMY~" + fltWorldX + "," + fltWorldY + "," + fltHP + "," + blnLeft + "," + intPosition);
     }
 
     public GameObject findNearestObject() {
