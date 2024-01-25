@@ -392,7 +392,10 @@ public class Wizard extends GameObject {
 
         }
     }
-
+    /**
+     * @return void 
+     * this checks for collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);

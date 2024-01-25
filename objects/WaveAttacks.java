@@ -47,22 +47,6 @@ public class WaveAttacks extends GameObject {
      /**
     The int which will store the value celebratory shot count
      **/ 
-
-    public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float intBoomRadintBoomRadintBoomRad, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.fltVelX = fltVelX;
-        this.fltVelY = fltVelY;
-        this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
-        this.handler = handler;
-        this.intBoomRad = intBoomRad;
-        this.id = ObjectId.WAVE;
-        this.fltDmg = fltDmg;
-        this.intBleedCount = intBleedCount;
-        this.fltBurnDmg = fltBurnDmg;
-        this.intCelebShot = intCelebShot;
-        //all necessary parameters
-        camObject = handler.getObject(Main.intSessionId - 1);
-    }
     /**
      * Constructor for the Knight
      * @param fltWorldX - float value for the X position of the knight
@@ -80,6 +64,21 @@ public class WaveAttacks extends GameObject {
      * @param intCelebShot - float value for the height of the knight
      * @param fltLifeSteal - lifesteal value
      */
+    public WaveAttacks(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, float fltStartAngle, float fltDmg, int intBoomRad, float fltBurnDmg, int intBleedCount, float fltLifeSteal, int intCelebShot, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
+        this.fltVelX = fltVelX;
+        this.fltVelY = fltVelY;
+        this.fltStartAngle = (float)Math.toDegrees(fltStartAngle);
+        this.handler = handler;
+        this.intBoomRad = intBoomRad;
+        this.id = ObjectId.WAVE;
+        this.fltDmg = fltDmg;
+        this.intBleedCount = intBleedCount;
+        this.fltBurnDmg = fltBurnDmg;
+        this.intCelebShot = intCelebShot;
+        //all necessary parameters
+        camObject = handler.getObject(Main.intSessionId - 1);
+    }
      
     
     public void update() {
@@ -106,7 +105,10 @@ public class WaveAttacks extends GameObject {
         return new Rectangle((int)(fltWorldX - camObject.getWorldX() - camObject.getWidth()/2), (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2), (int)fltWidth, (int)fltHeight);
         //returns the hitboxes of the arc
     }
-
+    /**
+     * @return void 
+     * this method is collisions
+     */
     private void collisions() {
         
         if(fltWorldX < 0 || fltWorldX > 1920){
@@ -114,38 +116,67 @@ public class WaveAttacks extends GameObject {
         }
         //if the arc leaves the room, remove it
     }
-
+    /**
+     * @return int 
+     * this method reutnrs int
+     */
     public int getBoom(){
         return intBoomRad;
     }
+
+    /**
+     * @return float 
+     * this method returns dmg
+     */
     public float getDmg(){
         return fltDmg;
     }
-
+    /**
+     * @return float 
+     * this method is burn
+     */
     public float getBurn(){
         return fltBurnDmg;
     }
-
+    /**
+     * @return float 
+     * this method is bleed
+     */
     public float getBleed(){
         return intBleedCount;
     }
-
+    /**
+     * @return int 
+     * this method is char
+     */
     public int getChar(){
         return this.intSender;
     }
-
+    /**
+     * @return float 
+     * this method is lifesteal
+     */
     public float getLifeSteal(){
         return this.fltLifeSteal;
     }
-
+    /**
+     * @return int 
+     * this method is celeb shot
+     */
     public int getCelebShot(){
         return this.intCelebShot;
     }
-
+    /**
+     * @return float 
+     * this method is velx
+     */
     public float getVelX(){
         return this.fltVelX;
     }
-
+    /**
+     * @return float 
+     * this method is vely
+     */
     public float getVelY(){
         return this.fltVelY;
     }

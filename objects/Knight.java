@@ -13,29 +13,29 @@ import Framework.SuperSocketMaster;
 import Framework.InputHandler.InputButtons;
 
 public class Knight extends GameObject {
-
-    private InputHandler input;
     /**
     The inputhandler which holds key values
      **/
-    private ResourceLoader resLoader = new ResourceLoader();
+    private InputHandler input;
     /**
     The resource loader which helps load files
      **/
-    private BufferedImage biBulletTexture;
+    private ResourceLoader resLoader = new ResourceLoader();
     /**
     The BufferedImage which stores the bullet texture
      **/
-    private BufferedImage[] biSprite;
+    private BufferedImage biBulletTexture;
     /**
     The BufferedImage which stores the player texturex
      **/
-    private BufferedImage[] biCountDown;
-    /**
+    private BufferedImage[] biSprite;
+        /**
     The BufferedImage which stores the ability cooldowntextures
      **/
-
-
+    private BufferedImage[] biCountDown;
+    /**
+    The float fltDec and atAcc which stores the values for acceleration and deceleration
+     **/
     private float fltAcc = 1f, fltDec = 0.5f;
     /**
     The float fltDec and atAcc which stores the values for acceleration and deceleration
@@ -152,7 +152,7 @@ public class Knight extends GameObject {
     **/
     private boolean blnBoost = false;
     /**
-    The boolean value for boosting which starts off as false
+    The boolean value for homing which starts off as false
     **/
     private boolean blnHoming = false;
     /**
@@ -402,7 +402,10 @@ public class Knight extends GameObject {
             //sends player position and parameters over a network
         }
     }
-
+    /**
+     * @return void 
+     * this checks for collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);

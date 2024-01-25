@@ -27,42 +27,84 @@ public abstract class GameObject {
         this.handler = handler;
         this.ssm = ssm;
     }
-
+    /**
+     * @return void 
+     * updates the method
+     */
     public abstract void update();
+    /**
+     * @return void 
+     * draws stuff
+     */
     public abstract void draw(Graphics g);
+    /**
+     * @return rectangle 
+     * reutrns bounds
+     */
     public abstract Rectangle getBounds();
 
     // World X Coordinate Getter
+    /**
+     * @return float 
+     * getx
+     */
     public float getWorldX() {
         return fltWorldX;
     }
 
     // World X Coordinate Setter
+    /**
+     * @return void 
+     * set x
+     */
     public void setWorldX(float fltWorldX) {
         this.fltWorldX = fltWorldX;
     }
 
     // World Y Coordinate Getter
+    /**
+     * @return float 
+     * gety
+     */
     public float getWorldY() {
         return fltWorldY;
     }
 
     // World Y Coordinate Setter
+    /**
+     * @return void 
+     * set y 
+     */
     public void setWorldY(float fltWorldY) {
         this.fltWorldY = fltWorldY;
     }
 
     // Width Getter
+    // World Y Coordinate Getter
+    /**
+     * @return float 
+     * get width
+     */
     public float getWidth() {
         return fltWidth;
     }
 
     // Height Getter
+    // World Y Coordinate Getter
+    /**
+     * @return float 
+     * get hiehgt
+     */
     public float getHeight() {
         return fltHeight;
     }
 
     // Id Getter
+    // World Y Coordinate Getter
+    /**
+     * @return ObjectId 
+     * get Id
+     */
     public ObjectId getId() {
         return id;
     }

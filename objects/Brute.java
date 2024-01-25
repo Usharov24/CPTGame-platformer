@@ -368,7 +368,10 @@ public class Brute extends GameObject {
             //sends player stats and sets dmg back to normal if changeg
         }
     }
-
+    /**
+     * @return void 
+     * this checks for collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);

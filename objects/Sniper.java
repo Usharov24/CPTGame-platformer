@@ -170,19 +170,6 @@ public class Sniper extends GameObject {
     /**
     The boolean value for homing which starts off as false
     **/
-    
-    public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
-        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
-        this.input = input;
-        this.fltWidth = fltWidth;
-        this.fltHeight = fltHeight;
-        this.intPosition = intPosition;
-
-        biSprite = resLoader.loadImages("/res\\Sniper.png");
-        biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\Shrapnel.png");
-        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
-    }
-
     /**
      * Constructor for the Sniper
      * @param fltWorldX - float value for the X position of the Sniper
@@ -195,6 +182,17 @@ public class Sniper extends GameObject {
      * @param input - the input list of keys
      * @param intPosition - float value for the width of the Sniper
      **/
+    public Sniper(float fltWorldX, float fltWorldY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, InputHandler input, int intPosition) {
+        super(fltWorldX, fltWorldY, fltWidth, fltHeight, id, handler, ssm);
+        this.input = input;
+        this.fltWidth = fltWidth;
+        this.fltHeight = fltHeight;
+        this.intPosition = intPosition;
+
+        biSprite = resLoader.loadImages("/res\\Sniper.png");
+        biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\Shrapnel.png");
+        biCountDown = resLoader.loadImages("/res\\M2.png","/res\\Shift.png","/res\\FKey.png");;
+    }
 
     public void update() {
         if(intPosition != Main.intSessionId - 1 && camObject == null) camObject = handler.getObject(Main.intSessionId - 1);
@@ -415,7 +413,10 @@ public class Sniper extends GameObject {
             else if(ssm != null) ssm.sendText("c" + (intPosition + 1) + ">h>oSNIPER~" + fltWorldX + "," + fltWorldY + "," + blnLeft + "," + fltHP + ","+ fltMaxHP + "," + intPosition);
         }
     }
-
+    /**
+     * @return void 
+     * this checks for collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);

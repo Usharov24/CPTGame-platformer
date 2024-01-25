@@ -13,18 +13,56 @@ import java.awt.Rectangle;
 public class Item extends GameObject {
 
     // Properties
+     /**
+    The int value for type of item
+    **/
     private int intItem;
+     /**
+    The int value for rarity
+    **/
     private int intRarity = 0;
+     /**
+    The boolean value for falling which starts off as true
+    **/
     private boolean blnFalling = true;
+     /**
+    The boolean value for activity which starts off as true
+    **/
     private boolean blnActive = true;
 
     // Images
+    /**
+    The BufferedImage which stores the item texturex
+     **/
     private BufferedImage biImg = null;
+    /**
+    The loaderthat loads textures
+     **/
     private ResourceLoader resLoader = new ResourceLoader();
+    /**
+    The BufferedImage which stores the common textures
+     **/
     private BufferedImage[] biCommonItems = resLoader.loadImages("/res\\AGoo.png", "/res\\Cow.png", "/res\\Wungoos.png", "/res\\GunPowder.png", "/res\\AlienLeg.png", "/res\\PointBrush.png", "/res\\chalk.png", "/res\\ACream.png", "/res\\MoonDust.png");
+    /**
+    The BufferedImage which stores the rare textures
+     **/
     private BufferedImage[] biRareItems = resLoader.loadImages("/res\\ConGrav.png", "/res\\Bornana.png", "/res\\Milk.png", "/res\\KneeCap.png", "/res\\ShotGun.png", "/res\\Slashes.png", "/res\\Fire.png");
+    /**
+    The BufferedImage which stores the legy texturex
+     **/
     private BufferedImage[] biLegyItems = resLoader.loadImages("/res\\VampToes.png", "/res\\Magnet.png", "/res\\GGoo.png", "/res\\MHeart.png", "/res\\Celeb.png");
-
+    /**
+     * Constructor for the Knight
+     * @param fltWorldX - float value for the X position of the knight
+     * @param fltWorldY - float value for the Y position of the knight
+     * @param fltVelX - float value for the velocity X
+     * @param fltVelY - float value for the velocity Y
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param fltWidth - the width
+     * @param fltHeight - the height
+     */
     // Constructor
     public Item(float fltX, float fltY, float fltHeight, float fltWidth, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm) {
         super(fltX, fltY, fltHeight, fltWidth, id, handler, ssm);
@@ -56,6 +94,7 @@ public class Item extends GameObject {
         }
 
         camObject = handler.getObject(Main.intSessionId - 1);
+        
     }
 
     // Handle Falling Items
@@ -73,6 +112,10 @@ public class Item extends GameObject {
     }
 
     // Collision Detection
+    /**
+     * @return void 
+     * this checks for collisions
+     */
     public void collisions(){
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
@@ -102,11 +145,17 @@ public class Item extends GameObject {
         else return new Rectangle();
         //if item is active, create its hitbox
     }
-
+    /**
+     * @return int 
+     * this checks rarity
+     */
     public int getRarity(){
      return this.intRarity;
     }
-
+    /**
+     * @return int 
+     * this checks placement
+     */
     public int getPlacement(){
      return this.intItem;
     }

@@ -10,9 +10,17 @@ import Framework.SuperSocketMaster;
 
 
 public class VacGrenade extends GameObject {
-
+    /**
+     buffered image which is the texture
+     */
     private BufferedImage[] biTextures;
+/**
+     int which is the start time
+     */
     private int intStartTime;
+    /**
+     boolean which deems activity
+     */
     private boolean blnActive = false;
 
     public VacGrenade(float fltWorldX, float fltWorldY, float fltVelX, float fltVelY, float fltWidth, float fltHeight, ObjectId id, ObjectHandler handler, SuperSocketMaster ssm, BufferedImage[] biTextures) {
@@ -24,6 +32,19 @@ public class VacGrenade extends GameObject {
 
         camObject = handler.getObject(Main.intSessionId - 1);
     }
+
+    /**
+     * Constructor for the Knight
+     * @param fltWorldX - float value for the X position of the knight
+     * @param fltWorldY - float value for the Y position of the knight
+     * @param fltVelX - float value for the velocity X
+     * @param fltVelY - float value for the velocity Y
+     * @param id - ObjectId value, the id of the object
+     * @param handler - handler value, which list is it a part of
+     * @param ssm - the ssm of the players
+     * @param fltWidth - the width
+     * @param fltHeight - the height
+     */
     
     public void update() {
         if(blnActive) {
@@ -66,7 +87,9 @@ public class VacGrenade extends GameObject {
         fltWorldX += fltVelX;
         fltWorldY += fltVelY;
     }
-
+    /**
+     * @return void checks for collisions
+     */
     private void collisions() {
         for(int intCount = 0; intCount < handler.objectList.size(); intCount++) {
             GameObject object = handler.getObject(intCount);
@@ -108,7 +131,9 @@ public class VacGrenade extends GameObject {
         return new Rectangle((int)fltBoundsX, (int)(fltWorldY - camObject.getWorldY() - camObject.getHeight()/2) + 4, (int)fltWidth, (int)fltHeight - 8);
         //the hit box of the grenade
     }
-
+    /**
+     * @return rectangle bound for y
+     */
     public Rectangle getBounds2() {
         float fltBoundsY = fltWorldY + fltVelY - camObject.getWorldY() - camObject.getHeight()/2;
 
