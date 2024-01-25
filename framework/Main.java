@@ -44,6 +44,7 @@ public class Main implements ActionListener, WindowListener {
                                               new CustomButton(200, 100, "Demo", biMenuButtons, this)};
     private CustomButton[] backButtons = {new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this), 
                                           new CustomButton(200, 100, "Back", biMenuButtons, this), new CustomButton(200, 100, "Back", biMenuButtons, this)};
+    
     // Host & Join Components
     private JTextArea[] netTextAreas = {new JTextArea(), new JTextArea()};
     private JTextField[] netTextFields = {new JTextField(), new JTextField(), new JTextField(), new JTextField()};
@@ -53,13 +54,17 @@ public class Main implements ActionListener, WindowListener {
     private CustomButton[] characterButtons = {new CustomButton(290, 290, null, biCharacterButtons[0], this), new CustomButton(290, 290, null, biCharacterButtons[1], this), 
                                                new CustomButton(290, 290, null, biCharacterButtons[2], this), new CustomButton(290, 290, null, biCharacterButtons[3], this)};
     private CustomButton readyButton = new CustomButton(800, 80, "Ready", biNetButtons, this);
+    
+    private JTextArea chatTextArea = new JTextArea();
+    private JTextField chatTextField = new JTextField();
+
     //All Sprites loaded
     private BufferedImage[] biBulletTextures = resLoader.loadImages("/res\\SniperBullet.png", "/res\\Rocket.png", "/res\\FireBall.png", "/res\\ElectricBall.png", "/res\\Shrapnel.png");
     private BufferedImage[] biVacTextures = resLoader.loadSpriteSheet("/res\\VacGrenade.png", 20, 20);
     private ImageIcon ioLogo = new ImageIcon(resLoader.loadImage("/res\\ioLogo.png"));
     
     // Timer
-    private Timer timer = new Timer(1000/30, this);
+    private Timer timer = new Timer(1000/60, this);
     
     public static State state = State.MAIN_MENU;
 
@@ -79,6 +84,7 @@ public class Main implements ActionListener, WindowListener {
     public static int intRoomCount;
     public static int intServerSize;
     public static int intHelpScreenCount = 0;
+
     private int intCurrentButton = -1, intPreviousButton = -1;
     private int intReady;
     private int[] intCharacterSelections = {-1, -1, -1, -1};
@@ -149,6 +155,24 @@ public class Main implements ActionListener, WindowListener {
         readyButton.setEnabled(false);
         thePanels[4].add(readyButton);
 
+        chatTextArea.setSize(225, 225);
+        chatTextArea.setLocation(10, 450);
+        chatTextArea.setBackground(new Color(0, 0, 0, 150));
+        chatTextArea.setForeground(Color.white);
+        chatTextArea.setBorder(new LineBorder(new Color(205, 237, 253), 3));
+        chatTextArea.setEditable(false);
+        chatTextArea.setVisible(false);
+        thePanels[5].add(chatTextArea);
+
+        chatTextField.setSize(225, 30);
+        chatTextField.setLocation(10, 680);
+        chatTextField.setBackground(new Color(0, 0, 0, 150));
+        chatTextField.setForeground(Color.white);
+        chatTextField.setBorder(new LineBorder(new Color(205, 237, 253), 3));
+        chatTextField.addActionListener(this);
+        chatTextField.setVisible(false);
+        thePanels[5].add(chatTextField);
+
         for(int intCount = 0; intCount < backButtons.length; intCount++) {
             backButtons[intCount].setLocation(20, 20);
             thePanels[intCount + 1].add(backButtons[intCount]);
@@ -179,32 +203,40 @@ public class Main implements ActionListener, WindowListener {
                     if(strMessage.contains("SNIPER")) {
                         Sniper sniper = (Sniper) object;
                         sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
+
                         sniper.setHP(Float.parseFloat(strPayload[3]));
                         sniper.setMaxHP(Float.parseFloat(strPayload[4]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oSNIPER~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oSNIPER~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("BRUTE")) {
                         Brute brute = (Brute) object;
                         brute.setLeft(Boolean.parseBoolean(strPayload[2]));
+
                         brute.setHP(Float.parseFloat(strPayload[3]));
                         brute.setMaxHP(Float.parseFloat(strPayload[4]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oBRUTE~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oBRUTE~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("KNIGHT")) {
                         Knight knight = (Knight) object;
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
+
                         knight.setHP(Float.parseFloat(strPayload[3]));
                         knight.setMaxHP(Float.parseFloat(strPayload[4]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oKNIGHT~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oKNIGHT~" + strMessage.split("~")[1]);
                     } else if(strMessage.contains("WIZARD")) {
                         Wizard wizard = (Wizard) object;
                         wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
+
                         wizard.setHP(Float.parseFloat(strPayload[3]));
                         wizard.setMaxHP(Float.parseFloat(strPayload[4]));
+
                         if(!strMessage.substring(1, 2).equals("2")) ssm.sendText("h>c2>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("3")) ssm.sendText("h>c3>oWIZARD~" + strMessage.split("~")[1]);
                         if(!strMessage.substring(1, 2).equals("4")) ssm.sendText("h>c4>oWIZARD~" + strMessage.split("~")[1]);
@@ -273,9 +305,9 @@ public class Main implements ActionListener, WindowListener {
                 } else if(strMessage.contains("mREADY")) {
                     intReady++;
                 } else if(strMessage.contains("cCHAT")){
-                    String[] strPayload = strMessage.split("~")[1].split(",");
+                    String strPayload = strMessage.split("~")[1];
                     
-                    System.out.println(strPayload[1]);
+                    chatTextArea.append(strPayload + "\n");
                 }
             } else if(!strMessage.substring(0, 1).equals("c") && (strMessage.split(">")[1].equals("a") || Integer.parseInt(strMessage.substring(3, 4)) == intSessionId)) {
                 if(strMessage.substring(4, 5).equals("o") || strMessage.substring(5, 6).equals("o")) {
@@ -289,25 +321,21 @@ public class Main implements ActionListener, WindowListener {
                         knight.setLeft(Boolean.parseBoolean(strPayload[2]));
                         knight.setHP(Float.parseFloat(strPayload[3]));
                         knight.setMaxHP(Float.parseFloat(strPayload[4]));
-                        knight.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("BRUTE")){
                         Brute brute = (Brute)object;
                         brute.setLeft(Boolean.parseBoolean(strPayload[2]));
                         brute.setHP(Float.parseFloat(strPayload[3]));
                         brute.setMaxHP(Float.parseFloat(strPayload[4]));
-                        brute.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("SNIPER")){
                         Sniper sniper = (Sniper)object;
                         sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
                         sniper.setHP(Float.parseFloat(strPayload[3]));
                         sniper.setMaxHP(Float.parseFloat(strPayload[4]));
-                        sniper.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("WIZARD")){
                         Wizard wizard = (Wizard)object;
                         wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
                         wizard.setHP(Float.parseFloat(strPayload[3]));
                         wizard.setMaxHP(Float.parseFloat(strPayload[4]));
-                        wizard.setLeft(Boolean.parseBoolean(strPayload[2]));
                     } else if(strMessage.contains("ENEMY")) {
                         Enemy enemy = (Enemy)object;
                         enemy.setHP(Float.parseFloat(strPayload[2]));
@@ -392,6 +420,10 @@ public class Main implements ActionListener, WindowListener {
                     theFrame.setContentPane(thePanels[5]);
                     thePanels[5].requestFocusInWindow();
                     theFrame.pack();
+                } else if(strMessage.contains("cCHAT")) {
+                    String strPayload = strMessage.split("~")[1];
+
+                    chatTextArea.append(strPayload + "\n");
                 }
             }
         }
@@ -590,6 +622,26 @@ public class Main implements ActionListener, WindowListener {
             theFrame.pack();
         }
 
+        if(input.buttonSet.contains(InputHandler.InputButtons.ENTER)) {
+            chatTextArea.setVisible(true);
+            chatTextField.setVisible(true);
+            chatTextField.requestFocusInWindow();
+        } else {
+            chatTextArea.setVisible(false);
+            chatTextField.setVisible(false);
+        }
+
+        if(evt.getSource() == chatTextField) {
+            input.buttonSet.remove(InputHandler.InputButtons.ENTER);
+            chatTextArea.append(strNameList[intSessionId - 1] + ": " + chatTextField.getText() + "\n");
+            chatTextField.setText("");
+
+            if(intSessionId == 1) ssm.sendText("h>a>cCHAT~" + strNameList[intSessionId - 1] + ": " + chatTextField.getText());
+            else ssm.sendText("c" + intSessionId + ">h>cCHAT~" + strNameList[intSessionId - 1] + ": " + chatTextField.getText());
+
+            thePanels[5].requestFocusInWindow();
+        }
+
         if(intHelpScreenCount == 0) helpMenuButtons[0].setEnabled(false);
         else helpMenuButtons[0].setEnabled(true);
 
@@ -634,18 +686,26 @@ public class Main implements ActionListener, WindowListener {
             theFrame.pack();
         }
     }
+
     public void windowClosing(WindowEvent evt) {
         if(ssm != null) {
             ssm.sendText((intSessionId == 1) ? "h>a>mHOST_DISCONNECT" : "c" + intSessionId + ">h>mCLIENT_DISCONNECT");
             ssm.disconnect();
         }
     }
+
     public void windowClosed(WindowEvent evt) {}
+
     public void windowActivated(WindowEvent evt) {}
+
     public void windowDeactivated(WindowEvent evt) {}
+
     public void windowDeiconified(WindowEvent evt) {}
+
     public void windowIconified(WindowEvent evt) {}
-    public void windowOpened(WindowEvent evt) {} 
+
+    public void windowOpened(WindowEvent evt) {}
+
     public static void main(String[] args) {
         new Main();
     }

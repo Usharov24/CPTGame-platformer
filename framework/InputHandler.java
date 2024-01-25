@@ -24,7 +24,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         if(evt.getKeyCode() == KeyEvent.VK_F) buttonSet.add(InputButtons.F);
         if(evt.getKeyCode() == KeyEvent.VK_SHIFT) buttonSet.add(InputButtons.SHIFT);
         if(evt.getKeyCode() == KeyEvent.VK_SPACE) buttonSet.add(InputButtons.SPACE);
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) buttonSet.add(InputButtons.ENTER);
     }
 
     public void keyReleased(KeyEvent evt) {
@@ -35,7 +34,10 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         if(evt.getKeyCode() == KeyEvent.VK_F) buttonSet.remove(InputButtons.F);
         if(evt.getKeyCode() == KeyEvent.VK_SHIFT) buttonSet.remove(InputButtons.SHIFT);
         if(evt.getKeyCode() == KeyEvent.VK_SPACE) buttonSet.remove(InputButtons.SPACE);
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) buttonSet.remove(InputButtons.ENTER);
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if(buttonSet.contains(InputButtons.ENTER)) buttonSet.remove(InputButtons.ENTER);
+            else buttonSet.add(InputButtons.ENTER);
+        }
     }
 
     public void mousePressed(MouseEvent evt) {
